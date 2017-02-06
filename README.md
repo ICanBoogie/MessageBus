@@ -1,11 +1,11 @@
 # MessageBus
 
-[![Release](https://img.shields.io/packagist/v/ICanBoogie/MessageBus.svg)](https://packagist.org/packages/ICanBoogie/MessageBus)
+[![Packagist](https://img.shields.io/packagist/v/icanboogie/message-bus.svg)](https://packagist.org/packages/icanboogie/message-bus)
 [![Build Status](https://img.shields.io/travis/ICanBoogie/MessageBus/master.svg)](http://travis-ci.org/ICanBoogie/MessageBus)
 [![HHVM](https://img.shields.io/hhvm/ICanBoogie/MessageBus.svg)](http://hhvm.h4cc.de/package/ICanBoogie/MessageBus)
 [![Code Quality](https://img.shields.io/scrutinizer/g/ICanBoogie/MessageBus/master.svg)](https://scrutinizer-ci.com/g/ICanBoogie/MessageBus)
 [![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/MessageBus/master.svg)](https://coveralls.io/r/ICanBoogie/MessageBus)
-[![Packagist](https://img.shields.io/packagist/dt/ICanBoogie/MessageBus.svg)](https://packagist.org/packages/ICanBoogie/MessageBus)
+[![Downloads](https://img.shields.io/packagist/dt/icanboogie/message-bus.svg)](https://packagist.org/packages/icanboogie/message-bus/stats)
 
 A simple message bus built with a functional approach to be as flexible as possible.
 
@@ -21,7 +21,7 @@ $bus = new SimpleMessageBus($message_handler_provider, $message_pusher);
 
 /* @var Message $message */
 
-// The message is executed right away by an handler
+// The message is handled right away by an handler
 $result = $bus->dispatch($message);
 
 /* @var MessageToPush $message */
@@ -101,11 +101,12 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
 ## License
 
-**icanboogie/message-bus** is licensed under the New BSD License - See the
-*[LICENSE](LICENSE) file for details.
+**icanboogie/message-bus** is licensed under the New BSD License - See the [LICENSE](LICENSE) file for details.
 
 
 
 
 
 [documentation]:                https://api.icanboogie.org/command-bus/latest/
+[available on GitHub]:          https://github.com/ICanBoogie/MessageBus
+[ICanBoogie]:                   https://icanboogie.org
