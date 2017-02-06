@@ -7,7 +7,16 @@
 [![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/MessageBus/master.svg)](https://coveralls.io/r/ICanBoogie/MessageBus)
 [![Downloads](https://img.shields.io/packagist/dt/icanboogie/message-bus.svg)](https://packagist.org/packages/icanboogie/message-bus/stats)
 
-A simple message bus built with a functional approach to be as flexible as possible.
+**ICanBoogie/MessageBus** provides a very simple message bus that can handle messages right away or
+push them in a queue. Implemented with a functional approach, it tries to be as flexible as
+possible: the message handler provider and the message pusher are defined with simple callables that
+you can implement with your favorite resolver and your favorite message queue.
+
+Three interfaces and a class make most of it: `MessageBus` defines a unique `dispatch()` method;
+`Message` should be implemented by messages to handle, while `MessageToPush` by message to push in a
+queue; finally the class `SimpleMessageBus` is a simple implementation of `MessageBus`.
+
+The following example demonstrates how to instantiate a message bus and dispatch messages:
 
 ```php
 <?php
