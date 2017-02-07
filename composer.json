@@ -35,6 +35,11 @@
 			"ICanBoogie\\MessageBus\\": "lib/"
 		}
 	},
+	"autoload-dev": {
+		"psr-4": {
+			"ICanBoogie\\MessageBus\\": "tests/"
+		}
+	},
 	"extra": {
 		"icanboogie": {
 			"config-path": "config"

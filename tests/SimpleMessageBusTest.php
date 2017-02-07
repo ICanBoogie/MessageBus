@@ -4,7 +4,7 @@ namespace ICanBoogie\MessageBus;
 
 class SimpleMessageBusTest extends \PHPUnit_Framework_TestCase
 {
-	public function testHandleMessage()
+	public function test_should_handle_message()
 	{
 		$expectedMessage = $this
 			->getMockBuilder(Message::class)
@@ -45,7 +45,7 @@ class SimpleMessageBusTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame($result, $bus->dispatch($expectedMessage));
 	}
 
-	public function testPushMessage()
+	public function test_should_push_message()
 	{
 		$expectedMessage = $this
 			->getMockBuilder(MessageToPush::class)
@@ -72,7 +72,7 @@ class SimpleMessageBusTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame($result, $bus->dispatch($expectedMessage));
 	}
 
-	public function testShouldThrowExceptionWhenPushingMessageWithoutPusher()
+	public function test_should_throw_exception_when_pushing_message_without_pusher()
 	{
 		$message = $this
 			->getMockBuilder(MessageToPush::class)

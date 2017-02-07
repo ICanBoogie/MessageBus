@@ -43,6 +43,62 @@ $bus->dispatch($message);
 
 
 
+## Message handler provider
+
+The message handler provider is a callable with a signature similar to the
+[MessageHandlerProvider][] interface, the package provides a simple message handler provider
+that only requires an array of key/value pairs, where _key_ is a message class and _value_
+a message handler callable.
+
+The following example demonstrates how to define a message handler provider with a selection
+of messages and their handlers:
+
+```php
+<?php
+
+use App\Application\Message;
+use ICanBoogie\MessageBus\SimpleMessageHandlerProvider;
+
+$message_handler_provider = new SimpleMessageHandlerProvider([
+
+	Message\CreateArticle::class => function (Message\CreateArticle $message) {
+
+		// create an article
+
+	},
+
+	Message\DeleteArticle::class => function (Message\DeleteArticle $message) {
+
+        // delete an article
+
+    },
+
+]);
+```
+
+Of course, if you're using the [icanboogie/service][] package, you can use service references
+instead of callables (well, technically, they are also callables):
+
+```php
+<?php
+
+use App\Application\Message;
+use ICanBoogie\MessageBus\SimpleMessageHandlerProvider;
+
+use function ICanBoogie\Service\ref;
+
+$message_handler_provider = new SimpleMessageHandlerProvider([
+
+	Message\CreateArticle::class => ref('handler.article.create'),
+	Message\DeleteArticle::class => ref('handler.article.delete'),
+
+]);
+```
+
+
+
+
+
 ----------
 
 
@@ -71,7 +127,7 @@ $ composer require icanboogie/message-bus
 
 ### Cloning the repository
 
-The package is [available on GitHub][], its repository can be cloned with the following command
+The package is [available on GitHub][], its repository can be cloned with the following Message
 line:
 
 	$ git clone https://github.com/ICanBoogie/MessageBus.git
@@ -83,9 +139,9 @@ line:
 ## Documentation
 
 The package is documented as part of the [ICanBoogie][] framework [documentation][]. You can
-generate the documentation for the package and its dependencies with the `make doc` command. The
+generate the documentation for the package and its dependencies with the `make doc` Message. The
 documentation is generated in the `build/docs` directory. [ApiGen](http://apigen.org/) is required.
-The directory can later be cleaned with the `make clean` command.
+The directory can later be cleaned with the `make clean` Message.
 
 
 
@@ -93,11 +149,11 @@ The directory can later be cleaned with the `make clean` command.
 
 ## Testing
 
-The test suite is ran with the `make test` command. [PHPUnit](https://phpunit.de/) and
-[Composer](http://getcomposer.org/) need to be globally available to run the suite. The command
-installs dependencies as required. The `make test-coverage` command runs test suite and also creates
+The test suite is ran with the `make test` Message. [PHPUnit](https://phpunit.de/) and
+[Composer](http://getcomposer.org/) need to be globally available to run the suite. The Message
+installs dependencies as required. The `make test-coverage` Message runs test suite and also creates
 an HTML coverage report in `build/coverage`. The directory can later be cleaned with the `make
-clean` command.
+clean` Message.
 
 The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
@@ -116,6 +172,8 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
 
 
-[documentation]:                https://api.icanboogie.org/command-bus/latest/
+[documentation]:                https://api.icanboogie.org/message-bus/latest/
+[MessageHandlerProvider]:       https://api.icanboogie.org/message-bus/latest/class-ICanBoogie.MessageBus.MessageHandlerProvider.html
 [available on GitHub]:          https://github.com/ICanBoogie/MessageBus
+[icanboogie/service]:           https://github.com/ICanBoogie/Service
 [ICanBoogie]:                   https://icanboogie.org
