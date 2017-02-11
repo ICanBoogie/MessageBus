@@ -14,7 +14,7 @@ namespace ICanBoogie\MessageBus;
 /**
  * An interface for messages that should be pushed to a queue rather than handled right away.
  */
-interface MessageToPush
+interface ShouldBePushed
 {
 
 }

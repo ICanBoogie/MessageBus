@@ -43,7 +43,7 @@ class SimpleMessageBus implements MessageBus
 	 */
 	public function dispatch($message)
 	{
-		if ($message instanceof MessageToPush)
+		if ($message instanceof ShouldBePushed)
 		{
 			return $this->push($message);
 		}

@@ -13,7 +13,8 @@ possible: the message handler provider and the message pusher are defined with s
 you can implement or decorate with your favorite resolver and your favorite message queue.
 
 The following example demonstrates how to instantiate a message bus and dispatch messages. Messages
-implementing the [MessageToPush][] interface are pushed to the queue rather than executed right away.
+implementing the [ShouldBePushed][] interface are pushed to the queue rather than executed right
+away.
 
 ```php
 <?php
@@ -30,7 +31,7 @@ $bus = new SimpleMessageBus($message_handler_provider, $message_pusher);
 // The message is handled right away by an handler
 $result = $bus->dispatch($message);
 
-/* @var MessageToPush $message */
+/* @var ShouldBePushed $message */
 
 // The message is pushed to a queue
 $bus->dispatch($message);
@@ -169,8 +170,9 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
 
 
-[documentation]:                https://api.icanboogie.org/message-bus/latest/
-[MessageHandlerProvider]:       https://api.icanboogie.org/message-bus/latest/class-ICanBoogie.MessageBus.MessageHandlerProvider.html
+[documentation]:                https://icanboogie.org/api/message-bus/master/
+[MessageHandlerProvider]:       https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.MessageHandlerProvider.html
+[ShouldBePushed]:               https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.ShouldBePushed.html
 [available on GitHub]:          https://github.com/ICanBoogie/MessageBus
 [icanboogie/service]:           https://github.com/ICanBoogie/Service
 [ICanBoogie]:                   https://icanboogie.org

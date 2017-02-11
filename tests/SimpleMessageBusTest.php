@@ -42,7 +42,7 @@ class SimpleMessageBusTest extends \PHPUnit_Framework_TestCase
 	public function test_should_push_message()
 	{
 		$expectedMessage = $this
-			->getMockBuilder(MessageToPush::class)
+			->getMockBuilder(ShouldBePushed::class)
 			->getMockForAbstractClass();
 
 		$result = uniqid();
@@ -66,7 +66,7 @@ class SimpleMessageBusTest extends \PHPUnit_Framework_TestCase
 	public function test_should_throw_exception_when_pushing_message_without_pusher()
 	{
 		$message = $this
-			->getMockBuilder(MessageToPush::class)
+			->getMockBuilder(ShouldBePushed::class)
 			->getMockForAbstractClass();
 
 		$handler_provider = function ($message) {
