@@ -20,7 +20,7 @@ class SimpleMessageHandlerProviderTest extends \PHPUnit_Framework_TestCase
 
 		$message_handler_provider = new SimpleMessageHandlerProvider([
 
-			get_class($messageA) => function (Message $message) {
+			get_class($messageA) => function ($message) {
 
 				$this->fail("Should call another handler");
 
@@ -52,13 +52,13 @@ class SimpleMessageHandlerProviderTest extends \PHPUnit_Framework_TestCase
 
 		$message_handler_provider = new SimpleMessageHandlerProvider([
 
-			get_class($messageA) => function (Message $message) {
+			get_class($messageA) => function ($message) {
 
 				$this->fail("Should call another handler");
 
 			},
 
-			get_class($messageB) => function (Message $message) use ($result, $messageB) {
+			get_class($messageB) => function ($message) use ($result, $messageB) {
 
 				$this->assertSame($messageB, $message);
 

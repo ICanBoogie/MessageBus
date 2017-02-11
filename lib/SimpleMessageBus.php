@@ -37,11 +37,11 @@ class SimpleMessageBus implements MessageBus
 	}
 
 	/**
-	 * @param Message $message
+	 * @param object $message
 	 *
 	 * @return mixed
 	 */
-	public function dispatch(Message $message)
+	public function dispatch($message)
 	{
 		if ($message instanceof MessageToPush)
 		{
@@ -52,11 +52,11 @@ class SimpleMessageBus implements MessageBus
 	}
 
 	/**
-	 * @param Message $message
+	 * @param object $message
 	 *
 	 * @return mixed
 	 */
-	protected function push(Message $message)
+	protected function push($message)
 	{
 		$pusher = $this->message_pusher;
 
@@ -69,11 +69,11 @@ class SimpleMessageBus implements MessageBus
 	}
 
 	/**
-	 * @param Message $message
+	 * @param object $message
 	 *
 	 * @return mixed
 	 */
-	protected function handle(Message $message)
+	protected function handle($message)
 	{
 		$handler = $this->resolve_handler($message);
 
@@ -81,13 +81,13 @@ class SimpleMessageBus implements MessageBus
 	}
 
 	/**
-	 * @param Message $message
+	 * @param object $message
 	 *
 	 * @return MessageHandler|callable
 	 *
 	 * @throws NoHandlerForMessage
 	 */
-	protected function resolve_handler(Message $message)
+	protected function resolve_handler($message)
 	{
 		$provider = $this->message_handler_provider;
 

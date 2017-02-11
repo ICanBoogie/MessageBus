@@ -32,7 +32,7 @@ class SimpleMessageHandlerProvider implements MessageHandlerProvider
 	/**
 	 * @inheritdoc
 	 */
-	public function __invoke(Message $message)
+	public function __invoke($message)
 	{
 		$class = get_class($message);
 

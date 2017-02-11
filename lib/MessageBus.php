@@ -14,9 +14,9 @@ namespace ICanBoogie\MessageBus;
 interface MessageBus
 {
 	/**
-	 * @param Message $message
+	 * @param object $message
 	 *
 	 * @return mixed
 	 */
-	public function dispatch(Message $message);
+	public function dispatch($message);
 }

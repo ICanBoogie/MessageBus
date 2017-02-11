@@ -15,12 +15,7 @@ class NoHandlerForMessageTest extends \PHPUnit_Framework_TestCase
 {
 	public function testException()
 	{
-		$message = $this
-			->getMockBuilder(Message::class)
-			->getMockForAbstractClass();
-
-		/* @var Message $message */
-
+		$message = (object) [ uniqid() => uniqid() ];
 		$exception = new NoHandlerForMessage($message);
 
 		$this->assertSame(400, $exception->getCode());

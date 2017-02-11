@@ -17,9 +17,9 @@ namespace ICanBoogie\MessageBus;
 interface MessageHandler
 {
 	/**
-	 * @param Message $message
+	 * @param object $message
 	 *
 	 * @return mixed
 	 */
-	public function __invoke(Message $message);
+	public function __invoke($message);
 }

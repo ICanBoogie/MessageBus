@@ -16,19 +16,19 @@ use ICanBoogie\Accessor\AccessorTrait;
 /**
  * Exception thrown when there is no message_pusher defined to push a message type.
  *
- * @property-read Message $message
+ * @property-read object $message
  */
 class NoPusherForMessage extends \LogicException implements Exception
 {
 	use AccessorTrait;
 
 	/**
-	 * @var Message
+	 * @var object
 	 */
 	private $_message;
 
 	/**
-	 * @return Message
+	 * @return object
 	 */
 	protected function get_message()
 	{
@@ -36,10 +36,10 @@ class NoPusherForMessage extends \LogicException implements Exception
 	}
 
 	/**
-	 * @param Message $message
+	 * @param object $message
 	 * @param Exception|null $previous
 	 */
-	public function __construct(Message $message, Exception $previous = null)
+	public function __construct($message, Exception $previous = null)
 	{
 		$this->_message = $message;
 
@@ -47,11 +47,11 @@ class NoPusherForMessage extends \LogicException implements Exception
 	}
 
 	/**
-	 * @param Message $message
+	 * @param object $message
 	 *
 	 * @return string
 	 */
-	private function format_message(Message $message)
+	private function format_message($message)
 	{
 		$class = get_class($message);
 

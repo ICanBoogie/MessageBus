@@ -19,8 +19,6 @@ class NoPusherForMessageTest extends \PHPUnit_Framework_TestCase
 			->getMockBuilder(MessageToPush::class)
 			->getMockForAbstractClass();
 
-		/* @var Message $message */
-
 		$exception = new NoPusherForMessage($message);
 
 		$this->assertSame(400, $exception->getCode());

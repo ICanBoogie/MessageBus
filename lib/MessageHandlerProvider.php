@@ -17,11 +17,11 @@ namespace ICanBoogie\MessageBus;
 interface MessageHandlerProvider
 {
 	/**
-	 * @param Message $message
+	 * @param object $message
 	 *
 	 * @return MessageHandler|callable
 	 *
 	 * @throws NoHandlerForMessage if the handler for the message cannot the found.
 	 */
-	public function __invoke(Message $message);
+	public function __invoke($message);
 }
