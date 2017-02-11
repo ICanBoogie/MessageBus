@@ -14,7 +14,7 @@ namespace ICanBoogie\MessageBus;
 use ICanBoogie\Accessor\AccessorTrait;
 
 /**
- * Exception thrown when there is no message_pusher defined to push a message type.
+ * Exception thrown when there is no message pusher defined to push a message.
  *
  * @property-read object $message
  */
@@ -55,6 +55,6 @@ class NoPusherForMessage extends \LogicException implements Exception
 	{
 		$class = get_class($message);
 
-		return "There is no message_pusher defined to push messages of type `$class`";
+		return "There is no message pusher defined to push messages of type `$class`";
 	}
 }

@@ -11,6 +11,9 @@
 
 namespace ICanBoogie\MessageBus;
 
+/**
+ * The interface for the message bus.
+ */
 interface MessageBus
 {
 	/**
