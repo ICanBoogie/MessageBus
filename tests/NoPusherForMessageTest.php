@@ -23,7 +23,7 @@ class NoPusherForMessageTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertSame(400, $exception->getCode());
 		$this->assertSame($message, $exception->message);
-		$this->assertStringStartsWith("There is no message_pusher defined", $exception->getMessage());
+		$this->assertStringStartsWith("There is no message pusher defined", $exception->getMessage());
 		$this->assertContains(get_class($message), $exception->getMessage());
 	}
 }
