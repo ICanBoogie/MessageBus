@@ -1,10 +1,9 @@
 # MessageBus
 
 [![Packagist](https://img.shields.io/packagist/v/icanboogie/message-bus.svg)](https://packagist.org/packages/icanboogie/message-bus)
-[![Build Status](https://img.shields.io/travis/ICanBoogie/MessageBus/master.svg)](http://travis-ci.org/ICanBoogie/MessageBus)
-[![HHVM](https://img.shields.io/hhvm/ICanBoogie/MessageBus.svg)](http://hhvm.h4cc.de/package/ICanBoogie/MessageBus)
-[![Code Quality](https://img.shields.io/scrutinizer/g/ICanBoogie/MessageBus/master.svg)](https://scrutinizer-ci.com/g/ICanBoogie/MessageBus)
-[![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/MessageBus/master.svg)](https://coveralls.io/r/ICanBoogie/MessageBus)
+[![Build Status](https://img.shields.io/travis/ICanBoogie/MessageBus.svg)](http://travis-ci.org/ICanBoogie/MessageBus)
+[![Code Quality](https://img.shields.io/scrutinizer/g/ICanBoogie/MessageBus.svg)](https://scrutinizer-ci.com/g/ICanBoogie/MessageBus)
+[![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/MessageBus.svg)](https://coveralls.io/r/ICanBoogie/MessageBus)
 [![Downloads](https://img.shields.io/packagist/dt/icanboogie/message-bus.svg)](https://packagist.org/packages/icanboogie/message-bus/stats)
 
 **ICanBoogie/MessageBus** provides a very simple message bus that can handle messages right away or
@@ -155,8 +154,8 @@ clean` Message.
 
 The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
-[![Build Status](https://img.shields.io/travis/ICanBoogie/MessageBus/master.svg)](http://travis-ci.org/ICanBoogie/MessageBus)
-[![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/MessageBus/master.svg)](https://coveralls.io/r/ICanBoogie/MessageBus)
+[![Build Status](https://img.shields.io/travis/ICanBoogie/MessageBus.svg)](http://travis-ci.org/ICanBoogie/MessageBus)
+[![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/MessageBus.svg)](https://coveralls.io/r/ICanBoogie/MessageBus)
 
 
 
