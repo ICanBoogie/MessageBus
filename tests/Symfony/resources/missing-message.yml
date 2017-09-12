@@ -1,0 +1,6 @@
+services:
+
+  handler.message_a:
+    class: ICanBoogie\MessageBus\HandlerA
+    tags:
+      - name: message_bus.handler

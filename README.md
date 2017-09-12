@@ -47,6 +47,8 @@ The message handler provider is a callable with a signature similar to the
 that only requires an array of key/value pairs, where _key_ is a message class and _value_
 a message handler callable.
 
+### Providing handlers
+
 The following example demonstrates how to define a message handler provider with a selection
 of messages and their handlers:
 
@@ -73,6 +75,8 @@ $message_handler_provider = new SimpleMessageHandlerProvider([
 ]);
 ```
 
+### Providing handlers with icanboogie/service
+
 Of course, if you're using the [icanboogie/service][] package, you can use service references
 instead of callables (well, technically, they are also callables):
 
@@ -90,6 +94,62 @@ $message_handler_provider = new SimpleMessageHandlerProvider([
 	Message\DeleteArticle::class => ref('handler.article.delete'),
 
 ]);
+```
+
+
+
+
+### Providing handlers with a PSR container
+
+Use an instance of [PSR\ContainerMessageHandlerProvider][] to provide handlers from a 
+[PSR container][]:
+
+```php
+<?php
+
+use App\Application\Message;
+use ICanBoogie\MessageBus\PSR\ContainerMessageHandlerProvider;
+
+/* @var $container \Psr\Container\ContainerInterface */
+
+$message_handler_provider = new ContainerMessageHandlerProvider([
+
+	Message\CreateArticle::class => 'handler.article.create',
+	Message\DeleteArticle::class => 'handler.article.delete',
+
+], $container);
+```
+
+If you're using [symfony/dependency-injection][] you can add an instance of [AddCommandBusPass][]
+to your compilation pass to automatically generate the provider:
+
+```yaml
+services:
+  handler.article.create:
+    class: App\Domain\Article\Handler\CreateArticleHandler
+    tags:
+      - name: message_bus.handler
+        message: App\Application\Message\CreateArticle
+```
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\Config\FileLocator;
+use ICanBoogie\MessageBus\Symfony\AddCommandBusPass;
+
+/* @var string $config */
+/* @var ICanBoogie\MessageBus\PSR\ContainerMessageHandlerProvider $provider */
+
+$container = new ContainerBuilder();
+$loader = new YamlFileLoader($container, new FileLocator(__DIR__));
+$loader->load($config);
+$container->addCompilerPass(new AddCommandBusPass);
+$container->compile();
+
+$provider = $container->get(AddCommandBusPass::DEFAULT_PROVIDER_SERVICE);
 ```
 
 
@@ -114,9 +174,7 @@ The package requires PHP 5.6 or later.
 
 The recommended way to install this package is through [Composer](http://getcomposer.org/):
 
-```
-$ composer require icanboogie/message-bus
-```
+	$ composer require icanboogie/message-bus
 
 
 
@@ -169,9 +227,13 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
 
 
-[documentation]:                https://icanboogie.org/api/message-bus/master/
-[MessageHandlerProvider]:       https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.MessageHandlerProvider.html
-[ShouldBePushed]:               https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.ShouldBePushed.html
-[available on GitHub]:          https://github.com/ICanBoogie/MessageBus
-[icanboogie/service]:           https://github.com/ICanBoogie/Service
-[ICanBoogie]:                   https://icanboogie.org
+[documentation]:                       https://icanboogie.org/api/message-bus/master/
+[MessageHandlerProvider]:              https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.MessageHandlerProvider.html
+[ShouldBePushed]:                      https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.ShouldBePushed.html
+[AddCommandBusPass]:                   https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.Symfony.AddCommandBusPass.html
+[available on GitHub]:                 https://github.com/ICanBoogie/MessageBus
+[icanboogie/service]:                  https://github.com/ICanBoogie/Service
+[PSR container]:                       https://github.com/php-fig/container
+[ICanBoogie]:                          https://icanboogie.org
+[PSR\ContainerMessageHandlerProvider]: https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.PSR.ContainerMessageHandlerProvider.html
+[symfony/dependency-injection]:        https://symfony.com/doc/current/components/dependency_injection.html

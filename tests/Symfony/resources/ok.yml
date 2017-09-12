@@ -1,0 +1,13 @@
+services:
+
+  handler.message_a:
+    class: ICanBoogie\MessageBus\HandlerA
+    tags:
+      - name: message_bus.handler
+        message: ICanBoogie\MessageBus\MessageA
+
+  handler.message_b:
+    class: ICanBoogie\MessageBus\HandlerB
+    tags:
+      - name: message_bus.handler
+        message: ICanBoogie\MessageBus\MessageB
