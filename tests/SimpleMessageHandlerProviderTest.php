@@ -28,7 +28,7 @@ class SimpleMessageHandlerProviderTest extends \PHPUnit_Framework_TestCase
 
 		]);
 
-		$bus = new SimpleMessageBus($message_handler_provider);
+		$bus = new SimpleDispatcher($message_handler_provider);
 
 		try
 		{
@@ -68,7 +68,7 @@ class SimpleMessageHandlerProviderTest extends \PHPUnit_Framework_TestCase
 
 		]);
 
-		$bus = new SimpleMessageBus($message_handler_provider);
+		$bus = new SimpleDispatcher($message_handler_provider);
 
 		$this->assertSame($result, $bus->dispatch($messageB));
 	}

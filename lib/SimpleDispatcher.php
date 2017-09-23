@@ -12,9 +12,9 @@
 namespace ICanBoogie\MessageBus;
 
 /**
- * A message bus that can handle messages right away or push them to a queue.
+ * A dispatcher that dispatches messages right away or push them to a queue.
  */
-class SimpleMessageBus implements MessageBus
+class SimpleDispatcher implements Dispatcher
 {
 	/**
 	 * @var MessageHandlerProvider|callable

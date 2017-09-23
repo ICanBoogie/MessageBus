@@ -13,7 +13,7 @@ namespace ICanBoogie\MessageBus;
 
 use Prophecy\Argument;
 
-class AssertingMessageBusTest extends \PHPUnit_Framework_TestCase
+class AssertingDispatcherTest extends \PHPUnit_Framework_TestCase
 {
 	use MockHelpers;
 
@@ -22,9 +22,9 @@ class AssertingMessageBusTest extends \PHPUnit_Framework_TestCase
 		$message = (object) [];
 		$exception = new \Exception();
 
-		$message_bus = $this->make_message_bus(
-			function ($message_bus) {
-				$message_bus->dispatch(Argument::any())
+		$dispatcher = $this->make_dispatcher(
+			function ($dispatcher) {
+				$dispatcher->dispatch(Argument::any())
 					->shouldNotBeCalled();
 			},
 			function ($actual) use ($message, $exception) {
@@ -35,7 +35,7 @@ class AssertingMessageBusTest extends \PHPUnit_Framework_TestCase
 
 		try
 		{
-			$message_bus->dispatch($message);
+			$dispatcher->dispatch($message);
 		} catch (\Exception $e) {
 			$this->assertSame($exception, $e);
 			return;
@@ -49,9 +49,9 @@ class AssertingMessageBusTest extends \PHPUnit_Framework_TestCase
 		$message = (object) [];
 		$result = uniqid();
 
-		$message_bus = $this->make_message_bus(
-			function ($message_bus) use ($message, $result) {
-				$message_bus->dispatch($message)
+		$dispatcher = $this->make_dispatcher(
+			function ($dispatcher) use ($message, $result) {
+				$dispatcher->dispatch($message)
 					->shouldBeCalled()->willReturn($result);
 			},
 			function ($actual) use ($message) {
@@ -59,19 +59,19 @@ class AssertingMessageBusTest extends \PHPUnit_Framework_TestCase
 			}
 		);
 
-		$this->assertSame($result, $message_bus->dispatch($message));
+		$this->assertSame($result, $dispatcher->dispatch($message));
 	}
 
 	/**
-	 * @param callable $init_message_bus
+	 * @param callable $init_dispatcher
 	 * @param callable $assertion
 	 *
-	 * @return AssertingMessageBus
+	 * @return AssertingDispatcher
 	 */
-	private function make_message_bus(callable $init_message_bus, callable $assertion)
+	private function make_dispatcher(callable $init_dispatcher, callable $assertion)
 	{
-		return new AssertingMessageBus(
-			$this->mock(MessageBus::class, $init_message_bus),
+		return new AssertingDispatcher(
+			$this->mock(Dispatcher::class, $init_dispatcher),
 			$assertion
 		);
 	}

@@ -1,8 +1,17 @@
 <?php
 
+/*
+ * This file is part of the ICanBoogie package.
+ *
+ * (c) Olivier Laviale <olivier.laviale@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace ICanBoogie\MessageBus;
 
-class SimpleMessageBusTest extends \PHPUnit_Framework_TestCase
+class SimpleDispatcherTest extends \PHPUnit_Framework_TestCase
 {
 	public function test_should_handle_message()
 	{
@@ -35,7 +44,7 @@ class SimpleMessageBusTest extends \PHPUnit_Framework_TestCase
 
 		};
 
-		$bus = new SimpleMessageBus($handler_provider, $pusher);
+		$bus = new SimpleDispatcher($handler_provider, $pusher);
 		$this->assertSame($result, $bus->dispatch($expectedMessage));
 	}
 
@@ -59,7 +68,7 @@ class SimpleMessageBusTest extends \PHPUnit_Framework_TestCase
 
 		};
 
-		$bus = new SimpleMessageBus($handler_provider, $pusher);
+		$bus = new SimpleDispatcher($handler_provider, $pusher);
 		$this->assertSame($result, $bus->dispatch($expectedMessage));
 	}
 
@@ -75,7 +84,7 @@ class SimpleMessageBusTest extends \PHPUnit_Framework_TestCase
 
 		};
 
-		$bus = new SimpleMessageBus($handler_provider);
+		$bus = new SimpleDispatcher($handler_provider);
 
 		$this->expectException(NoPusherForMessage::class);
 		$bus->dispatch($message);

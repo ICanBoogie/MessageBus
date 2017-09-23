@@ -12,9 +12,9 @@
 namespace ICanBoogie\MessageBus;
 
 /**
- * The interface for the message bus.
+ * An interface for message dispatchers.
  */
-interface MessageBus
+interface Dispatcher
 {
 	/**
 	 * @param object $message

@@ -12,14 +12,14 @@
 namespace ICanBoogie\MessageBus;
 
 /**
- * A MessageBus decorator that asserts messages before dispatching them.
+ * A Dispatcher decorator that asserts messages before dispatching them.
  */
-class AssertingMessageBus implements MessageBus
+class AssertingDispatcher implements Dispatcher
 {
 	/**
-	 * @var MessageBus
+	 * @var Dispatcher
 	 */
-	private $message_bus;
+	private $dispatcher;
 
 	/**
 	 * @var callable
@@ -27,13 +27,13 @@ class AssertingMessageBus implements MessageBus
 	private $assertion;
 
 	/**
-	 * @param MessageBus $message_bus
+	 * @param Dispatcher $dispatcher
 	 * @param callable $assertion A callable that should throw an exception if the message shouldn't
 	 * be dispatched.
 	 */
-	public function __construct(MessageBus $message_bus, callable $assertion)
+	public function __construct(Dispatcher $dispatcher, callable $assertion)
 	{
-		$this->message_bus = $message_bus;
+		$this->dispatcher = $dispatcher;
 		$this->assertion = $assertion;
 	}
 
@@ -46,6 +46,6 @@ class AssertingMessageBus implements MessageBus
 	{
 		call_user_func($this->assertion, $message);
 
-		return $this->message_bus->dispatch($message);
+		return $this->dispatcher->dispatch($message);
 	}
 }

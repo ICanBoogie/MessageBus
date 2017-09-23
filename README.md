@@ -23,17 +23,17 @@ namespace ICanBoogie\MessageBus;
 /* @var MessageHandlerProvider|callable $message_handler_provider */
 /* @var MessagePusher|callable $message_pusher */
 
-$bus = new SimpleMessageBus($message_handler_provider, $message_pusher);
+$dispatcher = new SimpleDispatcher($message_handler_provider, $message_pusher);
 
 /* @var object $message */
 
 // The message is handled right away by an handler
-$result = $bus->dispatch($message);
+$result = $dispatcher->dispatch($message);
 
 /* @var ShouldBePushed $message */
 
 // The message is pushed to a queue
-$bus->dispatch($message);
+$dispatcher->dispatch($message);
 ```
 
 
@@ -166,17 +166,17 @@ $provider = $container->get(AddCommandBusPass::DEFAULT_PROVIDER_SERVICE);
 
 ## Asserting messages before dispatching
 
-The [AssertingMessageBus][] decorator can be used to assert messages before they are dispatched. One
+The [AssertingDispatcher][] decorator can be used to assert messages before they are dispatched. One
 could use the assertion to reject messages that require special permissions.
 
 ```php
 <?php
 
-use ICanBoogie\MessageBus\AssertingMessageBus;
+use ICanBoogie\MessageBus\AssertingDispatcher;
 
-/* @var ICanBoogie\MessageBus\MessageBus $message_bus */
+/* @var ICanBoogie\MessageBus\Dispatcher $dispatcher */
 
-$asserting_message_bus = new AssertingMessageBus($message_bus, function ($message) {
+$asserting_dispatcher = new AssertingDispatcher($dispatcher, function ($message) {
 
 	if (/* some condition */)
 		throw new \LogicException("The message should not be dispatched.");
@@ -260,7 +260,7 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
 
 [documentation]:                       https://icanboogie.org/api/message-bus/master/
-[AssertingMessageBus]:                 https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.AssertingMessageBus.html
+[AssertingDispatcher]:                 https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.AssertingMessageBus.html
 [MessageHandlerProvider]:              https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.MessageHandlerProvider.html
 [ShouldBePushed]:                      https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.ShouldBePushed.html
 [AddCommandBusPass]:                   https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.Symfony.AddCommandBusPass.html
