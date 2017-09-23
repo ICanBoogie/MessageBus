@@ -20,10 +20,10 @@ away.
 
 namespace ICanBoogie\MessageBus;
 
-/* @var MessageHandlerProvider|callable $message_handler_provider */
+/* @var HandlerProvider|callable $handler_provider */
 /* @var MessagePusher|callable $message_pusher */
 
-$dispatcher = new SimpleDispatcher($message_handler_provider, $message_pusher);
+$dispatcher = new SimpleDispatcher($handler_provider, $message_pusher);
 
 /* @var object $message */
 
@@ -43,7 +43,7 @@ $dispatcher->dispatch($message);
 ## Message handler provider
 
 The message handler provider is a callable with a signature similar to the
-[MessageHandlerProvider][] interface, the package provides a simple message handler provider
+[HandlerProvider][] interface, the package provides a simple message handler provider
 that only requires an array of key/value pairs, where _key_ is a message class and _value_
 a message handler callable.
 
@@ -60,9 +60,9 @@ of messages and their handlers:
 <?php
 
 use App\Application\Message;
-use ICanBoogie\MessageBus\SimpleMessageHandlerProvider;
+use ICanBoogie\MessageBus\SimpleHandlerProvider;
 
-$message_handler_provider = new SimpleMessageHandlerProvider([
+$handler_provider = new SimpleHandlerProvider([
 
 	Message\CreateArticle::class => function (Message\CreateArticle $message) {
 
@@ -92,11 +92,11 @@ instead of callables (well, technically, they are also callables):
 <?php
 
 use App\Application\Message;
-use ICanBoogie\MessageBus\SimpleMessageHandlerProvider;
+use ICanBoogie\MessageBus\SimpleHandlerProvider;
 
 use function ICanBoogie\Service\ref;
 
-$message_handler_provider = new SimpleMessageHandlerProvider([
+$handler_provider = new SimpleHandlerProvider([
 
 	Message\CreateArticle::class => ref('handler.article.create'),
 	Message\DeleteArticle::class => ref('handler.article.delete'),
@@ -109,18 +109,18 @@ $message_handler_provider = new SimpleMessageHandlerProvider([
 
 ### Providing handlers with a PSR container
 
-Use an instance of [PSR\ContainerMessageHandlerProvider][] to provide handlers from a 
+Use an instance of [PSR\ContainerHandlerProvider][] to provide handlers from a 
 [PSR container][]:
 
 ```php
 <?php
 
 use App\Application\Message;
-use ICanBoogie\MessageBus\PSR\ContainerMessageHandlerProvider;
+use ICanBoogie\MessageBus\PSR\ContainerHandlerProvider;
 
 /* @var $container \Psr\Container\ContainerInterface */
 
-$message_handler_provider = new ContainerMessageHandlerProvider([
+$handler_provider = new ContainerHandlerProvider([
 
 	Message\CreateArticle::class => 'handler.article.create',
 	Message\DeleteArticle::class => 'handler.article.delete',
@@ -149,7 +149,7 @@ use Symfony\Component\Config\FileLocator;
 use ICanBoogie\MessageBus\Symfony\AddCommandBusPass;
 
 /* @var string $config */
-/* @var ICanBoogie\MessageBus\PSR\ContainerMessageHandlerProvider $provider */
+/* @var ICanBoogie\MessageBus\PSR\ContainerHandlerProvider $provider */
 
 $container = new ContainerBuilder();
 $loader = new YamlFileLoader($container, new FileLocator(__DIR__));
@@ -261,12 +261,12 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
 [documentation]:                       https://icanboogie.org/api/message-bus/master/
 [AssertingDispatcher]:                 https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.AssertingMessageBus.html
-[MessageHandlerProvider]:              https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.MessageHandlerProvider.html
+[HandlerProvider]:                     https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.HandlerProvider.html
 [ShouldBePushed]:                      https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.ShouldBePushed.html
 [AddCommandBusPass]:                   https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.Symfony.AddCommandBusPass.html
 [available on GitHub]:                 https://github.com/ICanBoogie/MessageBus
 [icanboogie/service]:                  https://github.com/ICanBoogie/Service
 [PSR container]:                       https://github.com/php-fig/container
 [ICanBoogie]:                          https://icanboogie.org
-[PSR\ContainerMessageHandlerProvider]: https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.PSR.ContainerMessageHandlerProvider.html
+[PSR\ContainerHandlerProvider]:        https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.PSR.ContainerHandlerProvider.html
 [symfony/dependency-injection]:        https://symfony.com/doc/current/components/dependency_injection.html

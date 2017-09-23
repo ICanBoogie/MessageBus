@@ -12,16 +12,14 @@
 namespace ICanBoogie\MessageBus;
 
 /**
- * Signature example for the message handler provider callable.
+ * Signature example for the message handler callable.
  */
-interface MessageHandlerProvider
+interface Handler
 {
 	/**
 	 * @param object $message
 	 *
-	 * @return MessageHandler|callable
-	 *
-	 * @throws NoHandlerForMessage if the handler for the message cannot the found.
+	 * @return mixed
 	 */
 	public function __invoke($message);
 }

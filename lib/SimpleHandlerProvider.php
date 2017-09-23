@@ -12,9 +12,9 @@
 namespace ICanBoogie\MessageBus;
 
 /**
- * A simple implementation of {@link MessageHandlerProvider}.
+ * A simple implementation of {@link HandlerProvider}.
  */
-class SimpleMessageHandlerProvider implements MessageHandlerProvider
+class SimpleHandlerProvider implements HandlerProvider
 {
 	/**
 	 * @var array
@@ -22,7 +22,7 @@ class SimpleMessageHandlerProvider implements MessageHandlerProvider
 	private $handlers;
 
 	/**
-	 * @param MessageHandler[]|callable[] $handlers
+	 * @param Handler[]|callable[] $handlers
 	 */
 	public function __construct(array $handlers)
 	{

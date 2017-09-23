@@ -12,13 +12,13 @@
 namespace ICanBoogie\MessageBus\PSR;
 
 use ICanBoogie\MessageBus\NoHandlerForMessage;
-use ICanBoogie\MessageBus\SimpleMessageHandlerProvider;
+use ICanBoogie\MessageBus\SimpleHandlerProvider;
 use Psr\Container\ContainerInterface;
 
 /**
- * A simple implementation of {@link MessageHandlerProvider}.
+ * A simple implementation of {@link HandlerProvider}.
  */
-class ContainerMessageHandlerProvider extends SimpleMessageHandlerProvider
+class ContainerHandlerProvider extends SimpleHandlerProvider
 {
 	/**
 	 * @var ContainerInterface

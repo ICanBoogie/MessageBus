@@ -17,9 +17,9 @@ namespace ICanBoogie\MessageBus;
 class SimpleDispatcher implements Dispatcher
 {
 	/**
-	 * @var MessageHandlerProvider|callable
+	 * @var HandlerProvider|callable
 	 */
-	private $message_handler_provider;
+	private $handler_provider;
 
 	/**
 	 * @var MessagePusher|callable
@@ -27,12 +27,12 @@ class SimpleDispatcher implements Dispatcher
 	private $message_pusher;
 
 	/**
-	 * @param MessageHandlerProvider|callable $message_handler_provider
+	 * @param HandlerProvider|callable $handler_provider
 	 * @param MessagePusher|callable $message_pusher
 	 */
-	public function __construct(callable $message_handler_provider, callable $message_pusher = null)
+	public function __construct(callable $handler_provider, callable $message_pusher = null)
 	{
-		$this->message_handler_provider = $message_handler_provider;
+		$this->handler_provider = $handler_provider;
 		$this->message_pusher = $message_pusher;
 	}
 
@@ -83,13 +83,13 @@ class SimpleDispatcher implements Dispatcher
 	/**
 	 * @param object $message
 	 *
-	 * @return MessageHandler|callable
+	 * @return Handler|callable
 	 *
 	 * @throws NoHandlerForMessage
 	 */
 	protected function resolve_handler($message)
 	{
-		$provider = $this->message_handler_provider;
+		$provider = $this->handler_provider;
 
 		return $provider($message);
 	}

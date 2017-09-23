@@ -11,14 +11,14 @@
 
 namespace ICanBoogie\MessageBus;
 
-class SimpleMessageHandlerProviderTest extends \PHPUnit_Framework_TestCase
+class SimpleHandlerProviderTest extends \PHPUnit_Framework_TestCase
 {
 	public function test_should_throw_exception_on_missing_handler()
 	{
 		$messageA = new MessageA;
 		$messageB = new MessageB;
 
-		$message_handler_provider = new SimpleMessageHandlerProvider([
+		$handler_provider = new SimpleHandlerProvider([
 
 			get_class($messageA) => function ($message) {
 
@@ -28,7 +28,7 @@ class SimpleMessageHandlerProviderTest extends \PHPUnit_Framework_TestCase
 
 		]);
 
-		$bus = new SimpleDispatcher($message_handler_provider);
+		$bus = new SimpleDispatcher($handler_provider);
 
 		try
 		{
@@ -50,7 +50,7 @@ class SimpleMessageHandlerProviderTest extends \PHPUnit_Framework_TestCase
 
 		$result = uniqid();
 
-		$message_handler_provider = new SimpleMessageHandlerProvider([
+		$handler_provider = new SimpleHandlerProvider([
 
 			get_class($messageA) => function ($message) {
 
@@ -68,7 +68,7 @@ class SimpleMessageHandlerProviderTest extends \PHPUnit_Framework_TestCase
 
 		]);
 
-		$bus = new SimpleDispatcher($message_handler_provider);
+		$bus = new SimpleDispatcher($handler_provider);
 
 		$this->assertSame($result, $bus->dispatch($messageB));
 	}

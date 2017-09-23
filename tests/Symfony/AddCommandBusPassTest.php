@@ -15,7 +15,7 @@ use ICanBoogie\MessageBus\HandlerA;
 use ICanBoogie\MessageBus\HandlerB;
 use ICanBoogie\MessageBus\MessageA;
 use ICanBoogie\MessageBus\MessageB;
-use ICanBoogie\MessageBus\PSR\ContainerMessageHandlerProvider;
+use ICanBoogie\MessageBus\PSR\ContainerHandlerProvider;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -42,11 +42,11 @@ class AddCommandBusPassTest extends \PHPUnit_Framework_TestCase
 
 	public function test_should_return_handler()
 	{
-		/* @var ContainerMessageHandlerProvider $provider */
+		/* @var ContainerHandlerProvider $provider */
 		$container = $this->makeContainer(__DIR__ . '/resources/ok.yml');
 		$provider = $container->get(AddCommandBusPass::DEFAULT_PROVIDER_SERVICE);
 
-		$this->assertInstanceOf(ContainerMessageHandlerProvider::class, $provider);
+		$this->assertInstanceOf(ContainerHandlerProvider::class, $provider);
 		$this->assertInstanceOf(HandlerA::class, $provider(new MessageA()));
 		$this->assertInstanceOf(HandlerB::class, $provider(new MessageB()));
 	}

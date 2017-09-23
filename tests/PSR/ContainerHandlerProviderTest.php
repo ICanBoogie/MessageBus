@@ -4,11 +4,11 @@ namespace ICanBoogie\MessageBus\PSR;
 
 use ICanBoogie\MessageBus\MessageA;
 use ICanBoogie\MessageBus\MessageB;
-use ICanBoogie\MessageBus\MessageHandlerProvider;
+use ICanBoogie\MessageBus\HandlerProvider;
 use ICanBoogie\MessageBus\MockHelpers;
 use Psr\Container\ContainerInterface;
 
-class ContainerMessageHandlerProviderTest extends \PHPUnit_Framework_TestCase
+class ContainerHandlerProviderTest extends \PHPUnit_Framework_TestCase
 {
 	use MockHelpers;
 
@@ -66,11 +66,11 @@ class ContainerMessageHandlerProviderTest extends \PHPUnit_Framework_TestCase
 	 * @param array $handlers
 	 * @param callable|null $initContainer
 	 *
-	 * @return MessageHandlerProvider
+	 * @return HandlerProvider
 	 */
 	private function makeProvider(array $handlers, callable $initContainer = null)
 	{
-		return new ContainerMessageHandlerProvider(
+		return new ContainerHandlerProvider(
 			$handlers,
 			$this->mockContainer($initContainer)
 		);

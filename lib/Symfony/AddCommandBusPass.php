@@ -11,7 +11,7 @@
 
 namespace ICanBoogie\MessageBus\Symfony;
 
-use ICanBoogie\MessageBus\PSR\ContainerMessageHandlerProvider;
+use ICanBoogie\MessageBus\PSR\ContainerHandlerProvider;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\TypedReference;
  */
 class AddCommandBusPass implements CompilerPassInterface
 {
-	const DEFAULT_PROVIDER_SERVICE = 'message_bus.message_handler_provider';
+	const DEFAULT_PROVIDER_SERVICE = 'message_bus.handler_provider';
 	const DEFAULT_HANDLER_TAG = 'message_bus.handler';
 	const DEFAULT_MESSAGE_PROPERTY = 'message';
 
@@ -90,7 +90,7 @@ class AddCommandBusPass implements CompilerPassInterface
 		}
 
 		$container
-			->register($this->providerId, ContainerMessageHandlerProvider::class)
+			->register($this->providerId, ContainerHandlerProvider::class)
 			->setArguments([
 				$mapping,
 				ServiceLocatorTagPass::register($container, $handlerRefs)
