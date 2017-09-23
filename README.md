@@ -166,7 +166,7 @@ $provider = $container->get(AddCommandBusPass::DEFAULT_PROVIDER_SERVICE);
 
 ## Asserting messages before dispatching
 
-The [AssertingMessageBus][] decorator can be used to assert message before they are dispatched. One
+The [AssertingMessageBus][] decorator can be used to assert messages before they are dispatched. One
 could use the assertion to reject messages that require special permissions.
 
 ```php
