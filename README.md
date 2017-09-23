@@ -47,6 +47,10 @@ The message handler provider is a callable with a signature similar to the
 that only requires an array of key/value pairs, where _key_ is a message class and _value_
 a message handler callable.
 
+
+
+
+
 ### Providing handlers
 
 The following example demonstrates how to define a message handler provider with a selection
@@ -74,6 +78,10 @@ $message_handler_provider = new SimpleMessageHandlerProvider([
 
 ]);
 ```
+
+
+
+
 
 ### Providing handlers with icanboogie/service
 
@@ -156,6 +164,30 @@ $provider = $container->get(AddCommandBusPass::DEFAULT_PROVIDER_SERVICE);
 
 
 
+## Asserting messages before dispatching
+
+The [AssertingMessageBus][] decorator can be used to assert message before they are dispatched. One
+could use the assertion to reject messages that require special permissions.
+
+```php
+<?php
+
+use ICanBoogie\MessageBus\AssertingMessageBus;
+
+/* @var ICanBoogie\MessageBus\MessageBus $message_bus */
+
+$asserting_message_bus = new AssertingMessageBus($message_bus, function ($message) {
+
+	if (/* some condition */)
+		throw new \LogicException("The message should not be dispatched.");
+
+});
+```
+
+
+
+
+
 ----------
 
 
@@ -228,6 +260,7 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
 
 [documentation]:                       https://icanboogie.org/api/message-bus/master/
+[AssertingMessageBus]:                 https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.AssertingMessageBus.html
 [MessageHandlerProvider]:              https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.MessageHandlerProvider.html
 [ShouldBePushed]:                      https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.ShouldBePushed.html
 [AddCommandBusPass]:                   https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.Symfony.AddCommandBusPass.html
