@@ -22,18 +22,11 @@ class SimpleDispatcher implements Dispatcher
 	private $handler_provider;
 
 	/**
-	 * @var MessagePusher|callable
-	 */
-	private $message_pusher;
-
-	/**
 	 * @param HandlerProvider|callable $handler_provider
-	 * @param MessagePusher|callable $message_pusher
 	 */
-	public function __construct(callable $handler_provider, callable $message_pusher = null)
+	public function __construct(callable $handler_provider)
 	{
 		$this->handler_provider = $handler_provider;
-		$this->message_pusher = $message_pusher;
 	}
 
 	/**
@@ -42,38 +35,6 @@ class SimpleDispatcher implements Dispatcher
 	 * @return mixed
 	 */
 	public function dispatch($message)
-	{
-		if ($message instanceof ShouldBePushed)
-		{
-			return $this->push($message);
-		}
-
-		return $this->handle($message);
-	}
-
-	/**
-	 * @param object $message
-	 *
-	 * @return mixed
-	 */
-	protected function push($message)
-	{
-		$pusher = $this->message_pusher;
-
-		if (!$pusher)
-		{
-			throw new NoPusherForMessage($message);
-		}
-
-		return $pusher($message);
-	}
-
-	/**
-	 * @param object $message
-	 *
-	 * @return mixed
-	 */
-	protected function handle($message)
 	{
 		$handler = $this->resolve_handler($message);
 

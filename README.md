@@ -6,14 +6,9 @@
 [![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/MessageBus.svg)](https://coveralls.io/r/ICanBoogie/MessageBus)
 [![Downloads](https://img.shields.io/packagist/dt/icanboogie/message-bus.svg)](https://packagist.org/packages/icanboogie/message-bus/stats)
 
-**ICanBoogie/MessageBus** provides a very simple message bus that can handle messages right away or
-push them in a queue. Implemented with a functional approach, it tries to be as flexible as
-possible: the message handler provider and the message pusher are defined with simple callables that
-you can implement or decorate with your favorite resolver and your favorite message queue.
-
-The following example demonstrates how to instantiate a message bus and dispatch messages. Messages
-implementing the [ShouldBePushed][] interface are pushed to the queue rather than executed right
-away.
+**ICanBoogie/MessageBus** provides a very simple message dispatcher. Implemented with a functional
+approach, it tries to be as flexible as possible: the handler provider is defined as a simple
+callables that you can implement or decorate with your favorite resolver.
 
 ```php
 <?php
@@ -21,19 +16,17 @@ away.
 namespace ICanBoogie\MessageBus;
 
 /* @var HandlerProvider|callable $handler_provider */
-/* @var MessagePusher|callable $message_pusher */
 
-$dispatcher = new SimpleDispatcher($handler_provider, $message_pusher);
+$dispatcher = new SimpleDispatcher($handler_provider);
 
 /* @var object $message */
 
-// The message is handled right away by an handler
+// The message is dispatched by an handler
 $result = $dispatcher->dispatch($message);
 
-/* @var ShouldBePushed $message */
+/* @var callable $assertion */
 
-// The message is pushed to a queue
-$dispatcher->dispatch($message);
+$asserting_dispatcher = new AssertingDispatcher($dispatcher, $assertion);
 ```
 
 
@@ -109,8 +102,7 @@ $handler_provider = new SimpleHandlerProvider([
 
 ### Providing handlers with a PSR container
 
-Use an instance of [PSR\ContainerHandlerProvider][] to provide handlers from a 
-[PSR container][]:
+Use an instance of [PSR\ContainerHandlerProvider][] to provide handlers from a [PSR container][]:
 
 ```php
 <?php
@@ -262,7 +254,6 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 [documentation]:                       https://icanboogie.org/api/message-bus/master/
 [AssertingDispatcher]:                 https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.AssertingMessageBus.html
 [HandlerProvider]:                     https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.HandlerProvider.html
-[ShouldBePushed]:                      https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.ShouldBePushed.html
 [AddCommandBusPass]:                   https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.Symfony.AddCommandBusPass.html
 [available on GitHub]:                 https://github.com/ICanBoogie/MessageBus
 [icanboogie/service]:                  https://github.com/ICanBoogie/Service
