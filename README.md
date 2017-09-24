@@ -120,7 +120,7 @@ $handler_provider = new ContainerHandlerProvider([
 ], $container);
 ```
 
-If you're using [symfony/dependency-injection][] you can add an instance of [AddCommandBusPass][]
+If you're using [symfony/dependency-injection][] you can add an instance of [MessageBusPass][]
 to your compilation pass to automatically generate the provider:
 
 ```yaml
@@ -138,7 +138,7 @@ services:
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
-use ICanBoogie\MessageBus\Symfony\AddCommandBusPass;
+use ICanBoogie\MessageBus\Symfony\MessageBusPass;
 
 /* @var string $config */
 /* @var ICanBoogie\MessageBus\PSR\ContainerHandlerProvider $provider */
@@ -146,10 +146,10 @@ use ICanBoogie\MessageBus\Symfony\AddCommandBusPass;
 $container = new ContainerBuilder();
 $loader = new YamlFileLoader($container, new FileLocator(__DIR__));
 $loader->load($config);
-$container->addCompilerPass(new AddCommandBusPass);
+$container->addCompilerPass(new MessageBusPass);
 $container->compile();
 
-$provider = $container->get(AddCommandBusPass::DEFAULT_PROVIDER_SERVICE);
+$provider = $container->get(MessageBusPass::DEFAULT_PROVIDER_SERVICE);
 ```
 
 
@@ -252,9 +252,9 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
 
 [documentation]:                       https://icanboogie.org/api/message-bus/master/
-[AssertingDispatcher]:                 https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.AssertingMessageBus.html
+[AssertingDispatcher]:                 https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.AssertingDispatcher.html
 [HandlerProvider]:                     https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.HandlerProvider.html
-[AddCommandBusPass]:                   https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.Symfony.AddCommandBusPass.html
+[MessageBusPass]:                      https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.Symfony.MessageBusPass.html
 [available on GitHub]:                 https://github.com/ICanBoogie/MessageBus
 [icanboogie/service]:                  https://github.com/ICanBoogie/Service
 [PSR container]:                       https://github.com/php-fig/container

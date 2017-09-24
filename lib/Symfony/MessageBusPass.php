@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\TypedReference;
 /**
  * Registers command bus handlers.
  */
-class AddCommandBusPass implements CompilerPassInterface
+class MessageBusPass implements CompilerPassInterface
 {
 	const DEFAULT_PROVIDER_SERVICE = 'message_bus.handler_provider';
 	const DEFAULT_HANDLER_TAG = 'message_bus.handler';

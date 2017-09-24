@@ -20,7 +20,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-class AddCommandBusPassTest extends \PHPUnit_Framework_TestCase
+class MessageBusPassTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * @expectedException \InvalidArgumentException
@@ -44,7 +44,7 @@ class AddCommandBusPassTest extends \PHPUnit_Framework_TestCase
 	{
 		/* @var ContainerHandlerProvider $provider */
 		$container = $this->makeContainer(__DIR__ . '/resources/ok.yml');
-		$provider = $container->get(AddCommandBusPass::DEFAULT_PROVIDER_SERVICE);
+		$provider = $container->get(MessageBusPass::DEFAULT_PROVIDER_SERVICE);
 
 		$this->assertInstanceOf(ContainerHandlerProvider::class, $provider);
 		$this->assertInstanceOf(HandlerA::class, $provider(new MessageA()));
@@ -61,7 +61,7 @@ class AddCommandBusPassTest extends \PHPUnit_Framework_TestCase
 		$container = new SymfonyContainerBuilder();
 		$loader = new YamlFileLoader($container, new FileLocator(__DIR__));
 		$loader->load($config);
-		$container->addCompilerPass(new AddCommandBusPass);
+		$container->addCompilerPass(new MessageBusPass);
 		$container->compile();
 
 		return $container;
