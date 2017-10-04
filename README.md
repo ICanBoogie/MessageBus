@@ -150,7 +150,7 @@ $loader->load($config);
 $container->addCompilerPass(new MessageBusPass);
 $container->compile();
 
-$provider = $container->get(MessageBusPass::DEFAULT_PROVIDER_SERVICE);
+$provider = $container->get(MessageBusPass::DEFAULT_SERVICE_ID);
 # or
 $provider = $container->get(HandlerProvider::class);
 ```

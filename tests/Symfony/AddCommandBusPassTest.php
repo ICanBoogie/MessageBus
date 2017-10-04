@@ -44,7 +44,7 @@ class MessageBusPassTest extends \PHPUnit_Framework_TestCase
 	{
 		/* @var ContainerHandlerProvider $provider */
 		$container = $this->makeContainer(__DIR__ . '/resources/ok.yml');
-		$provider = $container->get(MessageBusPass::DEFAULT_PROVIDER_SERVICE);
+		$provider = $container->get(MessageBusPass::DEFAULT_SERVICE_ID);
 
 		$this->assertInstanceOf(ContainerHandlerProvider::class, $provider);
 		$this->assertInstanceOf(HandlerA::class, $provider(new MessageA()));

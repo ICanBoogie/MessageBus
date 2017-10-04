@@ -25,14 +25,14 @@ use Symfony\Component\DependencyInjection\TypedReference;
  */
 class MessageBusPass implements CompilerPassInterface
 {
-	const DEFAULT_PROVIDER_SERVICE = HandlerProvider::class;
+	const DEFAULT_SERVICE_ID = HandlerProvider::class;
 	const DEFAULT_HANDLER_TAG = 'message_bus.handler';
 	const DEFAULT_MESSAGE_PROPERTY = 'message';
 
 	/**
 	 * @var string
 	 */
-	private $providerId;
+	private $service_id;
 
 	/**
 	 * @var string
@@ -50,11 +50,11 @@ class MessageBusPass implements CompilerPassInterface
 	 * @param string $messageProperty
 	 */
 	public function __construct(
-		$providerId = self::DEFAULT_PROVIDER_SERVICE,
+		$providerId = self::DEFAULT_SERVICE_ID,
 		$handlerTag = self::DEFAULT_HANDLER_TAG,
 		$messageProperty = self::DEFAULT_MESSAGE_PROPERTY
 	) {
-		$this->providerId = $providerId;
+		$this->service_id = $providerId;
 		$this->handlerTag = $handlerTag;
 		$this->messageProperty = $messageProperty;
 	}
@@ -91,7 +91,7 @@ class MessageBusPass implements CompilerPassInterface
 		}
 
 		$container
-			->register($this->providerId, ContainerHandlerProvider::class)
+			->register($this->service_id, ContainerHandlerProvider::class)
 			->setArguments([
 				$mapping,
 				ServiceLocatorTagPass::register($container, $handlerRefs)
