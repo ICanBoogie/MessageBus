@@ -37,26 +37,26 @@ class MessageBusPass implements CompilerPassInterface
 	/**
 	 * @var string
 	 */
-	private $handlerTag;
+	private $handler_tag;
 
 	/**
 	 * @var string
 	 */
-	private $messageProperty;
+	private $message_property;
 
 	/**
-	 * @param string $providerId
-	 * @param string $handlerTag
-	 * @param string $messageProperty
+	 * @param string $service_id
+	 * @param string $handler_tag
+	 * @param string $message_property
 	 */
 	public function __construct(
-		$providerId = self::DEFAULT_SERVICE_ID,
-		$handlerTag = self::DEFAULT_HANDLER_TAG,
-		$messageProperty = self::DEFAULT_MESSAGE_PROPERTY
+		$service_id = self::DEFAULT_SERVICE_ID,
+		$handler_tag = self::DEFAULT_HANDLER_TAG,
+		$message_property = self::DEFAULT_MESSAGE_PROPERTY
 	) {
-		$this->service_id = $providerId;
-		$this->handlerTag = $handlerTag;
-		$this->messageProperty = $messageProperty;
+		$this->service_id = $service_id;
+		$this->handler_tag = $handler_tag;
+		$this->message_property = $message_property;
 	}
 
 	/**
@@ -64,20 +64,20 @@ class MessageBusPass implements CompilerPassInterface
 	 */
 	public function process(ContainerBuilder $container)
 	{
-		$handlers = $container->findTaggedServiceIds($this->handlerTag, true);
-		$messageProperty = $this->messageProperty;
+		$handlers = $container->findTaggedServiceIds($this->handler_tag, true);
+		$message_property = $this->message_property;
 		$mapping = [];
-		$handlerRefs = [];
+		$ref_map = [];
 
 		foreach ($handlers as $id => $tags) {
-			if (empty($tags[0][$messageProperty]))
+			if (empty($tags[0][$message_property]))
 			{
 				throw new InvalidArgumentException(
-					"The `$messageProperty` property is required for service `$id`."
+					"The `$message_property` property is required for service `$id`."
 				);
 			}
 
-			$command = $tags[0][$messageProperty];
+			$command = $tags[0][$message_property];
 
 			if (isset($mapping[$command]))
 			{
@@ -87,14 +87,14 @@ class MessageBusPass implements CompilerPassInterface
 			}
 
 			$mapping[$command] = $id;
-			$handlerRefs[$id] = new TypedReference($id, $container->getDefinition($id)->getClass());
+			$ref_map[$id] = new TypedReference($id, $container->getDefinition($id)->getClass());
 		}
 
 		$container
 			->register($this->service_id, ContainerHandlerProvider::class)
 			->setArguments([
 				$mapping,
-				ServiceLocatorTagPass::register($container, $handlerRefs)
+				ServiceLocatorTagPass::register($container, $ref_map)
 			]);
 	}
 }
