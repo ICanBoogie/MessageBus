@@ -8,14 +8,14 @@
 
 **ICanBoogie/MessageBus** provides a very simple message dispatcher. Implemented with a functional
 approach, it tries to be as flexible as possible: the handler provider is defined as a simple
-callables that you can implement or decorate with your favorite resolver.
+callable that you can implement or decorate with your favorite resolver.
 
 ```php
 <?php
 
 namespace ICanBoogie\MessageBus;
 
-/* @var HandlerProvider|callable $handler_provider */
+/* @var HandlerProvider $handler_provider */
 
 $dispatcher = new SimpleDispatcher($handler_provider);
 

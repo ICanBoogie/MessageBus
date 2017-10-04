@@ -17,14 +17,14 @@ namespace ICanBoogie\MessageBus;
 class SimpleDispatcher implements Dispatcher
 {
 	/**
-	 * @var HandlerProvider|callable
+	 * @var HandlerProvider
 	 */
 	private $handler_provider;
 
 	/**
-	 * @param HandlerProvider|callable $handler_provider
+	 * @param HandlerProvider $handler_provider
 	 */
-	public function __construct(callable $handler_provider)
+	public function __construct(HandlerProvider $handler_provider)
 	{
 		$this->handler_provider = $handler_provider;
 	}

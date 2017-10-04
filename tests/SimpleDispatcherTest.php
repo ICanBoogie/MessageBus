@@ -24,21 +24,11 @@ class SimpleDispatcherTest extends \PHPUnit_Framework_TestCase
 
 		};
 
-		$handler_provider = function ($message) use (
-			$expectedMessage,
-			$handler
-		) {
+		$handler_provider = $this->prophesize(HandlerProvider::class);
+		$handler_provider->__invoke($expectedMessage)
+			->shouldBeCalled()->willReturn($handler);
 
-			if ($message === $expectedMessage)
-			{
-				return $handler;
-			}
-
-			throw new NoHandlerForMessage($message);
-
-		};
-
-		$bus = new SimpleDispatcher($handler_provider);
+		$bus = new SimpleDispatcher($handler_provider->reveal());
 		$this->assertSame($result, $bus->dispatch($expectedMessage));
 	}
 }
