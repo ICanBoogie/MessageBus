@@ -11,6 +11,7 @@
 
 namespace ICanBoogie\MessageBus\Symfony;
 
+use ICanBoogie\MessageBus\HandlerProvider;
 use ICanBoogie\MessageBus\PSR\ContainerHandlerProvider;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
@@ -24,7 +25,7 @@ use Symfony\Component\DependencyInjection\TypedReference;
  */
 class MessageBusPass implements CompilerPassInterface
 {
-	const DEFAULT_PROVIDER_SERVICE = 'message_bus.handler_provider';
+	const DEFAULT_PROVIDER_SERVICE = HandlerProvider::class;
 	const DEFAULT_HANDLER_TAG = 'message_bus.handler';
 	const DEFAULT_MESSAGE_PROPERTY = 'message';
 

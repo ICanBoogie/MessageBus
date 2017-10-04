@@ -138,6 +138,7 @@ services:
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
+use ICanBoogie\MessageBus\HandlerProvider;
 use ICanBoogie\MessageBus\Symfony\MessageBusPass;
 
 /* @var string $config */
@@ -150,6 +151,8 @@ $container->addCompilerPass(new MessageBusPass);
 $container->compile();
 
 $provider = $container->get(MessageBusPass::DEFAULT_PROVIDER_SERVICE);
+# or
+$provider = $container->get(HandlerProvider::class);
 ```
 
 
