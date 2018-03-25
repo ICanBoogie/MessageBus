@@ -21,5 +21,5 @@ interface Dispatcher
 	 *
 	 * @return mixed
 	 */
-	public function dispatch($message);
+	public function dispatch(object $message);
 }

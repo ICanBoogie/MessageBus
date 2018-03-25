@@ -34,7 +34,7 @@ class SimpleDispatcher implements Dispatcher
 	 *
 	 * @return mixed
 	 */
-	public function dispatch($message)
+	public function dispatch(object $message)
 	{
 		$handler = $this->resolve_handler($message);
 
@@ -44,11 +44,11 @@ class SimpleDispatcher implements Dispatcher
 	/**
 	 * @param object $message
 	 *
-	 * @return Handler|callable
+	 * @return mixed
 	 *
 	 * @throws NoHandlerForMessage
 	 */
-	protected function resolve_handler($message)
+	protected function resolve_handler(object $message)
 	{
 		$provider = $this->handler_provider;
 

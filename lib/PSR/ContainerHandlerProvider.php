@@ -25,10 +25,6 @@ class ContainerHandlerProvider extends SimpleHandlerProvider
 	 */
 	private $container;
 
-	/**
-	 * @param array $handlers
-	 * @param ContainerInterface $container
-	 */
 	public function __construct(array $handlers, ContainerInterface $container)
 	{
 		parent::__construct($handlers);
@@ -39,7 +35,7 @@ class ContainerHandlerProvider extends SimpleHandlerProvider
 	/**
 	 * @inheritdoc
 	 */
-	public function __invoke($message)
+	public function __invoke(object $message): callable
 	{
 		$id = parent::__invoke($message);
 

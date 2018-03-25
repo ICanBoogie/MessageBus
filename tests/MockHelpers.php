@@ -19,9 +19,9 @@ trait MockHelpers
 	 *
 	 * @return mixed
 	 */
-	private function mock($class, callable $init = null)
+	private function mock(string $class, callable $init = null)
 	{
-		/* @var $this \PHPUnit_Framework_TestCase */
+		/* @var $this \PHPUnit\Framework\TestCase */
 
 		$container = $this->prophesize($class);
 

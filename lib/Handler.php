@@ -21,5 +21,5 @@ interface Handler
 	 *
 	 * @return mixed
 	 */
-	public function __invoke($message);
+	public function __invoke(object $message);
 }

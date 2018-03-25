@@ -11,7 +11,7 @@
 
 namespace ICanBoogie\MessageBus;
 
-class SimpleHandlerProviderTest extends \PHPUnit_Framework_TestCase
+class SimpleHandlerProviderTest extends \PHPUnit\Framework\TestCase
 {
 	public function test_should_throw_exception_on_missing_handler()
 	{

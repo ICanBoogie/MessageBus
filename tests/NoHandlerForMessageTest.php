@@ -11,7 +11,7 @@
 
 namespace ICanBoogie\MessageBus;
 
-class NoHandlerForMessageTest extends \PHPUnit_Framework_TestCase
+class NoHandlerForMessageTest extends \PHPUnit\Framework\TestCase
 {
 	public function testException()
 	{

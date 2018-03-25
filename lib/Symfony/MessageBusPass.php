@@ -44,15 +44,10 @@ class MessageBusPass implements CompilerPassInterface
 	 */
 	private $message_property;
 
-	/**
-	 * @param string $service_id
-	 * @param string $handler_tag
-	 * @param string $message_property
-	 */
 	public function __construct(
-		$service_id = self::DEFAULT_SERVICE_ID,
-		$handler_tag = self::DEFAULT_HANDLER_TAG,
-		$message_property = self::DEFAULT_MESSAGE_PROPERTY
+		string $service_id = self::DEFAULT_SERVICE_ID,
+		string $handler_tag = self::DEFAULT_HANDLER_TAG,
+		string $message_property = self::DEFAULT_MESSAGE_PROPERTY
 	) {
 		$this->service_id = $service_id;
 		$this->handler_tag = $handler_tag;

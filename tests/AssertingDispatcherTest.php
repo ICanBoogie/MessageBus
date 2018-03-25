@@ -13,7 +13,7 @@ namespace ICanBoogie\MessageBus;
 
 use Prophecy\Argument;
 
-class AssertingDispatcherTest extends \PHPUnit_Framework_TestCase
+class AssertingDispatcherTest extends \PHPUnit\Framework\TestCase
 {
 	use MockHelpers;
 
@@ -62,13 +62,7 @@ class AssertingDispatcherTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame($result, $dispatcher->dispatch($message));
 	}
 
-	/**
-	 * @param callable $init_dispatcher
-	 * @param callable $assertion
-	 *
-	 * @return AssertingDispatcher
-	 */
-	private function make_dispatcher(callable $init_dispatcher, callable $assertion)
+	private function make_dispatcher(callable $init_dispatcher, callable $assertion): AssertingDispatcher
 	{
 		return new AssertingDispatcher(
 			$this->mock(Dispatcher::class, $init_dispatcher),

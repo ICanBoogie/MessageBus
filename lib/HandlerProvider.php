@@ -19,9 +19,9 @@ interface HandlerProvider
 	/**
 	 * @param object $message
 	 *
-	 * @return Handler|callable
+	 * @return mixed
 	 *
 	 * @throws NoHandlerForMessage if the handler for the message cannot the found.
 	 */
-	public function __invoke($message);
+	public function __invoke(object $message);
 }

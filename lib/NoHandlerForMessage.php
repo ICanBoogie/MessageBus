@@ -27,31 +27,19 @@ class NoHandlerForMessage extends \LogicException implements Exception
 	 */
 	private $_message;
 
-	/**
-	 * @return object
-	 */
-	protected function get_message()
+	protected function get_message(): object
 	{
 		return $this->_message;
 	}
 
-	/**
-	 * @param object $message
-	 * @param Exception|null $previous
-	 */
-	public function __construct($message, Exception $previous = null)
+	public function __construct(object $message, \Throwable $previous = null)
 	{
 		$this->_message = $message;
 
 		parent::__construct($this->format_message($message), 400, $previous);
 	}
 
-	/**
-	 * @param object $message
-	 *
-	 * @return string
-	 */
-	private function format_message($message)
+	private function format_message(object $message): string
 	{
 		$class = get_class($message);
 

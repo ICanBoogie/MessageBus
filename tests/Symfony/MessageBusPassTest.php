@@ -13,14 +13,17 @@ namespace ICanBoogie\MessageBus\Symfony;
 
 use ICanBoogie\MessageBus\HandlerA;
 use ICanBoogie\MessageBus\HandlerB;
+use ICanBoogie\MessageBus\HandlerProvider;
 use ICanBoogie\MessageBus\MessageA;
 use ICanBoogie\MessageBus\MessageB;
 use ICanBoogie\MessageBus\PSR\ContainerHandlerProvider;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use function uniqid;
 
-class MessageBusPassTest extends \PHPUnit_Framework_TestCase
+class MessageBusPassTest extends \PHPUnit\Framework\TestCase
 {
 	/**
 	 * @expectedException \InvalidArgumentException
@@ -43,25 +46,26 @@ class MessageBusPassTest extends \PHPUnit_Framework_TestCase
 	public function test_should_return_handler()
 	{
 		/* @var ContainerHandlerProvider $provider */
-		$container = $this->makeContainer(__DIR__ . '/resources/ok.yml');
-		$provider = $container->get(MessageBusPass::DEFAULT_SERVICE_ID);
+		$container = $this->makeContainer(__DIR__ . '/resources/ok.yml', $alias = 'alias_' . uniqid());
+		$provider = $container->get($alias);
 
 		$this->assertInstanceOf(ContainerHandlerProvider::class, $provider);
 		$this->assertInstanceOf(HandlerA::class, $provider(new MessageA()));
 		$this->assertInstanceOf(HandlerB::class, $provider(new MessageB()));
 	}
 
-	/**
-	 * @param string $config
-	 *
-	 * @return SymfonyContainerBuilder
-	 */
-	private function makeContainer($config)
+	private function makeContainer(string $config, string $alias = null): SymfonyContainerBuilder
 	{
 		$container = new SymfonyContainerBuilder();
 		$loader = new YamlFileLoader($container, new FileLocator(__DIR__));
 		$loader->load($config);
 		$container->addCompilerPass(new MessageBusPass);
+
+		if ($alias)
+		{
+			$container->setAlias($alias, new Alias(HandlerProvider::class, true));
+		}
+
 		$container->compile();
 
 		return $container;

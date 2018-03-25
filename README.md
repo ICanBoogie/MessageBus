@@ -6,9 +6,9 @@
 [![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/MessageBus.svg)](https://coveralls.io/r/ICanBoogie/MessageBus)
 [![Downloads](https://img.shields.io/packagist/dt/icanboogie/message-bus.svg)](https://packagist.org/packages/icanboogie/message-bus/stats)
 
-**ICanBoogie/MessageBus** provides a very simple message dispatcher. Implemented with a functional
-approach, it tries to be as flexible as possible: the handler provider is defined as a simple
-callable that you can implement or decorate with your favorite resolver.
+**ICanBoogie/MessageBus** provides a very simple message dispatcher that tries to be as flexible as
+possible: the handler provider is defined as a simple callable that you can implement or decorate
+with your favorite resolver.
 
 ```php
 <?php
@@ -125,6 +125,10 @@ to your compilation pass to automatically generate the provider:
 
 ```yaml
 services:
+
+  ICanBoogie\MessageBus\SimpleDispatcher:
+    autowire: true
+
   handler.article.create:
     class: App\Domain\Article\Handler\CreateArticleHandler
     tags:
@@ -138,21 +142,15 @@ services:
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
-use ICanBoogie\MessageBus\HandlerProvider;
 use ICanBoogie\MessageBus\Symfony\MessageBusPass;
 
 /* @var string $config */
-/* @var ICanBoogie\MessageBus\PSR\ContainerHandlerProvider $provider */
 
 $container = new ContainerBuilder();
 $loader = new YamlFileLoader($container, new FileLocator(__DIR__));
 $loader->load($config);
 $container->addCompilerPass(new MessageBusPass);
 $container->compile();
-
-$provider = $container->get(MessageBusPass::DEFAULT_SERVICE_ID);
-# or
-$provider = $container->get(HandlerProvider::class);
 ```
 
 
@@ -191,7 +189,7 @@ $asserting_dispatcher = new AssertingDispatcher($dispatcher, function ($message)
 
 ## Requirements
 
-The package requires PHP 5.6 or later.
+The package requires PHP 7.2 or later.
 
 
 
@@ -254,13 +252,13 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
 
 
-[documentation]:                       https://icanboogie.org/api/message-bus/master/
-[AssertingDispatcher]:                 https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.AssertingDispatcher.html
-[HandlerProvider]:                     https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.HandlerProvider.html
-[MessageBusPass]:                      https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.Symfony.MessageBusPass.html
+[documentation]:                       https://icanboogie.org/api/message-bus/0.6/
+[AssertingDispatcher]:                 https://icanboogie.org/api/message-bus/0.6/class-ICanBoogie.MessageBus.AssertingDispatcher.html
+[HandlerProvider]:                     https://icanboogie.org/api/message-bus/0.6/class-ICanBoogie.MessageBus.HandlerProvider.html
+[MessageBusPass]:                      https://icanboogie.org/api/message-bus/0.6/class-ICanBoogie.MessageBus.Symfony.MessageBusPass.html
+[PSR\ContainerHandlerProvider]:        https://icanboogie.org/api/message-bus/0.6/class-ICanBoogie.MessageBus.PSR.ContainerHandlerProvider.html
 [available on GitHub]:                 https://github.com/ICanBoogie/MessageBus
 [icanboogie/service]:                  https://github.com/ICanBoogie/Service
 [PSR container]:                       https://github.com/php-fig/container
 [ICanBoogie]:                          https://icanboogie.org
-[PSR\ContainerHandlerProvider]:        https://icanboogie.org/api/message-bus/master/class-ICanBoogie.MessageBus.PSR.ContainerHandlerProvider.html
 [symfony/dependency-injection]:        https://symfony.com/doc/current/components/dependency_injection.html

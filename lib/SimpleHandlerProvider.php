@@ -21,9 +21,6 @@ class SimpleHandlerProvider implements HandlerProvider
 	 */
 	private $handlers;
 
-	/**
-	 * @param Handler[]|callable[] $handlers
-	 */
 	public function __construct(array $handlers)
 	{
 		$this->handlers = $handlers;
@@ -32,7 +29,7 @@ class SimpleHandlerProvider implements HandlerProvider
 	/**
 	 * @inheritdoc
 	 */
-	public function __invoke($message)
+	public function __invoke(object $message)
 	{
 		$class = get_class($message);
 

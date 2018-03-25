@@ -42,9 +42,9 @@ class AssertingDispatcher implements Dispatcher
 	 *
 	 * @return mixed
 	 */
-	public function dispatch($message)
+	public function dispatch(object $message)
 	{
-		call_user_func($this->assertion, $message);
+		($this->assertion)($message);
 
 		return $this->dispatcher->dispatch($message);
 	}

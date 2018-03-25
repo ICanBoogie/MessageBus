@@ -8,7 +8,7 @@ use ICanBoogie\MessageBus\HandlerProvider;
 use ICanBoogie\MessageBus\MockHelpers;
 use Psr\Container\ContainerInterface;
 
-class ContainerHandlerProviderTest extends \PHPUnit_Framework_TestCase
+class ContainerHandlerProviderTest extends \PHPUnit\Framework\TestCase
 {
 	use MockHelpers;
 
@@ -41,7 +41,7 @@ class ContainerHandlerProviderTest extends \PHPUnit_Framework_TestCase
 	{
 		$messageA = new MessageA();
 		$messageB = new MessageB();
-		$expected_service = (object) [];
+		$expected_service = function () {};
 		$handlers = [
 
 			get_class($messageA) => $expected_service_id = uniqid(),
