@@ -9,12 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\MessageBus;
+namespace ICanBoogie\MessageBus\PSR;
 
-/**
- *  Dispatcher exceptions implement this interface so that they can be easily recognized.
- */
-interface Exception
+use ICanBoogie\MessageBus\SimpleDispatcher;
+
+class QueryDispatcher extends SimpleDispatcher
 {
-
+	public function __construct(QueryHandlerProvider $handler_provider)
+	{
+		parent::__construct($handler_provider);
+	}
 }

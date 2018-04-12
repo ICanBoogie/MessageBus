@@ -1,0 +1,30 @@
+services:
+
+  _defaults:
+    autowire: true
+
+  ICanBoogie\MessageBus\CommandDispatcher:
+    class: ICanBoogie\MessageBus\PSR\CommandDispatcher
+
+  ICanBoogie\MessageBus\QueryDispatcher:
+    class: ICanBoogie\MessageBus\PSR\QueryDispatcher
+
+  query_dispatcher:
+    alias: ICanBoogie\MessageBus\QueryDispatcher
+    public: true
+
+  command_dispatcher:
+    alias: ICanBoogie\MessageBus\CommandDispatcher
+    public: true
+
+  handler.entity.show:
+    class: ICanBoogie\MessageBus\HandlerA
+    tags:
+      - name: query_dispatcher.handler
+        query: ICanBoogie\MessageBus\Symfony\QueryA
+
+  handler.entity.create:
+    class: ICanBoogie\MessageBus\HandlerB
+    tags:
+      - name: command_dispatcher.handler
+        command: ICanBoogie\MessageBus\Symfony\CommandA

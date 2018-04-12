@@ -16,7 +16,9 @@ use ICanBoogie\MessageBus\HandlerB;
 use ICanBoogie\MessageBus\HandlerProvider;
 use ICanBoogie\MessageBus\MessageA;
 use ICanBoogie\MessageBus\MessageB;
+use ICanBoogie\MessageBus\PSR\CommandDispatcher;
 use ICanBoogie\MessageBus\PSR\ContainerHandlerProvider;
+use ICanBoogie\MessageBus\PSR\QueryDispatcher;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
@@ -54,12 +56,28 @@ class MessageBusPassTest extends \PHPUnit\Framework\TestCase
 		$this->assertInstanceOf(HandlerB::class, $provider(new MessageB()));
 	}
 
+	public function test_cqs()
+	{
+		$container = new SymfonyContainerBuilder();
+		$loader = new YamlFileLoader($container, new FileLocator(__DIR__));
+		$loader->load(__DIR__ . '/resources/cqs.yml');
+		$container
+			->addCompilerPass(new QueryHandlerProviderPass)
+			->addCompilerPass(new CommandHandlerProviderPass)
+			->compile();
+
+		$command_dispatcher = $container->get('command_dispatcher');
+		$query_dispatcher = $container->get('query_dispatcher');
+		$this->assertInstanceOf(CommandDispatcher::class, $command_dispatcher);
+		$this->assertInstanceOf(QueryDispatcher::class, $query_dispatcher);
+	}
+
 	private function makeContainer(string $config, string $alias = null): SymfonyContainerBuilder
 	{
 		$container = new SymfonyContainerBuilder();
 		$loader = new YamlFileLoader($container, new FileLocator(__DIR__));
 		$loader->load($config);
-		$container->addCompilerPass(new MessageBusPass);
+		$container->addCompilerPass(new HandlerProviderPass);
 
 		if ($alias)
 		{

@@ -21,13 +21,13 @@ use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\DependencyInjection\TypedReference;
 
 /**
- * Registers command bus handlers.
+ * Collect message handlers and register their provider.
  */
-class MessageBusPass implements CompilerPassInterface
+class HandlerProviderPass implements CompilerPassInterface
 {
 	const DEFAULT_SERVICE_ID = HandlerProvider::class;
-	const DEFAULT_HANDLER_TAG = 'message_bus.handler';
-	const DEFAULT_MESSAGE_PROPERTY = 'message';
+	const DEFAULT_HANDLER_TAG = 'message_dispatcher.handler';
+	const DEFAULT_QUERY_PROPERTY = 'message';
 
 	/**
 	 * @var string
@@ -47,7 +47,7 @@ class MessageBusPass implements CompilerPassInterface
 	public function __construct(
 		string $service_id = self::DEFAULT_SERVICE_ID,
 		string $handler_tag = self::DEFAULT_HANDLER_TAG,
-		string $message_property = self::DEFAULT_MESSAGE_PROPERTY
+		string $message_property = self::DEFAULT_QUERY_PROPERTY
 	) {
 		$this->service_id = $service_id;
 		$this->handler_tag = $handler_tag;
@@ -58,6 +58,18 @@ class MessageBusPass implements CompilerPassInterface
 	 * @inheritdoc
 	 */
 	public function process(ContainerBuilder $container)
+	{
+		[ $mapping, $ref_map ] = $this->collectHandlers($container);
+
+		$container
+			->register($this->service_id, ContainerHandlerProvider::class)
+			->setArguments([
+				$mapping,
+				ServiceLocatorTagPass::register($container, $ref_map)
+			]);
+	}
+
+	protected function collectHandlers(ContainerBuilder $container): array
 	{
 		$handlers = $container->findTaggedServiceIds($this->handler_tag, true);
 		$message_property = $this->message_property;
@@ -85,11 +97,6 @@ class MessageBusPass implements CompilerPassInterface
 			$ref_map[$id] = new TypedReference($id, $container->getDefinition($id)->getClass());
 		}
 
-		$container
-			->register($this->service_id, ContainerHandlerProvider::class)
-			->setArguments([
-				$mapping,
-				ServiceLocatorTagPass::register($container, $ref_map)
-			]);
+		return [ $mapping, $ref_map ];
 	}
 }

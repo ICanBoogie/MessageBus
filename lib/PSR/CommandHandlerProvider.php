@@ -9,12 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\MessageBus;
+namespace ICanBoogie\MessageBus\PSR;
 
-/**
- *  Dispatcher exceptions implement this interface so that they can be easily recognized.
- */
-interface Exception
+class CommandHandlerProvider extends ContainerHandlerProvider
 {
 
 }
