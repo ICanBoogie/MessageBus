@@ -19,8 +19,7 @@ class NoHandlerForMessageTest extends \PHPUnit\Framework\TestCase
 		$exception = new NoHandlerForMessage($message);
 
 		$this->assertSame(400, $exception->getCode());
-		$this->assertSame($message, $exception->message);
-		$this->assertStringStartsWith("There is no handler defined", $exception->getMessage());
+		$this->assertStringStartsWith("There is no handler for", $exception->getMessage());
 		$this->assertContains(get_class($message), $exception->getMessage());
 	}
 }

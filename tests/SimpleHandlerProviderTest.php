@@ -36,7 +36,7 @@ class SimpleHandlerProviderTest extends \PHPUnit\Framework\TestCase
 		}
 		catch (NoHandlerForMessage $e)
 		{
-			$this->assertSame($messageB, $e->message);
+			$this->assertContains(get_class($messageB), $e->getMessage());
 			return;
 		}
 
