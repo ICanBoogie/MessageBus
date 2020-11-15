@@ -12,8 +12,9 @@
 namespace ICanBoogie\MessageBus\PSR;
 
 use ICanBoogie\MessageBus\HandlerProvider;
-use ICanBoogie\MessageBus\NoHandlerForMessage;
+use ICanBoogie\MessageBus\NotFound;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use function get_class;
 
 class ContainerHandlerProvider implements HandlerProvider
@@ -44,11 +45,15 @@ class ContainerHandlerProvider implements HandlerProvider
 		$class = get_class($message);
 		$id = $this->handlers[$class] ?? null;
 
-		if (!$id || !$this->container->has($id))
+		if (!$id)
 		{
-			throw new NoHandlerForMessage($message);
+			throw new NotFound("No handler for messages of type `$class`.");
 		}
 
-		return $this->container->get($id);
+		try {
+			return $this->container->get($id);
+		} catch (NotFoundExceptionInterface $e) {
+			throw new NotFound("No handler for messages of type `$class`.", $e);
+		}
 	}
 }

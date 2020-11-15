@@ -2,13 +2,16 @@
 
 namespace ICanBoogie\MessageBus\PSR;
 
+use Exception;
 use ICanBoogie\MessageBus\HandlerProvider;
 use ICanBoogie\MessageBus\MessageA;
 use ICanBoogie\MessageBus\MessageB;
-use ICanBoogie\MessageBus\NoHandlerForMessage;
+use ICanBoogie\MessageBus\NotFound;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class ContainerHandlerProviderTest extends TestCase
 {
@@ -24,7 +27,19 @@ class ContainerHandlerProviderTest extends TestCase
 		parent::setUp();
 	}
 
-	public function test_should_throw_exception_on_undefined_service()
+	public function test_should_fail_on_undefined_handler()
+	{
+		$this->container->get(Argument::any())
+			->shouldNotBeCalled();
+
+		$provider = $this->makeProvider([]);
+
+		$this->expectException(NotFound::class);
+
+		$provider->getHandlerForMessage(new class () {});
+	}
+
+	public function test_should_fail_on_undefined_service()
 	{
 		$messageA = new MessageA();
 		$handlers = [
@@ -33,14 +48,12 @@ class ContainerHandlerProviderTest extends TestCase
 
 		];
 
-		$this->container->has($undefined_service)
-			->shouldBeCalledTimes(1)->willReturn(false);
 		$this->container->get($undefined_service)
-			->shouldNotBeCalled();
+			->willThrow(new class extends Exception implements NotFoundExceptionInterface {});
 
 		$provider = $this->makeProvider($handlers);
 
-		$this->expectException(NoHandlerForMessage::class);
+		$this->expectException(NotFound::class);
 
 		$provider->getHandlerForMessage($messageA);
 	}
@@ -57,10 +70,8 @@ class ContainerHandlerProviderTest extends TestCase
 
 		];
 
-		$this->container->has($expected_service_id)
-			->shouldBeCalledTimes(1)->willReturn(true);
 		$this->container->get($expected_service_id)
-			->shouldBeCalledTimes(1)->willReturn($expected_service);
+			->willReturn($expected_service);
 
 		$provider = $this->makeProvider($handlers);
 

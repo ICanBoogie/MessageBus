@@ -7,6 +7,9 @@ implemented this interface, you'll have to change `__invoke(object $message)` to
 `getHandlerForMessage(object $message): callable`. The change was inspired by [PSR-14][] and its
 `ListenerProviderInterface` interface.
 
+The exception `NoHandlerForMessage` was renamed as `NotFound`, if you were catching that exception,
+you'll have to update.
+
 Other changes are mostly under the hood and shouldn't be noticed.
 
 ### Breaking changes
@@ -15,6 +18,7 @@ Other changes are mostly under the hood and shouldn't be noticed.
 - `ContainerHandlerProvider` expects container first, mapping second.
 - `ContainerHandlerProvider` not longer extends `SimpleHandlerProvider`.
 - Renamed `HandlerProviderPass::DEFAULT_QUERY_PROPERTY` as `DEFAULT_MESSAGE_PROPERTY`.
+- Reworked `NoHandlerForMessage` and renamed as `NotFound`.
 
 ### Other changes
 

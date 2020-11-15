@@ -36,7 +36,7 @@ final class SimpleHandlerProvider implements HandlerProvider
 
 		if (!$handler)
 		{
-			throw new NoHandlerForMessage($message);
+			throw new NotFound("No handler for messages of type `$class`.");
 		}
 
 		return $handler;

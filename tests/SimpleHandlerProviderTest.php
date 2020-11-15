@@ -22,7 +22,7 @@ class SimpleHandlerProviderTest extends TestCase
 
 		$handler_provider = new SimpleHandlerProvider([
 			get_class($messageA) => function () {
-				$this->fail("Should call another handler");
+				$this->fail("This is not the handler you are looking for");
 			}
 		]);
 
@@ -32,13 +32,13 @@ class SimpleHandlerProviderTest extends TestCase
 		{
 			$bus->dispatch($messageB);
 		}
-		catch (NoHandlerForMessage $e)
+		catch (NotFound $e)
 		{
 			$this->assertStringContainsString(get_class($messageB), $e->getMessage());
 			return;
 		}
 
-		$this->fail("Expected NoHandlerForMessage");
+		$this->fail("Expected NotFound");
 	}
 
 	public function test_should_return_the_expected_result()
@@ -50,11 +50,12 @@ class SimpleHandlerProviderTest extends TestCase
 
 		$handler_provider = new SimpleHandlerProvider([
 			get_class($messageA) => function () {
-				$this->fail("Should call another handler");
+				$this->fail("This is not the handler you are looking for");
 			},
 
 			get_class($messageB) => function ($message) use ($result, $messageB) {
 				$this->assertSame($messageB, $message);
+
 				return $result;
 			},
 		]);
