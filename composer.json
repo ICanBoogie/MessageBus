@@ -20,17 +20,15 @@
 		"issues": "https://github.com/ICanBoogie/MessageBus/issues",
 		"source": "https://github.com/ICanBoogie/MessageBus"
 	},
-	"minimum-stability": "dev",
 	"prefer-stable": true,
-	"prefer-dist": true,
 	"require": {
-		"php": "^7.2"
+		"php": ">=7.2.5"
 	},
 	"require-dev": {
 		"psr/container": "^1.0",
-		"symfony/dependency-injection": "^4.0",
-		"symfony/config": "^4.0",
-		"symfony/yaml": "^4.0"
+		"symfony/config": "^4.0|^5.1",
+		"symfony/dependency-injection": "^4.0|^5.1",
+		"symfony/yaml": "^4.0|^5.1"
 	},
 	"autoload": {
 		"psr-4": {
@@ -41,6 +39,9 @@
 		"psr-4": {
 			"ICanBoogie\\MessageBus\\": "tests/"
 		}
+	},
+	"config": {
+		"sort-packages": true
 	},
 	"extra": {
 		"icanboogie": {
