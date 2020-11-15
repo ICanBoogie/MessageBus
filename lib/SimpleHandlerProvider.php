@@ -17,10 +17,13 @@ namespace ICanBoogie\MessageBus;
 class SimpleHandlerProvider implements HandlerProvider
 {
 	/**
-	 * @var array
+	 * @var array<string, object>
 	 */
 	private $handlers;
 
+	/**
+	 * @param array<string, object> $handlers
+	 */
 	public function __construct(array $handlers)
 	{
 		$this->handlers = $handlers;
@@ -32,12 +35,13 @@ class SimpleHandlerProvider implements HandlerProvider
 	public function __invoke(object $message)
 	{
 		$class = get_class($message);
+		$handler = $this->handlers[$class] ?? null;
 
-		if (empty($this->handlers[$class]))
+		if (!$handler)
 		{
 			throw new NoHandlerForMessage($message);
 		}
 
-		return $this->handlers[$class];
+		return $handler;
 	}
 }

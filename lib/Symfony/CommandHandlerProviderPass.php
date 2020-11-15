@@ -17,9 +17,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class CommandHandlerProviderPass extends HandlerProviderPass
 {
-	const DEFAULT_SERVICE_ID = CommandHandlerProvider::class;
-	const DEFAULT_HANDLER_TAG = 'command_dispatcher.handler';
-	const DEFAULT_QUERY_PROPERTY = 'command';
+	public const DEFAULT_SERVICE_ID = CommandHandlerProvider::class;
+	public const DEFAULT_HANDLER_TAG = 'command_dispatcher.handler';
+	public const DEFAULT_QUERY_PROPERTY = 'command';
 
 	/**
 	 * @var string

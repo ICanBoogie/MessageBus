@@ -17,9 +17,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class QueryHandlerProviderPass extends HandlerProviderPass
 {
-	const DEFAULT_SERVICE_ID = QueryHandlerProvider::class;
-	const DEFAULT_HANDLER_TAG = 'query_dispatcher.handler';
-	const DEFAULT_QUERY_PROPERTY = 'query';
+	public const DEFAULT_SERVICE_ID = QueryHandlerProvider::class;
+	public const DEFAULT_HANDLER_TAG = 'query_dispatcher.handler';
+	public const DEFAULT_QUERY_PROPERTY = 'query';
 
 	/**
 	 * @var string

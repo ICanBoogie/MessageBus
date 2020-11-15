@@ -25,9 +25,9 @@ use Symfony\Component\DependencyInjection\TypedReference;
  */
 class HandlerProviderPass implements CompilerPassInterface
 {
-	const DEFAULT_SERVICE_ID = HandlerProvider::class;
-	const DEFAULT_HANDLER_TAG = 'message_dispatcher.handler';
-	const DEFAULT_QUERY_PROPERTY = 'message';
+	public const DEFAULT_SERVICE_ID = HandlerProvider::class;
+	public const DEFAULT_HANDLER_TAG = 'message_dispatcher.handler';
+	public const DEFAULT_QUERY_PROPERTY = 'message';
 
 	/**
 	 * @var string
