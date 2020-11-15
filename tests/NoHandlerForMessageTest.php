@@ -11,7 +11,9 @@
 
 namespace ICanBoogie\MessageBus;
 
-class NoHandlerForMessageTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class NoHandlerForMessageTest extends TestCase
 {
 	public function testException()
 	{
@@ -20,6 +22,6 @@ class NoHandlerForMessageTest extends \PHPUnit\Framework\TestCase
 
 		$this->assertSame(400, $exception->getCode());
 		$this->assertStringStartsWith("There is no handler for", $exception->getMessage());
-		$this->assertContains(get_class($message), $exception->getMessage());
+		$this->assertStringContainsString(get_class($message), $exception->getMessage());
 	}
 }

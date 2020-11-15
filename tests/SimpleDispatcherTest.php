@@ -11,22 +11,20 @@
 
 namespace ICanBoogie\MessageBus;
 
-class SimpleDispatcherTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class SimpleDispatcherTest extends TestCase
 {
 	public function test_should_handle_message()
 	{
 		$expectedMessage = (object) [ uniqid() => uniqid() ];
 		$result = uniqid();
 
-		$handler = function ($message) use ($result) {
-
-			return $result;
-
-		};
-
 		$handler_provider = $this->prophesize(HandlerProvider::class);
 		$handler_provider->__invoke($expectedMessage)
-			->shouldBeCalled()->willReturn($handler);
+			->shouldBeCalled()->willReturn(function () use ($result) {
+				return $result;
+			});
 
 		$bus = new SimpleDispatcher($handler_provider->reveal());
 		$this->assertSame($result, $bus->dispatch($expectedMessage));

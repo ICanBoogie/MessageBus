@@ -19,29 +19,28 @@ use ICanBoogie\MessageBus\MessageB;
 use ICanBoogie\MessageBus\PSR\CommandDispatcher;
 use ICanBoogie\MessageBus\PSR\ContainerHandlerProvider;
 use ICanBoogie\MessageBus\PSR\QueryDispatcher;
+use InvalidArgumentException;
+use LogicException;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use function uniqid;
 
-class MessageBusPassTest extends \PHPUnit\Framework\TestCase
+class MessageBusPassTest extends TestCase
 {
-	/**
-	 * @expectedException \InvalidArgumentException
-	 * @expectedExceptionMessage The `message` property is required for service `handler.message_a`
-	 */
 	public function test_should_error_on_missing_message()
 	{
+		$this->expectExceptionMessage("The `message` property is required for service `handler.message_a`");
+		$this->expectException(InvalidArgumentException::class);
 		$this->makeContainer(__DIR__ . '/resources/missing-message.yml');
 	}
 
-	/**
-	 * @expectedException \LogicException
-	 * @expectedExceptionMessage The command `ICanBoogie\MessageBus\MessageA` already has an handler: `handler.message_a`.
-	 */
 	public function test_should_error_message_duplicated()
 	{
+		$this->expectExceptionMessage("The command `ICanBoogie\MessageBus\MessageA` already has an handler: `handler.message_a`.");
+		$this->expectException(LogicException::class);
 		$this->makeContainer(__DIR__ . '/resources/message-duplicate.yml');
 	}
 

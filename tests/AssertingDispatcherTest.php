@@ -11,22 +11,33 @@
 
 namespace ICanBoogie\MessageBus;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 
-class AssertingDispatcherTest extends \PHPUnit\Framework\TestCase
+class AssertingDispatcherTest extends TestCase
 {
-	use MockHelpers;
+	/**
+	 * @var Dispatcher|ObjectProphecy
+	 */
+	private $dispatcher;
+
+	protected function setUp(): void
+	{
+		$this->dispatcher = $this->prophesize(Dispatcher::class);
+
+		parent::setUp();
+	}
 
 	public function test_should_not_dispatch_message()
 	{
 		$message = (object) [];
 		$exception = new \Exception();
 
+		$this->dispatcher->dispatch(Argument::any())
+			->shouldNotBeCalled();
+
 		$dispatcher = $this->make_dispatcher(
-			function ($dispatcher) {
-				$dispatcher->dispatch(Argument::any())
-					->shouldNotBeCalled();
-			},
 			function ($actual) use ($message, $exception) {
 				$this->assertSame($message, $actual);
 				throw $exception;
@@ -49,11 +60,10 @@ class AssertingDispatcherTest extends \PHPUnit\Framework\TestCase
 		$message = (object) [];
 		$result = uniqid();
 
+		$this->dispatcher->dispatch($message)
+			->shouldBeCalled()->willReturn($result);
+
 		$dispatcher = $this->make_dispatcher(
-			function ($dispatcher) use ($message, $result) {
-				$dispatcher->dispatch($message)
-					->shouldBeCalled()->willReturn($result);
-			},
 			function ($actual) use ($message) {
 				$this->assertSame($message, $actual);
 			}
@@ -62,10 +72,10 @@ class AssertingDispatcherTest extends \PHPUnit\Framework\TestCase
 		$this->assertSame($result, $dispatcher->dispatch($message));
 	}
 
-	private function make_dispatcher(callable $init_dispatcher, callable $assertion): AssertingDispatcher
+	private function make_dispatcher(callable $assertion): AssertingDispatcher
 	{
 		return new AssertingDispatcher(
-			$this->mock(Dispatcher::class, $init_dispatcher),
+			$this->dispatcher->reveal(),
 			$assertion
 		);
 	}

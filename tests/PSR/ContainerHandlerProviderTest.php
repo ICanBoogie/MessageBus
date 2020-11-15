@@ -2,19 +2,28 @@
 
 namespace ICanBoogie\MessageBus\PSR;
 
+use ICanBoogie\MessageBus\HandlerProvider;
 use ICanBoogie\MessageBus\MessageA;
 use ICanBoogie\MessageBus\MessageB;
-use ICanBoogie\MessageBus\HandlerProvider;
-use ICanBoogie\MessageBus\MockHelpers;
+use ICanBoogie\MessageBus\NoHandlerForMessage;
+use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 
-class ContainerHandlerProviderTest extends \PHPUnit\Framework\TestCase
+class ContainerHandlerProviderTest extends TestCase
 {
-	use MockHelpers;
-
 	/**
-	 * @expectedException \ICanBoogie\MessageBus\NoHandlerForMessage
+	 * @var ObjectProphecy|ContainerInterface
 	 */
+	private $container;
+
+	protected function setUp(): void
+	{
+		$this->container = $this->prophesize(ContainerInterface::class);
+
+		parent::setUp();
+	}
+
 	public function test_should_throw_exception_on_undefined_service()
 	{
 		$messageA = new MessageA();
@@ -24,15 +33,14 @@ class ContainerHandlerProviderTest extends \PHPUnit\Framework\TestCase
 
 		];
 
-		$provider = $this->makeProvider(
-			$handlers,
-			function ($container) use ($undefined_service) {
-				$container->has($undefined_service)
-					->shouldBeCalledTimes(1)->willReturn(false);
-				$container->get($undefined_service)
-					->shouldNotBeCalled();
-			}
-		);
+		$this->container->has($undefined_service)
+			->shouldBeCalledTimes(1)->willReturn(false);
+		$this->container->get($undefined_service)
+			->shouldNotBeCalled();
+
+		$provider = $this->makeProvider($handlers);
+
+		$this->expectException(NoHandlerForMessage::class);
 
 		$provider($messageA);
 	}
@@ -49,40 +57,21 @@ class ContainerHandlerProviderTest extends \PHPUnit\Framework\TestCase
 
 		];
 
-		$provider = $this->makeProvider(
-			$handlers,
-			function ($container) use ($expected_service_id, $expected_service) {
-				$container->has($expected_service_id)
-					->shouldBeCalledTimes(1)->willReturn(true);
-				$container->get($expected_service_id)
-					->shouldBeCalledTimes(1)->willReturn($expected_service);
-			}
-		);
+		$this->container->has($expected_service_id)
+			->shouldBeCalledTimes(1)->willReturn(true);
+		$this->container->get($expected_service_id)
+			->shouldBeCalledTimes(1)->willReturn($expected_service);
+
+		$provider = $this->makeProvider($handlers);
 
 		$this->assertSame($expected_service, $provider($messageA));
 	}
 
-	/**
-	 * @param array $handlers
-	 * @param callable|null $initContainer
-	 *
-	 * @return HandlerProvider
-	 */
-	private function makeProvider(array $handlers, callable $initContainer = null)
+	private function makeProvider(array $handlers): HandlerProvider
 	{
 		return new ContainerHandlerProvider(
 			$handlers,
-			$this->mockContainer($initContainer)
+			$this->container->reveal()
 		);
-	}
-
-	/**
-	 * @param callable|null $init
-	 *
-	 * @return ContainerInterface
-	 */
-	private function mockContainer(callable $init = null)
-	{
-		return $this->mock(ContainerInterface::class, $init);
 	}
 }

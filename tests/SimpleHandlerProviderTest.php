@@ -11,7 +11,9 @@
 
 namespace ICanBoogie\MessageBus;
 
-class SimpleHandlerProviderTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class SimpleHandlerProviderTest extends TestCase
 {
 	public function test_should_throw_exception_on_missing_handler()
 	{
@@ -19,13 +21,9 @@ class SimpleHandlerProviderTest extends \PHPUnit\Framework\TestCase
 		$messageB = new MessageB;
 
 		$handler_provider = new SimpleHandlerProvider([
-
-			get_class($messageA) => function ($message) {
-
+			get_class($messageA) => function () {
 				$this->fail("Should call another handler");
-
 			}
-
 		]);
 
 		$bus = new SimpleDispatcher($handler_provider);
@@ -36,7 +34,7 @@ class SimpleHandlerProviderTest extends \PHPUnit\Framework\TestCase
 		}
 		catch (NoHandlerForMessage $e)
 		{
-			$this->assertContains(get_class($messageB), $e->getMessage());
+			$this->assertStringContainsString(get_class($messageB), $e->getMessage());
 			return;
 		}
 
@@ -51,21 +49,14 @@ class SimpleHandlerProviderTest extends \PHPUnit\Framework\TestCase
 		$result = uniqid();
 
 		$handler_provider = new SimpleHandlerProvider([
-
-			get_class($messageA) => function ($message) {
-
+			get_class($messageA) => function () {
 				$this->fail("Should call another handler");
-
 			},
 
 			get_class($messageB) => function ($message) use ($result, $messageB) {
-
 				$this->assertSame($messageB, $message);
-
 				return $result;
-
 			},
-
 		]);
 
 		$bus = new SimpleDispatcher($handler_provider);
