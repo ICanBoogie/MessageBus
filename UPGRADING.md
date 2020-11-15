@@ -19,6 +19,7 @@ Other changes are mostly under the hood and shouldn't be noticed.
 - `ContainerHandlerProvider` not longer extends `SimpleHandlerProvider`.
 - Renamed `HandlerProviderPass::DEFAULT_QUERY_PROPERTY` as `DEFAULT_MESSAGE_PROPERTY`.
 - Reworked `NoHandlerForMessage` and renamed as `NotFound`.
+- Removed `Handler` interface.
 
 ### Other changes
 
