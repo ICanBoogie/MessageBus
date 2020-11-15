@@ -14,25 +14,22 @@ namespace ICanBoogie\MessageBus;
 /**
  * A simple implementation of {@link HandlerProvider}.
  */
-class SimpleHandlerProvider implements HandlerProvider
+final class SimpleHandlerProvider implements HandlerProvider
 {
 	/**
-	 * @var array<string, object>
+	 * @var array<string, callable>
 	 */
 	private $handlers;
 
 	/**
-	 * @param array<string, object> $handlers
+	 * @param array<string, callable> $handlers
 	 */
 	public function __construct(array $handlers)
 	{
 		$this->handlers = $handlers;
 	}
 
-	/**
-	 * @inheritdoc
-	 */
-	public function __invoke(object $message)
+	public function getHandlerForMessage(object $message): callable
 	{
 		$class = get_class($message);
 		$handler = $this->handlers[$class] ?? null;

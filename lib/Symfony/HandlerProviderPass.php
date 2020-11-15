@@ -27,7 +27,8 @@ class HandlerProviderPass implements CompilerPassInterface
 {
 	public const DEFAULT_SERVICE_ID = HandlerProvider::class;
 	public const DEFAULT_HANDLER_TAG = 'message_dispatcher.handler';
-	public const DEFAULT_QUERY_PROPERTY = 'message';
+	public const DEFAULT_MESSAGE_PROPERTY = 'message';
+	public const DEFAULT_PROVIDER_CLASS = ContainerHandlerProvider::class;
 
 	/**
 	 * @var string
@@ -44,14 +45,21 @@ class HandlerProviderPass implements CompilerPassInterface
 	 */
 	private $message_property;
 
+	/**
+	 * @var string
+	 */
+	private $provider_class;
+
 	public function __construct(
 		string $service_id = self::DEFAULT_SERVICE_ID,
 		string $handler_tag = self::DEFAULT_HANDLER_TAG,
-		string $message_property = self::DEFAULT_QUERY_PROPERTY
+		string $message_property = self::DEFAULT_MESSAGE_PROPERTY,
+		string $provider_class = self::DEFAULT_PROVIDER_CLASS
 	) {
 		$this->service_id = $service_id;
 		$this->handler_tag = $handler_tag;
 		$this->message_property = $message_property;
+		$this->provider_class = $provider_class;
 	}
 
 	/**
@@ -62,14 +70,14 @@ class HandlerProviderPass implements CompilerPassInterface
 		[ $mapping, $ref_map ] = $this->collectHandlers($container);
 
 		$container
-			->register($this->service_id, ContainerHandlerProvider::class)
+			->register($this->service_id, $this->provider_class)
 			->setArguments([
-				$mapping,
-				ServiceLocatorTagPass::register($container, $ref_map)
+				ServiceLocatorTagPass::register($container, $ref_map),
+				$mapping
 			]);
 	}
 
-	protected function collectHandlers(ContainerBuilder $container): array
+	private function collectHandlers(ContainerBuilder $container): array
 	{
 		$handlers = $container->findTaggedServiceIds($this->handler_tag, true);
 		$message_property = $this->message_property;

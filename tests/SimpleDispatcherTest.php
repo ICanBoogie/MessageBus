@@ -21,7 +21,7 @@ class SimpleDispatcherTest extends TestCase
 		$result = uniqid();
 
 		$handler_provider = $this->prophesize(HandlerProvider::class);
-		$handler_provider->__invoke($expectedMessage)
+		$handler_provider->getHandlerForMessage($expectedMessage)
 			->shouldBeCalled()->willReturn(function () use ($result) {
 				return $result;
 			});

@@ -42,7 +42,7 @@ class ContainerHandlerProviderTest extends TestCase
 
 		$this->expectException(NoHandlerForMessage::class);
 
-		$provider($messageA);
+		$provider->getHandlerForMessage($messageA);
 	}
 
 	public function test_should_return_expected_service()
@@ -64,14 +64,13 @@ class ContainerHandlerProviderTest extends TestCase
 
 		$provider = $this->makeProvider($handlers);
 
-		$this->assertSame($expected_service, $provider($messageA));
+		$this->assertSame($expected_service, $provider->getHandlerForMessage($messageA));
 	}
 
 	private function makeProvider(array $handlers): HandlerProvider
 	{
 		return new ContainerHandlerProvider(
-			$handlers,
-			$this->container->reveal()
+			$this->container->reveal(), $handlers
 		);
 	}
 }

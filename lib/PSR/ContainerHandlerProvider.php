@@ -11,35 +11,41 @@
 
 namespace ICanBoogie\MessageBus\PSR;
 
+use ICanBoogie\MessageBus\HandlerProvider;
 use ICanBoogie\MessageBus\NoHandlerForMessage;
-use ICanBoogie\MessageBus\SimpleHandlerProvider;
 use Psr\Container\ContainerInterface;
+use function get_class;
 
-/**
- * A simple implementation of {@link HandlerProvider}.
- */
-class ContainerHandlerProvider extends SimpleHandlerProvider
+class ContainerHandlerProvider implements HandlerProvider
 {
 	/**
 	 * @var ContainerInterface
 	 */
 	private $container;
 
-	public function __construct(array $handlers, ContainerInterface $container)
-	{
-		parent::__construct($handlers);
+	/**
+	 * @var array<string, string>
+	 */
+	private $handlers;
 
+	/**
+	 * @param array<string, string> $mapping
+	 *   An array of key/value pairs where _key_ is a message class and _value_ the service
+	 *   identifier of its handler.
+	 */
+	public function __construct(ContainerInterface $container, array $mapping)
+	{
+		$this->handlers = $mapping;
 		$this->container = $container;
 	}
 
-	/**
-	 * @inheritdoc
-	 */
-	public function __invoke(object $message): callable
+	public function getHandlerForMessage(object $message): callable
 	{
-		$id = parent::__invoke($message);
+		$class = get_class($message);
+		$id = $this->handlers[$class] ?? null;
 
-		if (!$this->container->has($id)) {
+		if (!$id || !$this->container->has($id))
+		{
 			throw new NoHandlerForMessage($message);
 		}
 

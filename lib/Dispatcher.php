@@ -12,14 +12,19 @@
 namespace ICanBoogie\MessageBus;
 
 /**
- * An interface for message dispatchers.
+ * A message dispatcher.
  */
 interface Dispatcher
 {
 	/**
 	 * @param object $message
+	 *   The message to dispatch.
 	 *
 	 * @return mixed
+	 *   Result type depends on the handler.
+	 *
+	 * @throws NoHandlerForMessage
+	 *   The handler for the message cannot the found.
 	 */
 	public function dispatch(object $message);
 }

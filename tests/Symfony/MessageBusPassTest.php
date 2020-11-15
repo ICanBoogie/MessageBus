@@ -51,8 +51,8 @@ class MessageBusPassTest extends TestCase
 		$provider = $container->get($alias);
 
 		$this->assertInstanceOf(ContainerHandlerProvider::class, $provider);
-		$this->assertInstanceOf(HandlerA::class, $provider(new MessageA()));
-		$this->assertInstanceOf(HandlerB::class, $provider(new MessageB()));
+		$this->assertInstanceOf(HandlerA::class, $provider->getHandlerForMessage(new MessageA()));
+		$this->assertInstanceOf(HandlerB::class, $provider->getHandlerForMessage(new MessageB()));
 	}
 
 	public function test_cqs()

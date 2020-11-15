@@ -112,12 +112,12 @@ use ICanBoogie\MessageBus\PSR\ContainerHandlerProvider;
 
 /* @var $container \Psr\Container\ContainerInterface */
 
-$handler_provider = new ContainerHandlerProvider([
+$handler_provider = new ContainerHandlerProvider($container, [
 
 	Message\CreateArticle::class => 'handler.article.create',
 	Message\DeleteArticle::class => 'handler.article.delete',
 
-], $container);
+]);
 ```
 
 If you're using [symfony/dependency-injection][] you can add an instance of [HandlerProviderPass][]
@@ -128,7 +128,7 @@ services:
 
   ICanBoogie\MessageBus\SimpleDispatcher:
     autowire: true
-    
+
   ICanBoogie\MessageBus\HandlerProvider:
   	synthetic: true
 
@@ -255,11 +255,11 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
 
 
-[documentation]:                       https://icanboogie.org/api/message-bus/0.6/
-[AssertingDispatcher]:                 https://icanboogie.org/api/message-bus/0.6/class-ICanBoogie.MessageBus.AssertingDispatcher.html
-[HandlerProvider]:                     https://icanboogie.org/api/message-bus/0.6/class-ICanBoogie.MessageBus.HandlerProvider.html
-[HandlerProviderPass]:                      https://icanboogie.org/api/message-bus/0.6/class-ICanBoogie.MessageBus.Symfony.MessageBusPass.html
-[PSR\ContainerHandlerProvider]:        https://icanboogie.org/api/message-bus/0.6/class-ICanBoogie.MessageBus.PSR.ContainerHandlerProvider.html
+[documentation]:                       https://icanboogie.org/api/message-bus/1.0/
+[AssertingDispatcher]:                 https://icanboogie.org/api/message-bus/1.0/class-ICanBoogie.MessageBus.AssertingDispatcher.html
+[HandlerProvider]:                     https://icanboogie.org/api/message-bus/1.0/class-ICanBoogie.MessageBus.HandlerProvider.html
+[HandlerProviderPass]:                 https://icanboogie.org/api/message-bus/1.0/class-ICanBoogie.MessageBus.Symfony.HandlerProviderPass.html
+[PSR\ContainerHandlerProvider]:        https://icanboogie.org/api/message-bus/1.0/class-ICanBoogie.MessageBus.PSR.ContainerHandlerProvider.html
 [available on GitHub]:                 https://github.com/ICanBoogie/MessageBus
 [icanboogie/service]:                  https://github.com/ICanBoogie/Service
 [PSR container]:                       https://github.com/php-fig/container

@@ -12,7 +12,7 @@
 namespace ICanBoogie\MessageBus;
 
 /**
- * A dispatcher that dispatches messages right away or push them to a queue.
+ * A simple message dispatcher.
  */
 class SimpleDispatcher implements Dispatcher
 {
@@ -21,37 +21,13 @@ class SimpleDispatcher implements Dispatcher
 	 */
 	private $handler_provider;
 
-	/**
-	 * @param HandlerProvider $handler_provider
-	 */
 	public function __construct(HandlerProvider $handler_provider)
 	{
 		$this->handler_provider = $handler_provider;
 	}
 
-	/**
-	 * @param object $message
-	 *
-	 * @return mixed
-	 */
 	public function dispatch(object $message)
 	{
-		$handler = $this->resolve_handler($message);
-
-		return $handler($message);
-	}
-
-	/**
-	 * @param object $message
-	 *
-	 * @return mixed
-	 *
-	 * @throws NoHandlerForMessage
-	 */
-	protected function resolve_handler(object $message)
-	{
-		$provider = $this->handler_provider;
-
-		return $provider($message);
+		return $this->handler_provider->getHandlerForMessage($message)($message);
 	}
 }
