@@ -6,39 +6,52 @@
 [![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/MessageBus.svg)](https://coveralls.io/r/ICanBoogie/MessageBus)
 [![Downloads](https://img.shields.io/packagist/dt/icanboogie/message-bus.svg)](https://packagist.org/packages/icanboogie/message-bus/stats)
 
-**ICanBoogie/MessageBus** provides a very simple message dispatcher that tries to be as flexible as
-possible: the handler provider is defined as a simple callable that you can implement or decorate
-with your favorite resolver.
+A message dispatcher helps to separate presentation concerns from business logic by mapping inputs
+of various sources to simpler application messages. It also helps to decouple the domain from the
+implementation, for an application only has to know about the messages, not how they are handled. A
+design well know in [Hexagonal architectures][hexagonal].
+
+Going further, and following the [Command–query separation][cqs] principle, every message should
+either be a _command_ that performs an action, or a _query_ that returns data to the caller, but not
+both.
+
+**ICanBoogie/MessageBus** provides a straightforward implementation of a message dispatcher, and
+going further of a command dispatcher and a query dispatcher. There's also a simple implementation
+of a message handler provider, and one more sophisticated that works with [PSR-11][] containers.
+Finally, there's special support for [Symfony's Dependency Injection component][symfony/di].
+
+Using a message dispatcher can be as simple as the following example:
 
 ```php
 <?php
 
-namespace ICanBoogie\MessageBus;
-
-/* @var HandlerProvider $handler_provider */
-
-$dispatcher = new SimpleDispatcher($handler_provider);
-
+/* @var ICanBoogie\MessageBus\Dispatcher $dispatcher */
 /* @var object $message */
 
-// The message is dispatched by an handler
+// The message is dispatched to its handler, the result is returned.
 $result = $dispatcher->dispatch($message);
-
-/* @var callable $assertion */
-
-$asserting_dispatcher = new AssertingDispatcher($dispatcher, $assertion);
 ```
 
 
 
 
 
-## Message handler provider
+## Message handlers
 
-The message handler provider is a callable with a signature similar to the
-[HandlerProvider][] interface, the package provides a simple message handler provider
-that only requires an array of key/value pairs, where _key_ is a message class and _value_
-a message handler callable.
+A handler needs to be specified for each message type. Usually the relation is 1:1, be it's not
+uncommon to have a same handler class handling different similar messages e.g. `DeleteMenu`,
+`DeleteRecipe`…
+
+The dispatcher is agnostic about the message/handler mapping and retrieves the handler through the
+[HandlerProvider][] interface, as demonstrated in the following example:
+
+```php
+
+/* @var ICanBoogie\MessageBus\HandlerProvider $provider */
+/* @var object $message */
+
+$result = $provider->getHandlerForMessage($message)($message);
+```
 
 
 
@@ -46,26 +59,30 @@ a message handler callable.
 
 ### Providing handlers
 
+The package includes a simple handler provider that only requires an array of key/value pairs, but
+more sophisticated ones are also available.
+
 The following example demonstrates how to define a message handler provider with a selection
 of messages and their handlers:
 
 ```php
 <?php
 
-use App\Application\Message;
+use ACME\Application\Command;
+use ACME\Application\Query;
 use ICanBoogie\MessageBus\SimpleHandlerProvider;
 
 $handler_provider = new SimpleHandlerProvider([
 
-	Message\CreateArticle::class => function (Message\CreateArticle $message) {
+	Command\CreateArticle::class => function (Command\CreateArticle $message) {
 
 		// create an article
 
 	},
 
-	Message\DeleteArticle::class => function (Message\DeleteArticle $message) {
+	Query\ShowArticle::class => function (Query\ShowArticle $message) {
 
-        // delete an article
+        // show an article
 
     },
 
@@ -76,68 +93,53 @@ $handler_provider = new SimpleHandlerProvider([
 
 
 
-### Providing handlers with icanboogie/service
-
-Of course, if you're using the [icanboogie/service][] package, you can use service references
-instead of callables (well, technically, they are also callables):
-
-```php
-<?php
-
-use App\Application\Message;
-use ICanBoogie\MessageBus\SimpleHandlerProvider;
-
-use function ICanBoogie\Service\ref;
-
-$handler_provider = new SimpleHandlerProvider([
-
-	Message\CreateArticle::class => ref('handler.article.create'),
-	Message\DeleteArticle::class => ref('handler.article.delete'),
-
-]);
-```
-
-
-
-
 ### Providing handlers with a PSR container
 
-Use an instance of [PSR\ContainerHandlerProvider][] to provide handlers from a [PSR container][]:
+Use an instance of [PSR\ContainerHandlerProvider][] to provide handlers from a
+[PSR container][PSR-11]:
 
 ```php
 <?php
 
-use App\Application\Message;
 use ICanBoogie\MessageBus\PSR\ContainerHandlerProvider;
 
 /* @var $container \Psr\Container\ContainerInterface */
 
 $handler_provider = new ContainerHandlerProvider($container, [
 
-	Message\CreateArticle::class => 'handler.article.create',
-	Message\DeleteArticle::class => 'handler.article.delete',
+	ACME\Application\Command\CreateArticle::class => 'handler.article.create',
+	ACME\Application\Query\ShowArticle::class => 'handler.article.show',
 
 ]);
 ```
 
-If you're using [symfony/dependency-injection][] you can add an instance of [HandlerProviderPass][]
-to your compilation pass to automatically generate the provider:
+### Using Symfony's Dependency Injection component
+
+The easiest way to define commands, queries, and their handler is with [Symfony's Dependency
+Injection][symfony/di] component. The handlers are defined as services, tags are used to identify
+command/query handlers and the comman/query they support. Compiler passes collect the services and
+create a command dispatcher and a query dispatcher. The compiler passes come with sensible defaults,
+but of course, you can configure all of this to your liking.
+
+The following example demonstrates how to define handlers. There's a command handler and a query
+handler, you can notice the use of `command_dispatcher.handler` and `query_dispatcher.handler`.
 
 ```yaml
 services:
-
-  ICanBoogie\MessageBus\SimpleDispatcher:
-    autowire: true
-
-  ICanBoogie\MessageBus\HandlerProvider:
-  	synthetic: true
-
   handler.article.create:
-    class: App\Domain\Article\Handler\CreateArticleHandler
+    class: ACME\Application\Command\CreateArticleHandler
     tags:
-      - name: message_dispatcher.handler
-        message: App\Application\Message\CreateArticle
+      - name: command_dispatcher.handler
+        command: ACME\Application\Command\CreateArticle
+
+  handler.article.show:
+    class: ACME\Application\Query\ShowArticleHandler
+    tags:
+      - name: query_dispatcher.handler
+        query: ACME\Application\Query\ShowArticle
 ```
+
+Simply add `CommandHandlerProviderPass` and `QueryHandlerProviderPass` to the compiler passes:
 
 ```php
 <?php
@@ -145,16 +147,20 @@ services:
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
-use ICanBoogie\MessageBus\Symfony\HandlerProviderPass;
+use ICanBoogie\MessageBus\Symfony\CommandHandlerProviderPass;
+use ICanBoogie\MessageBus\Symfony\QueryHandlerProviderPass;
 
 /* @var string $config */
 
 $container = new ContainerBuilder();
 $loader = new YamlFileLoader($container, new FileLocator(__DIR__));
 $loader->load($config);
-$container->addCompilerPass(new HandlerProviderPass);
+$container->addCompilerPass(new CommandHandlerProviderPass());
+$container->addCompilerPass(new QueryHandlerProviderPass());
 $container->compile();
 ```
+
+Request `CommandDispatcher` or `QueryDispatcher` in your constructor to get one or the other.
 
 
 
@@ -262,6 +268,9 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 [PSR\ContainerHandlerProvider]:        https://icanboogie.org/api/message-bus/1.0/class-ICanBoogie.MessageBus.PSR.ContainerHandlerProvider.html
 [available on GitHub]:                 https://github.com/ICanBoogie/MessageBus
 [icanboogie/service]:                  https://github.com/ICanBoogie/Service
-[PSR container]:                       https://github.com/php-fig/container
 [ICanBoogie]:                          https://icanboogie.org
 [symfony/dependency-injection]:        https://symfony.com/doc/current/components/dependency_injection.html
+[hexagonal]:                           https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/
+[cqs]:                                 https://en.wikipedia.org/wiki/Command%E2%80%93query_separation
+[PSR-11]:                              https://www.php-fig.org/psr/psr-11/
+[symfony/di]:                          https://symfony.com/doc/current/components/dependency_injection.html
