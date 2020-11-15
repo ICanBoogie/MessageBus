@@ -25,7 +25,7 @@ Other changes are mostly under the hood and shouldn't be noticed.
 - Added `HandlerProviderPass::DEFAULT_PROVIDER_CLASS`.
 - Simplified `CommandHandlerProviderPass` and `QueryHandlerProviderPass`.
 - Simplified `SimpleDispatcher`.
-
+- `Exception` extends `Throwable`.
 
 
 
