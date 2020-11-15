@@ -26,17 +26,17 @@ use ICanBoogie\MessageBus\PSR\QueryHandlerProvider;
  */
 final class QueryHandlerProviderPass extends HandlerProviderPass
 {
-	public const DEFAULT_SERVICE_ID = QueryHandlerProvider::class;
-	public const DEFAULT_HANDLER_TAG = 'query_dispatcher.handler';
-	public const DEFAULT_MESSAGE_PROPERTY = 'query';
-	public const DEFAULT_PROVIDER_CLASS = QueryHandlerProvider::class;
+    public const DEFAULT_SERVICE_ID = QueryHandlerProvider::class;
+    public const DEFAULT_HANDLER_TAG = 'query_dispatcher.handler';
+    public const DEFAULT_MESSAGE_PROPERTY = 'query';
+    public const DEFAULT_PROVIDER_CLASS = QueryHandlerProvider::class;
 
-	public function __construct(
-		string $service_id = self::DEFAULT_SERVICE_ID,
-		string $handler_tag = self::DEFAULT_HANDLER_TAG,
-		string $message_property = self::DEFAULT_MESSAGE_PROPERTY,
-		string $provider_class = self::DEFAULT_PROVIDER_CLASS
-	) {
-		parent::__construct($service_id, $handler_tag, $message_property, $provider_class);
-	}
+    public function __construct(
+        string $serviceId = self::DEFAULT_SERVICE_ID,
+        string $handlerTag = self::DEFAULT_HANDLER_TAG,
+        string $messageProperty = self::DEFAULT_MESSAGE_PROPERTY,
+        string $providerClass = self::DEFAULT_PROVIDER_CLASS
+    ) {
+        parent::__construct($serviceId, $handlerTag, $messageProperty, $providerClass);
+    }
 }

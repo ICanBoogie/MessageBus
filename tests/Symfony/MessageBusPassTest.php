@@ -26,65 +26,67 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+
 use function uniqid;
 
 class MessageBusPassTest extends TestCase
 {
-	public function test_should_error_on_missing_message()
-	{
-		$this->expectExceptionMessage("The `message` property is required for service `handler.message_a`");
-		$this->expectException(InvalidArgumentException::class);
-		$this->makeContainer(__DIR__ . '/resources/missing-message.yml');
-	}
+    public function testFailOnMissingMessage()
+    {
+        $this->expectExceptionMessage("The `message` property is required for service `handler.message_a`");
+        $this->expectException(InvalidArgumentException::class);
+        $this->makeContainer(__DIR__ . '/resources/missing-message.yml');
+    }
 
-	public function test_should_error_message_duplicated()
-	{
-		$this->expectExceptionMessage("The command `ICanBoogie\MessageBus\MessageA` already has an handler: `handler.message_a`.");
-		$this->expectException(LogicException::class);
-		$this->makeContainer(__DIR__ . '/resources/message-duplicate.yml');
-	}
+    public function testFailOnDuplicateMessage()
+    {
+        $this->expectExceptionMessage(
+            "The command `ICanBoogie\MessageBus\MessageA` already has an handler: `handler.message_a`."
+        );
+        $this->expectException(LogicException::class);
+        $this->makeContainer(__DIR__ . '/resources/message-duplicate.yml');
+    }
 
-	public function test_should_return_handler()
-	{
-		/* @var ContainerHandlerProvider $provider */
-		$container = $this->makeContainer(__DIR__ . '/resources/ok.yml', $alias = 'alias_' . uniqid());
-		$provider = $container->get($alias);
+    public function testProvider()
+    {
+        /* @var ContainerHandlerProvider $provider */
+        $container = $this->makeContainer(__DIR__ . '/resources/ok.yml', $alias = 'alias_' . uniqid());
+        $provider = $container->get($alias);
 
-		$this->assertInstanceOf(ContainerHandlerProvider::class, $provider);
-		$this->assertInstanceOf(HandlerA::class, $provider->getHandlerForMessage(new MessageA()));
-		$this->assertInstanceOf(HandlerB::class, $provider->getHandlerForMessage(new MessageB()));
-	}
+        $this->assertInstanceOf(ContainerHandlerProvider::class, $provider);
+        $this->assertInstanceOf(HandlerA::class, $provider->getHandlerForMessage(new MessageA()));
+        $this->assertInstanceOf(HandlerB::class, $provider->getHandlerForMessage(new MessageB()));
+    }
 
-	public function test_cqs()
-	{
-		$container = new SymfonyContainerBuilder();
-		$loader = new YamlFileLoader($container, new FileLocator(__DIR__));
-		$loader->load(__DIR__ . '/resources/cqs.yml');
-		$container
-			->addCompilerPass(new QueryHandlerProviderPass)
-			->addCompilerPass(new CommandHandlerProviderPass)
-			->compile();
+    public function testCQS()
+    {
+        $container = new SymfonyContainerBuilder();
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__));
+        $loader->load(__DIR__ . '/resources/cqs.yml');
+        $container
+            ->addCompilerPass(new QueryHandlerProviderPass())
+            ->addCompilerPass(new CommandHandlerProviderPass())
+            ->compile();
 
-		$command_dispatcher = $container->get('command_dispatcher');
-		$query_dispatcher = $container->get('query_dispatcher');
-		$this->assertInstanceOf(CommandDispatcher::class, $command_dispatcher);
-		$this->assertInstanceOf(QueryDispatcher::class, $query_dispatcher);
-	}
+        $commandDispatcher = $container->get('command_dispatcher');
+        $queryDispatcher = $container->get('query_dispatcher');
+        $this->assertInstanceOf(CommandDispatcher::class, $commandDispatcher);
+        $this->assertInstanceOf(QueryDispatcher::class, $queryDispatcher);
+    }
 
-	private function makeContainer(string $config, string $alias = null): SymfonyContainerBuilder
-	{
-		$container = new SymfonyContainerBuilder();
-		$loader = new YamlFileLoader($container, new FileLocator(__DIR__));
-		$loader->load($config);
-		$container->addCompilerPass(new HandlerProviderPass);
+    private function makeContainer(string $config, string $alias = null): SymfonyContainerBuilder
+    {
+        $container = new SymfonyContainerBuilder();
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__));
+        $loader->load($config);
+        $container->addCompilerPass(new HandlerProviderPass());
 
-		if ($alias)
-		{
-			$container->setAlias($alias, new Alias(HandlerProvider::class, true));
-		}
+        if ($alias) {
+            $container->setAlias($alias, new Alias(HandlerProvider::class, true));
+        }
 
-		$container->compile();
+        $container->compile();
 
-		return $container;
-	}
+        return $container;
+    }
 }

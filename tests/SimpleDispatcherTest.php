@@ -15,18 +15,18 @@ use PHPUnit\Framework\TestCase;
 
 class SimpleDispatcherTest extends TestCase
 {
-	public function test_should_handle_message()
-	{
-		$expectedMessage = (object) [ uniqid() => uniqid() ];
-		$result = uniqid();
+    public function testDispatch()
+    {
+        $expectedMessage = (object) [ uniqid() => uniqid() ];
+        $result = uniqid();
 
-		$handler_provider = $this->prophesize(HandlerProvider::class);
-		$handler_provider->getHandlerForMessage($expectedMessage)
-			->shouldBeCalled()->willReturn(function () use ($result) {
-				return $result;
-			});
+        $handlerProvider = $this->prophesize(HandlerProvider::class);
+        $handlerProvider->getHandlerForMessage($expectedMessage)
+            ->shouldBeCalled()->willReturn(function () use ($result) {
+                return $result;
+            });
 
-		$bus = new SimpleDispatcher($handler_provider->reveal());
-		$this->assertSame($result, $bus->dispatch($expectedMessage));
-	}
+        $bus = new SimpleDispatcher($handlerProvider->reveal());
+        $this->assertSame($result, $bus->dispatch($expectedMessage));
+    }
 }

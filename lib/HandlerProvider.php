@@ -16,15 +16,15 @@ namespace ICanBoogie\MessageBus;
  */
 interface HandlerProvider
 {
-	/**
-	 * @param object $message
-	 *   A message for which to return the relevant handler.
-	 *
-	 * @return callable
-	 *   A callable that MUST be type-compatible with $message.
-	 *
-	 * @throws NotFound
-	 *   The handler for the message cannot the found.
-	 */
-	public function getHandlerForMessage(object $message): callable;
+    /**
+     * @param object $message
+     *   A message for which to return the relevant handler.
+     *
+     * @return callable
+     *   A callable that MUST be type-compatible with $message.
+     *
+     * @throws NotFound
+     *   The handler for the message cannot the found.
+     */
+    public function getHandlerForMessage(object $message): callable;
 }

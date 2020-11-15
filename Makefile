@@ -5,6 +5,7 @@ PACKAGE_VERSION = 0.8
 PHPUNIT_VERSION = phpunit-8.5.phar
 PHPUNIT_FILENAME = build/$(PHPUNIT_VERSION)
 PHPUNIT = php $(PHPUNIT_FILENAME)
+PHPCS_FILENAME = build/phpcs
 
 # do not edit the following lines
 
@@ -38,6 +39,13 @@ test-coveralls: test-dependencies
 	COMPOSER_ROOT_VERSION=$(PACKAGE_VERSION) composer require satooshi/php-coveralls
 	@$(PHPUNIT) --coverage-clover build/logs/clover.xml
 	php vendor/bin/php-coveralls -v
+
+$(PHPCS_FILENAME):
+	curl -L -o $@ https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
+	chmod +x $@
+
+lint: $(PHPCS_FILENAME)
+	$(PHPCS_FILENAME)
 
 doc: vendor
 	@mkdir -p build/docs

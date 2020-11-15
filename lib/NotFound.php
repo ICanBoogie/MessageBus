@@ -19,8 +19,8 @@ use Throwable;
  */
 final class NotFound extends LogicException implements Exception
 {
-	public function __construct(string $message, Throwable $previous = null)
-	{
-		parent::__construct($message, 0, $previous);
-	}
+    public function __construct(string $message, Throwable $previous = null)
+    {
+        parent::__construct($message, 0, $previous);
+    }
 }

@@ -19,4 +19,5 @@ matrix:
   - php: nightly
 
 script:
+- make lint
 - if [[ $TRAVIS_PHP_VERSION == "7.2" ]]; then make test-coveralls; else make test; fi

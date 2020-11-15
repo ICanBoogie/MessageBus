@@ -15,8 +15,8 @@ use ICanBoogie\MessageBus\SimpleDispatcher;
 
 class CommandDispatcher extends SimpleDispatcher
 {
-	public function __construct(CommandHandlerProvider $handler_provider)
-	{
-		parent::__construct($handler_provider);
-	}
+    public function __construct(CommandHandlerProvider $handlerProvider)
+    {
+        parent::__construct($handlerProvider);
+    }
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<ruleset name="ICanBoogie" namespace="ICanBoogie">
+	<file>lib</file>
+	<file>tests</file>
+
+	<rule ref="PSR12"/>
+</ruleset>

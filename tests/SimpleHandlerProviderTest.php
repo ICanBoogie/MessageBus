@@ -15,53 +15,50 @@ use PHPUnit\Framework\TestCase;
 
 class SimpleHandlerProviderTest extends TestCase
 {
-	public function test_should_throw_exception_on_missing_handler()
-	{
-		$messageA = new MessageA;
-		$messageB = new MessageB;
+    public function testFailOnMissingHandler()
+    {
+        $messageA = new MessageA();
+        $messageB = new MessageB();
 
-		$handler_provider = new SimpleHandlerProvider([
-			get_class($messageA) => function () {
-				$this->fail("This is not the handler you are looking for");
-			}
-		]);
+        $handlerProvider = new SimpleHandlerProvider([
+            get_class($messageA) => function () {
+                $this->fail("This is not the handler you are looking for");
+            }
+        ]);
 
-		$bus = new SimpleDispatcher($handler_provider);
+        $bus = new SimpleDispatcher($handlerProvider);
 
-		try
-		{
-			$bus->dispatch($messageB);
-		}
-		catch (NotFound $e)
-		{
-			$this->assertStringContainsString(get_class($messageB), $e->getMessage());
-			return;
-		}
+        try {
+            $bus->dispatch($messageB);
+        } catch (NotFound $e) {
+            $this->assertStringContainsString(get_class($messageB), $e->getMessage());
+            return;
+        }
 
-		$this->fail("Expected NotFound");
-	}
+        $this->fail("Expected NotFound");
+    }
 
-	public function test_should_return_the_expected_result()
-	{
-		$messageA = new MessageA;
-		$messageB = new MessageB;
+    public function testDispatch()
+    {
+        $messageA = new MessageA();
+        $messageB = new MessageB();
 
-		$result = uniqid();
+        $result = uniqid();
 
-		$handler_provider = new SimpleHandlerProvider([
-			get_class($messageA) => function () {
-				$this->fail("This is not the handler you are looking for");
-			},
+        $handlerProvider = new SimpleHandlerProvider([
+            get_class($messageA) => function () {
+                $this->fail("This is not the handler you are looking for");
+            },
 
-			get_class($messageB) => function ($message) use ($result, $messageB) {
-				$this->assertSame($messageB, $message);
+            get_class($messageB) => function ($message) use ($result, $messageB) {
+                $this->assertSame($messageB, $message);
 
-				return $result;
-			},
-		]);
+                return $result;
+            },
+        ]);
 
-		$bus = new SimpleDispatcher($handler_provider);
+        $bus = new SimpleDispatcher($handlerProvider);
 
-		$this->assertSame($result, $bus->dispatch($messageB));
-	}
+        $this->assertSame($result, $bus->dispatch($messageB));
+    }
 }

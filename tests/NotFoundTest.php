@@ -12,16 +12,17 @@
 namespace ICanBoogie\MessageBus;
 
 use PHPUnit\Framework\TestCase;
+
 use function uniqid;
 
 class NotFoundTest extends TestCase
 {
-	public function testException()
-	{
-		$exception = new NotFound($message = uniqid(), $previous = new \Exception());
+    public function testException()
+    {
+        $exception = new NotFound($message = uniqid(), $previous = new \Exception());
 
-		$this->assertSame(0, $exception->getCode());
-		$this->assertSame($message, $exception->getMessage());
-		$this->assertSame($previous, $exception->getPrevious());
-	}
+        $this->assertSame(0, $exception->getCode());
+        $this->assertSame($message, $exception->getMessage());
+        $this->assertSame($previous, $exception->getPrevious());
+    }
 }

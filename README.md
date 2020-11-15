@@ -72,7 +72,7 @@ use ACME\Application\Command;
 use ACME\Application\Query;
 use ICanBoogie\MessageBus\SimpleHandlerProvider;
 
-$handler_provider = new SimpleHandlerProvider([
+$handlerProvider = new SimpleHandlerProvider([
 
 	Command\CreateArticle::class => function (Command\CreateArticle $message) {
 
@@ -105,7 +105,7 @@ use ICanBoogie\MessageBus\PSR\ContainerHandlerProvider;
 
 /* @var $container \Psr\Container\ContainerInterface */
 
-$handler_provider = new ContainerHandlerProvider($container, [
+$handlerProvider = new ContainerHandlerProvider($container, [
 
 	ACME\Application\Command\CreateArticle::class => 'handler.article.create',
 	ACME\Application\Query\ShowArticle::class => 'handler.article.show',
@@ -178,7 +178,7 @@ use ICanBoogie\MessageBus\AssertingDispatcher;
 
 /* @var ICanBoogie\MessageBus\Dispatcher $dispatcher */
 
-$asserting_dispatcher = new AssertingDispatcher($dispatcher, function ($message) {
+$assertingDispatcher = new AssertingDispatcher($dispatcher, function ($message) {
 
 	if (/* some condition */)
 		throw new \LogicException("The message should not be dispatched.");

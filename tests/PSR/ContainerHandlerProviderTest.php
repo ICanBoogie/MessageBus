@@ -15,73 +15,74 @@ use Psr\Container\NotFoundExceptionInterface;
 
 class ContainerHandlerProviderTest extends TestCase
 {
-	/**
-	 * @var ObjectProphecy|ContainerInterface
-	 */
-	private $container;
+    /**
+     * @var ObjectProphecy|ContainerInterface
+     */
+    private $container;
 
-	protected function setUp(): void
-	{
-		$this->container = $this->prophesize(ContainerInterface::class);
+    protected function setUp(): void
+    {
+        $this->container = $this->prophesize(ContainerInterface::class);
 
-		parent::setUp();
-	}
+        parent::setUp();
+    }
 
-	public function test_should_fail_on_undefined_handler()
-	{
-		$this->container->get(Argument::any())
-			->shouldNotBeCalled();
+    public function testFailOnUndefinedHandler()
+    {
+        $this->container->get(Argument::any())
+            ->shouldNotBeCalled();
 
-		$provider = $this->makeProvider([]);
+        $provider = $this->makeProvider([]);
 
-		$this->expectException(NotFound::class);
+        $this->expectException(NotFound::class);
 
-		$provider->getHandlerForMessage(new class () {});
-	}
+        $provider->getHandlerForMessage(new class () {
+        });
+    }
 
-	public function test_should_fail_on_undefined_service()
-	{
-		$messageA = new MessageA();
-		$handlers = [
+    public function testFailOnUndefinedService()
+    {
+        $messageA = new MessageA();
+        $handlers = [
 
-			get_class($messageA) => $undefined_service = uniqid(),
+            get_class($messageA) => $undefinedService = uniqid(),
 
-		];
+        ];
 
-		$this->container->get($undefined_service)
-			->willThrow(new class extends Exception implements NotFoundExceptionInterface {});
+        $this->container->get($undefinedService)
+            ->willThrow(new class extends Exception implements NotFoundExceptionInterface {
+            });
 
-		$provider = $this->makeProvider($handlers);
+        $provider = $this->makeProvider($handlers);
 
-		$this->expectException(NotFound::class);
+        $this->expectException(NotFound::class);
 
-		$provider->getHandlerForMessage($messageA);
-	}
+        $provider->getHandlerForMessage($messageA);
+    }
 
-	public function test_should_return_expected_service()
-	{
-		$messageA = new MessageA();
-		$messageB = new MessageB();
-		$expected_service = function () {};
-		$handlers = [
+    public function testReturnExpectedService()
+    {
+        $messageA = new MessageA();
+        $messageB = new MessageB();
+        $expectedService = function () {
+        };
+        $handlers = [
 
-			get_class($messageA) => $expected_service_id = uniqid(),
-			get_class($messageB) => uniqid(),
+            get_class($messageA) => $expectedServiceId = uniqid(),
+            get_class($messageB) => uniqid(),
 
-		];
+        ];
 
-		$this->container->get($expected_service_id)
-			->willReturn($expected_service);
+        $this->container->get($expectedServiceId)
+            ->willReturn($expectedService);
 
-		$provider = $this->makeProvider($handlers);
+        $provider = $this->makeProvider($handlers);
 
-		$this->assertSame($expected_service, $provider->getHandlerForMessage($messageA));
-	}
+        $this->assertSame($expectedService, $provider->getHandlerForMessage($messageA));
+    }
 
-	private function makeProvider(array $handlers): HandlerProvider
-	{
-		return new ContainerHandlerProvider(
-			$this->container->reveal(), $handlers
-		);
-	}
+    private function makeProvider(array $handlers): HandlerProvider
+    {
+        return new ContainerHandlerProvider($this->container->reveal(), $handlers);
+    }
 }

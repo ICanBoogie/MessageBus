@@ -16,15 +16,15 @@ namespace ICanBoogie\MessageBus;
  */
 interface Dispatcher
 {
-	/**
-	 * @param object $message
-	 *   The message to dispatch.
-	 *
-	 * @return mixed
-	 *   Result type depends on the handler.
-	 *
-	 * @throws NotFound
-	 *   The handler for the message cannot the found.
-	 */
-	public function dispatch(object $message);
+    /**
+     * @param object $message
+     *   The message to dispatch.
+     *
+     * @return mixed
+     *   Result type depends on the handler.
+     *
+     * @throws NotFound
+     *   The handler for the message cannot the found.
+     */
+    public function dispatch(object $message);
 }

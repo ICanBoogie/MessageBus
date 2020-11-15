@@ -15,8 +15,8 @@ use ICanBoogie\MessageBus\SimpleDispatcher;
 
 class QueryDispatcher extends SimpleDispatcher
 {
-	public function __construct(QueryHandlerProvider $handler_provider)
-	{
-		parent::__construct($handler_provider);
-	}
+    public function __construct(QueryHandlerProvider $handlerProvider)
+    {
+        parent::__construct($handlerProvider);
+    }
 }

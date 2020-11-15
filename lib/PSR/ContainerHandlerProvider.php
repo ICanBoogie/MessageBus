@@ -15,45 +15,45 @@ use ICanBoogie\MessageBus\HandlerProvider;
 use ICanBoogie\MessageBus\NotFound;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+
 use function get_class;
 
 class ContainerHandlerProvider implements HandlerProvider
 {
-	/**
-	 * @var ContainerInterface
-	 */
-	private $container;
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
 
-	/**
-	 * @var array<string, string>
-	 */
-	private $handlers;
+    /**
+     * @var array<string, string>
+     */
+    private $handlers;
 
-	/**
-	 * @param array<string, string> $mapping
-	 *   An array of key/value pairs where _key_ is a message class and _value_ the service
-	 *   identifier of its handler.
-	 */
-	public function __construct(ContainerInterface $container, array $mapping)
-	{
-		$this->handlers = $mapping;
-		$this->container = $container;
-	}
+    /**
+     * @param array<string, string> $mapping
+     *   An array of key/value pairs where _key_ is a message class and _value_ the service
+     *   identifier of its handler.
+     */
+    public function __construct(ContainerInterface $container, array $mapping)
+    {
+        $this->handlers = $mapping;
+        $this->container = $container;
+    }
 
-	public function getHandlerForMessage(object $message): callable
-	{
-		$class = get_class($message);
-		$id = $this->handlers[$class] ?? null;
+    public function getHandlerForMessage(object $message): callable
+    {
+        $class = get_class($message);
+        $id = $this->handlers[$class] ?? null;
 
-		if (!$id)
-		{
-			throw new NotFound("No handler for messages of type `$class`.");
-		}
+        if (!$id) {
+            throw new NotFound("No handler for messages of type `$class`.");
+        }
 
-		try {
-			return $this->container->get($id);
-		} catch (NotFoundExceptionInterface $e) {
-			throw new NotFound("No handler for messages of type `$class`.", $e);
-		}
-	}
+        try {
+            return $this->container->get($id);
+        } catch (NotFoundExceptionInterface $e) {
+            throw new NotFound("No handler for messages of type `$class`.", $e);
+        }
+    }
 }

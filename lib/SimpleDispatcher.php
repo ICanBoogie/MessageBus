@@ -16,18 +16,18 @@ namespace ICanBoogie\MessageBus;
  */
 class SimpleDispatcher implements Dispatcher
 {
-	/**
-	 * @var HandlerProvider
-	 */
-	private $handler_provider;
+    /**
+     * @var HandlerProvider
+     */
+    private $handlerProvider;
 
-	public function __construct(HandlerProvider $handler_provider)
-	{
-		$this->handler_provider = $handler_provider;
-	}
+    public function __construct(HandlerProvider $handlerProvider)
+    {
+        $this->handlerProvider = $handlerProvider;
+    }
 
-	public function dispatch(object $message)
-	{
-		return $this->handler_provider->getHandlerForMessage($message)($message);
-	}
+    public function dispatch(object $message)
+    {
+        return $this->handlerProvider->getHandlerForMessage($message)($message);
+    }
 }
