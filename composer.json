@@ -1,9 +1,10 @@
 {
 	"name": "icanboogie/message-bus",
 	"type": "library",
-	"description": "A message bus to handle or push messages",
+	"description": "A straightforward implementation of a message dispatcher",
 	"keywords": [
 		"message",
+		"dispatcher",
 		"bus"
 	],
 	"homepage": "https://icanboogie.org/",
@@ -43,10 +44,5 @@
 	},
 	"config": {
 		"sort-packages": true
-	},
-	"extra": {
-		"icanboogie": {
-			"config-path": "config"
-		}
 	}
 }
