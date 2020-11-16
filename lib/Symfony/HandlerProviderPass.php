@@ -20,6 +20,8 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\DependencyInjection\TypedReference;
 
+use function is_string;
+
 /**
  * Collect message handlers and register their provider.
  */
@@ -65,7 +67,7 @@ class HandlerProviderPass implements CompilerPassInterface
     /**
      * @inheritdoc
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         [ $mapping, $refMap ] = $this->collectHandlers($container);
 
@@ -77,6 +79,9 @@ class HandlerProviderPass implements CompilerPassInterface
             ]);
     }
 
+    /**
+     * @return array{0: array<string, string>, 1: array<string, TypedReference>}
+     */
     private function collectHandlers(ContainerBuilder $container): array
     {
         $handlers = $container->findTaggedServiceIds($this->handlerTag, true);
@@ -85,13 +90,17 @@ class HandlerProviderPass implements CompilerPassInterface
         $refMap = [];
 
         foreach ($handlers as $id => $tags) {
-            if (empty($tags[0][$messageProperty])) {
+            assert(is_string($id));
+
+            $command = $tags[0][$messageProperty] ?? null;
+
+            if (!$command) {
                 throw new InvalidArgumentException(
                     "The `$messageProperty` property is required for service `$id`."
                 );
             }
 
-            $command = $tags[0][$messageProperty];
+            assert(is_string($command));
 
             if (isset($mapping[$command])) {
                 throw new LogicException(
@@ -99,8 +108,14 @@ class HandlerProviderPass implements CompilerPassInterface
                 );
             }
 
+            $class = $container->getDefinition($id)->getClass();
+
+            if (!$class) {
+                throw new LogicException("Unable to get class of service `$id`.");
+            }
+
             $mapping[$command] = $id;
-            $refMap[$id] = new TypedReference($id, $container->getDefinition($id)->getClass());
+            $refMap[$id] = new TypedReference($id, $class);
         }
 
         return [ $mapping, $refMap ];

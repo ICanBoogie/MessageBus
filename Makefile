@@ -44,8 +44,9 @@ $(PHPCS_FILENAME):
 	curl -L -o $@ https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
 	chmod +x $@
 
-lint: $(PHPCS_FILENAME)
+lint: vendor $(PHPCS_FILENAME)
 	$(PHPCS_FILENAME)
+	./vendor/bin/phpstan analyse
 
 doc: vendor
 	@mkdir -p build/docs
