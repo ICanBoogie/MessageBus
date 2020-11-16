@@ -225,17 +225,6 @@ line:
 
 
 
-## Documentation
-
-The package is documented as part of the [ICanBoogie][] framework [documentation][]. You can
-generate the documentation for the package and its dependencies with the `make doc` Message. The
-documentation is generated in the `build/docs` directory. [ApiGen](http://apigen.org/) is required.
-The directory can later be cleaned with the `make clean` Message.
-
-
-
-
-
 ## Testing
 
 The test suite is ran with the `make test` Message. [PHPUnit](https://phpunit.de/) and
@@ -261,13 +250,11 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
 
 
-[documentation]:                       https://icanboogie.org/api/message-bus/1.0/
-[AssertingDispatcher]:                 https://icanboogie.org/api/message-bus/1.0/class-ICanBoogie.MessageBus.AssertingDispatcher.html
-[HandlerProvider]:                     https://icanboogie.org/api/message-bus/1.0/class-ICanBoogie.MessageBus.HandlerProvider.html
-[HandlerProviderPass]:                 https://icanboogie.org/api/message-bus/1.0/class-ICanBoogie.MessageBus.Symfony.HandlerProviderPass.html
-[PSR\ContainerHandlerProvider]:        https://icanboogie.org/api/message-bus/1.0/class-ICanBoogie.MessageBus.PSR.ContainerHandlerProvider.html
+[AssertingDispatcher]:                 lib/AssertingDispatcher.php
+[HandlerProvider]:                     lib/HandlerProvider.php
+[HandlerProviderPass]:                 lib/Symfony/HandlerProviderPass.php
+[PSR\ContainerHandlerProvider]:        lib/PSR/ContainerHandlerProvider.php
 [available on GitHub]:                 https://github.com/ICanBoogie/MessageBus
-[icanboogie/service]:                  https://github.com/ICanBoogie/Service
 [ICanBoogie]:                          https://icanboogie.org
 [symfony/dependency-injection]:        https://symfony.com/doc/current/components/dependency_injection.html
 [hexagonal]:                           https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/
