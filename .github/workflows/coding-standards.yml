@@ -1,0 +1,21 @@
+name: coding-standards
+
+on:
+  pull_request:
+
+jobs:
+  PSR-12:
+    name: PSR-12
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Install PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        coverage: none
+        php-version: "7.2"
+        ini-values: memory_limit=-1
+        tools: phpcs, cs2pr
+    - name: Run PHP Code Sniffer
+      run: phpcs -q --report=checkstyle | cs2pr

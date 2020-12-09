@@ -2,9 +2,6 @@
 
 PACKAGE_NAME = icanboogie/message-bus
 PACKAGE_VERSION = 0.8
-PHPUNIT_VERSION = phpunit-8.5.phar
-PHPUNIT_FILENAME = build/$(PHPUNIT_VERSION)
-PHPUNIT = php $(PHPUNIT_FILENAME)
 PHPCS_FILENAME = build/phpcs
 
 # do not edit the following lines
@@ -18,27 +15,12 @@ vendor:
 update:
 	@COMPOSER_ROOT_VERSION=$(PACKAGE_VERSION) composer update
 
-autoload: vendor
-	@composer dump-autoload
-
-test-dependencies: vendor $(PHPUNIT_FILENAME)
-
-$(PHPUNIT_FILENAME):
-	mkdir -p build
-	wget https://phar.phpunit.de/$(PHPUNIT_VERSION) -O $(PHPUNIT_FILENAME) -q
-
-test: test-dependencies
+test: vendor
 	@$(PHPUNIT)
 
-test-coverage: test-dependencies
+test-coverage: vendor
 	@mkdir -p build/coverage
 	@$(PHPUNIT) --coverage-html build/coverage
-
-test-coveralls: test-dependencies
-	@mkdir -p build/logs
-	COMPOSER_ROOT_VERSION=$(PACKAGE_VERSION) composer require satooshi/php-coveralls
-	@$(PHPUNIT) --coverage-clover build/logs/clover.xml
-	php vendor/bin/php-coveralls -v
 
 $(PHPCS_FILENAME):
 	curl -L -o $@ https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
@@ -46,7 +28,7 @@ $(PHPCS_FILENAME):
 
 lint: vendor $(PHPCS_FILENAME)
 	$(PHPCS_FILENAME)
-	./vendor/bin/phpstan analyse
+	vendor/bin/phpstan analyse
 
 doc: vendor
 	@mkdir -p build/docs
