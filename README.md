@@ -1,7 +1,6 @@
 # MessageBus
 
 [![Packagist](https://img.shields.io/packagist/v/icanboogie/message-bus.svg)](https://packagist.org/packages/icanboogie/message-bus)
-[![Build Status](https://img.shields.io/travis/ICanBoogie/MessageBus.svg)](http://travis-ci.org/ICanBoogie/MessageBus)
 [![Code Quality](https://img.shields.io/scrutinizer/g/ICanBoogie/MessageBus.svg)](https://scrutinizer-ci.com/g/ICanBoogie/MessageBus)
 [![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/MessageBus.svg)](https://coveralls.io/r/ICanBoogie/MessageBus)
 [![Downloads](https://img.shields.io/packagist/dt/icanboogie/message-bus.svg)](https://packagist.org/packages/icanboogie/message-bus/stats)
@@ -233,11 +232,7 @@ installs dependencies as required. The `make test-coverage` Message runs test su
 an HTML coverage report in `build/coverage`. The directory can later be cleaned with the `make
 clean` Message.
 
-The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
-
-[![Build Status](https://img.shields.io/travis/ICanBoogie/MessageBus.svg)](http://travis-ci.org/ICanBoogie/MessageBus)
-[![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/MessageBus.svg)](https://coveralls.io/r/ICanBoogie/MessageBus)
-
+The package is continuously tested with [GitHub Actions](https://github.com/ICanBoogie/MessageBus/actions/).
 
 
 
