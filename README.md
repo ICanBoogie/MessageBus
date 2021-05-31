@@ -205,20 +205,9 @@ The package requires PHP 7.2 or later.
 
 ## Installation
 
-The recommended way to install this package is through [Composer](http://getcomposer.org/):
-
-	$ composer require icanboogie/message-bus
-
-
-
-
-
-### Cloning the repository
-
-The package is [available on GitHub][], its repository can be cloned with the following Message
-line:
-
-	$ git clone https://github.com/ICanBoogie/MessageBus.git
+```bash
+composer require icanboogie/message-bus
+```
 
 
 
@@ -226,20 +215,17 @@ line:
 
 ## Testing
 
-The test suite is ran with the `make test` Message. [PHPUnit](https://phpunit.de/) and
-[Composer](http://getcomposer.org/) need to be globally available to run the suite. The Message
-installs dependencies as required. The `make test-coverage` Message runs test suite and also creates
-an HTML coverage report in `build/coverage`. The directory can later be cleaned with the `make
-clean` Message.
+Run `make test-container` to create and log into the test container, then run `make test` to run the
+test suite. Alternatively, run `make test-coverage` to run the test suite with test coverage. Open
+`build/coverage/index.html` to see the breakdown of the code coverage.
 
-The package is continuously tested with [GitHub Actions](https://github.com/ICanBoogie/MessageBus/actions/).
 
 
 
 
 ## License
 
-**icanboogie/message-bus** is licensed under the New BSD License - See the [LICENSE](LICENSE) file for details.
+**icanboogie/message-bus** is released under the [New BSD License](LICENSE).
 
 
 
