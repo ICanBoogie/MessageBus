@@ -1,6 +1,7 @@
 # MessageBus
 
 [![Packagist](https://img.shields.io/packagist/v/icanboogie/message-bus.svg)](https://packagist.org/packages/icanboogie/message-bus)
+[![Build Status](https://img.shields.io/github/workflow/status/ICanBoogie/MessageBus/test)](https://github.com/ICanBoogie/MessageBus/actions?query=workflow%3Atest)
 [![Code Quality](https://img.shields.io/scrutinizer/g/ICanBoogie/MessageBus.svg)](https://scrutinizer-ci.com/g/ICanBoogie/MessageBus)
 [![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/MessageBus.svg)](https://coveralls.io/r/ICanBoogie/MessageBus)
 [![Downloads](https://img.shields.io/packagist/dt/icanboogie/message-bus.svg)](https://packagist.org/packages/icanboogie/message-bus/stats)

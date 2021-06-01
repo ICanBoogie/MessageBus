@@ -1,7 +1,8 @@
 name: analyze
 
 on:
-  pull_request:
+- push
+- pull_request
 
 jobs:
   phpstan:
