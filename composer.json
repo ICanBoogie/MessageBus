@@ -21,12 +21,16 @@
 		"issues": "https://github.com/ICanBoogie/MessageBus/issues",
 		"source": "https://github.com/ICanBoogie/MessageBus"
 	},
+	"config": {
+		"sort-packages": true
+	},
 	"prefer-stable": true,
+	"prefer-dist": true,
 	"require": {
 		"php": ">=7.2.5"
 	},
 	"require-dev": {
-		"phpstan/phpstan": "^0.12.55",
+		"phpstan/phpstan": "^1.5",
 		"phpunit/phpunit": "^8.5",
 		"psr/container": "^1.0",
 		"symfony/config": "^4.0|^5.1",
@@ -42,8 +46,5 @@
 		"psr-4": {
 			"ICanBoogie\\MessageBus\\": "tests/"
 		}
-	},
-	"config": {
-		"sort-packages": true
 	}
 }

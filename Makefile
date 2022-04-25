@@ -2,7 +2,6 @@
 
 PACKAGE_NAME = icanboogie/message-bus
 PHPUNIT = vendor/bin/phpunit
-PHPCS_FILENAME = build/phpcs
 
 # do not edit the following lines
 
@@ -13,10 +12,9 @@ usage:
 vendor:
 	@composer install
 
-.PHONY: update
-update:
-	@composer update
+# testing
 
+.PHONY: test-dependencies
 test-dependencies: vendor
 
 .PHONY: test
@@ -24,9 +22,9 @@ test: test-dependencies
 	@$(PHPUNIT)
 
 .PHONY: test-coverage
-test-coverage: vendor
+test-coverage: test-dependencies
 	@mkdir -p build/coverage
-	@$(PHPUNIT) --coverage-html build/coverage
+	@XDEBUG_MODE=coverage $(PHPUNIT) --coverage-html build/coverage
 
 .PHONY: test-coveralls
 test-coveralls: test-dependencies
@@ -35,27 +33,10 @@ test-coveralls: test-dependencies
 
 .PHONY: test-container
 test-container:
-	@-docker-compose -f ./docker-compose.yml run --rm app bash
-	@docker-compose -f ./docker-compose.yml down -v
+	@-docker-compose run --rm app bash
+	@docker-compose down -v
 
-$(PHPCS_FILENAME):
-	curl -L -o $@ https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
-	chmod +x $@
-
-lint: vendor $(PHPCS_FILENAME)
-	$(PHPCS_FILENAME)
-	vendor/bin/phpstan analyse
-
-doc: vendor
-	@mkdir -p build/docs
-	@apigen generate \
-	--source lib \
-	--destination build/docs/ \
-	--title "$(PACKAGE_NAME)" \
-	--template-theme "bootstrap"
-
-.PHONY: clean
-clean:
-	@rm -fR build
-	@rm -fR vendor
-	@rm -f composer.lock
+.PHONY: lint
+lint:
+	@XDEBUG_MODE=off phpcs -s
+	@XDEBUG_MODE=off vendor/bin/phpstan

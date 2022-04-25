@@ -1,10 +1,9 @@
 # MessageBus
 
 [![Packagist](https://img.shields.io/packagist/v/icanboogie/message-bus.svg)](https://packagist.org/packages/icanboogie/message-bus)
-[![Build Status](https://img.shields.io/github/workflow/status/ICanBoogie/MessageBus/test)](https://github.com/ICanBoogie/MessageBus/actions?query=workflow%3Atest)
 [![Code Quality](https://img.shields.io/scrutinizer/g/ICanBoogie/MessageBus.svg)](https://scrutinizer-ci.com/g/ICanBoogie/MessageBus)
 [![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/MessageBus.svg)](https://coveralls.io/r/ICanBoogie/MessageBus)
-[![Downloads](https://img.shields.io/packagist/dt/icanboogie/message-bus.svg)](https://packagist.org/packages/icanboogie/message-bus/stats)
+[![Downloads](https://img.shields.io/packagist/dt/icanboogie/message-bus.svg)](https://packagist.org/packages/icanboogie/message-bus)
 
 A message dispatcher helps to separate presentation concerns from business logic by mapping inputs
 of various sources to simpler application messages. It also helps to decouple the domain from the
@@ -33,6 +32,12 @@ $result = $dispatcher->dispatch($message);
 ```
 
 
+
+#### Installation
+
+```bash
+composer require icanboogie/message-bus
+```
 
 
 
@@ -194,50 +199,41 @@ $assertingDispatcher = new AssertingDispatcher($dispatcher, function ($message) 
 
 
 
+## Continuous Integration
 
+The project is continuously tested by [GitHub actions](https://github.com/ICanBoogie/Inflector/actions).
 
-## Requirements
-
-The package requires PHP 7.2 or later.
-
-
-
-
-
-## Installation
-
-```bash
-composer require icanboogie/message-bus
-```
+[![Tests](https://github.com/ICanBoogie/MessageBus/workflows/test/badge.svg?branch=master)](https://github.com/ICanBoogie/MessageBus/actions?query=workflow%3Atest)
+[![Static Analysis](https://github.com/ICanBoogie/MessageBus/workflows/static-analysis/badge.svg?branch=master)](https://github.com/ICanBoogie/MessageBus/actions?query=workflow%3Astatic-analysis)
+[![Code Style](https://github.com/ICanBoogie/MessageBus/workflows/code-style/badge.svg?branch=master)](https://github.com/ICanBoogie/MessageBus/actions?query=workflow%3Acode-style)
 
 
 
+## Code of Conduct
+
+This project adheres to a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in
+this project and its community, you are expected to uphold this code.
 
 
-## Testing
 
-Run `make test-container` to create and log into the test container, then run `make test` to run the
-test suite. Alternatively, run `make test-coverage` to run the test suite with test coverage. Open
-`build/coverage/index.html` to see the breakdown of the code coverage.
+## Contributing
 
-
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 
 
 ## License
 
-**icanboogie/message-bus** is released under the [New BSD License](LICENSE).
+**icanboogie/message-bus** is released under the [BSD-3-Clause](LICENSE).
 
 
 
-
-
+[ICanBoogie]:                          https://icanboogie.org/
 [AssertingDispatcher]:                 lib/AssertingDispatcher.php
 [HandlerProvider]:                     lib/HandlerProvider.php
 [HandlerProviderPass]:                 lib/Symfony/HandlerProviderPass.php
 [PSR\ContainerHandlerProvider]:        lib/PSR/ContainerHandlerProvider.php
 [available on GitHub]:                 https://github.com/ICanBoogie/MessageBus
-[ICanBoogie]:                          https://icanboogie.org
 [symfony/dependency-injection]:        https://symfony.com/doc/current/components/dependency_injection.html
 [hexagonal]:                           https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/
 [cqs]:                                 https://en.wikipedia.org/wiki/Command%E2%80%93query_separation

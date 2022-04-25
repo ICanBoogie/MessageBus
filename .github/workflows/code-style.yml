@@ -1,12 +1,11 @@
-name: coding-standards
+name: code-style
 
 on:
 - push
 - pull_request
 
 jobs:
-  PSR-12:
-    name: PSR-12
+  phpcs:
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout

@@ -51,7 +51,7 @@ class ContainerHandlerProvider implements HandlerProvider
         }
 
         try {
-            return $this->container->get($id);
+            return $this->container->get($id); // @phpstan-ignore-line
         } catch (NotFoundExceptionInterface $e) {
             throw new NotFound("No handler for messages of type `$class`.", $e);
         }

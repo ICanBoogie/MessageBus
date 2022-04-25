@@ -13,5 +13,4 @@ namespace ICanBoogie\MessageBus\PSR;
 
 class QueryHandlerProvider extends ContainerHandlerProvider
 {
-
 }

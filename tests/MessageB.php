@@ -13,5 +13,4 @@ namespace ICanBoogie\MessageBus;
 
 class MessageB
 {
-
 }
