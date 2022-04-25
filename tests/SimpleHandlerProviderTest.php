@@ -13,9 +13,9 @@ namespace ICanBoogie\MessageBus;
 
 use PHPUnit\Framework\TestCase;
 
-class SimpleHandlerProviderTest extends TestCase
+final class SimpleHandlerProviderTest extends TestCase
 {
-    public function testFailOnMissingHandler()
+    public function testFailOnMissingHandler(): void
     {
         $messageA = new MessageA();
         $messageB = new MessageB();
@@ -38,7 +38,7 @@ class SimpleHandlerProviderTest extends TestCase
         $this->fail("Expected NotFound");
     }
 
-    public function testDispatch()
+    public function testDispatch(): void
     {
         $messageA = new MessageA();
         $messageB = new MessageB();

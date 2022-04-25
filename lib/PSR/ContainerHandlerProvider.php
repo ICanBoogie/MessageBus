@@ -21,24 +21,15 @@ use function get_class;
 class ContainerHandlerProvider implements HandlerProvider
 {
     /**
-     * @var ContainerInterface
+     * @param array<string, string> $handlers
+     *     Where _key_ is a message class and _value_ the service identifier of its handler.
      */
-    private $container;
-
-    /**
-     * @var array<string, string>
-     */
-    private $handlers;
-
-    /**
-     * @param array<string, string> $mapping
-     *   An array of key/value pairs where _key_ is a message class and _value_ the service
-     *   identifier of its handler.
-     */
-    public function __construct(ContainerInterface $container, array $mapping)
-    {
-        $this->handlers = $mapping;
+    public function __construct(
+        private ContainerInterface $container,
+        private array $handlers
+    ) {
         $this->container = $container;
+        $this->handlers = $handlers;
     }
 
     public function getHandlerForMessage(object $message): callable

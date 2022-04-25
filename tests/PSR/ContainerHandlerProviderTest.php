@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the ICanBoogie package.
+ *
+ * (c) Olivier Laviale <olivier.laviale@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace ICanBoogie\MessageBus\PSR;
 
 use Exception;
@@ -9,16 +18,16 @@ use ICanBoogie\MessageBus\MessageB;
 use ICanBoogie\MessageBus\NotFound;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-class ContainerHandlerProviderTest extends TestCase
+final class ContainerHandlerProviderTest extends TestCase
 {
-    /**
-     * @var ObjectProphecy|ContainerInterface
-     */
-    private $container;
+    use ProphecyTrait;
+
+    private ObjectProphecy|ContainerInterface $container;
 
     protected function setUp(): void
     {
@@ -27,7 +36,7 @@ class ContainerHandlerProviderTest extends TestCase
         parent::setUp();
     }
 
-    public function testFailOnUndefinedHandler()
+    public function testFailOnUndefinedHandler(): void
     {
         $this->container->get(Argument::any())
             ->shouldNotBeCalled();
@@ -40,7 +49,7 @@ class ContainerHandlerProviderTest extends TestCase
         });
     }
 
-    public function testFailOnUndefinedService()
+    public function testFailOnUndefinedService(): void
     {
         $messageA = new MessageA();
         $handlers = [
@@ -60,7 +69,7 @@ class ContainerHandlerProviderTest extends TestCase
         $provider->getHandlerForMessage($messageA);
     }
 
-    public function testReturnExpectedService()
+    public function testReturnExpectedService(): void
     {
         $messageA = new MessageA();
         $messageB = new MessageB();

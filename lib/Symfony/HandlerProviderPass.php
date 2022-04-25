@@ -32,36 +32,12 @@ class HandlerProviderPass implements CompilerPassInterface
     public const DEFAULT_MESSAGE_PROPERTY = 'message';
     public const DEFAULT_PROVIDER_CLASS = ContainerHandlerProvider::class;
 
-    /**
-     * @var string
-     */
-    private $serviceId;
-
-    /**
-     * @var string
-     */
-    private $handlerTag;
-
-    /**
-     * @var string
-     */
-    private $messageProperty;
-
-    /**
-     * @var string
-     */
-    private $providerClass;
-
     public function __construct(
-        string $serviceId = self::DEFAULT_SERVICE_ID,
-        string $handlerTag = self::DEFAULT_HANDLER_TAG,
-        string $messageProperty = self::DEFAULT_MESSAGE_PROPERTY,
-        string $providerClass = self::DEFAULT_PROVIDER_CLASS
+        private string $serviceId = self::DEFAULT_SERVICE_ID,
+        private string $handlerTag = self::DEFAULT_HANDLER_TAG,
+        private string $messageProperty = self::DEFAULT_MESSAGE_PROPERTY,
+        private string $providerClass = self::DEFAULT_PROVIDER_CLASS
     ) {
-        $this->serviceId = $serviceId;
-        $this->handlerTag = $handlerTag;
-        $this->messageProperty = $messageProperty;
-        $this->providerClass = $providerClass;
     }
 
     /**
@@ -92,13 +68,10 @@ class HandlerProviderPass implements CompilerPassInterface
         foreach ($handlers as $id => $tags) {
             assert(is_string($id));
 
-            $command = $tags[0][$messageProperty] ?? null;
-
-            if (!$command) {
-                throw new InvalidArgumentException(
+            $command = $tags[0][$messageProperty]
+                ?? throw new InvalidArgumentException(
                     "The `$messageProperty` property is required for service `$id`."
                 );
-            }
 
             assert(is_string($command));
 

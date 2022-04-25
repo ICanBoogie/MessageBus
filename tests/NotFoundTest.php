@@ -15,9 +15,9 @@ use PHPUnit\Framework\TestCase;
 
 use function uniqid;
 
-class NotFoundTest extends TestCase
+final class NotFoundTest extends TestCase
 {
-    public function testException()
+    public function testException(): void
     {
         $exception = new NotFound($message = uniqid(), $previous = new \Exception());
 
