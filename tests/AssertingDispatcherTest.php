@@ -13,14 +13,14 @@ namespace ICanBoogie\MessageBus;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
-class AssertingDispatcherTest extends TestCase
+final class AssertingDispatcherTest extends TestCase
 {
-    /**
-     * @var Dispatcher|ObjectProphecy
-     */
-    private $dispatcher;
+    use ProphecyTrait;
+
+    private Dispatcher|ObjectProphecy $dispatcher;
 
     protected function setUp(): void
     {
@@ -29,7 +29,7 @@ class AssertingDispatcherTest extends TestCase
         parent::setUp();
     }
 
-    public function testBubbleFailure()
+    public function testBubbleFailure(): void
     {
         $message = (object) [];
         $exception = new \Exception();
@@ -54,7 +54,7 @@ class AssertingDispatcherTest extends TestCase
         $this->fail("Expected exception");
     }
 
-    public function testDispatch()
+    public function testDispatch(): void
     {
         $message = (object) [];
         $result = uniqid();

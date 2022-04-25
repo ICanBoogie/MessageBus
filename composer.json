@@ -27,15 +27,16 @@
 	"prefer-stable": true,
 	"prefer-dist": true,
 	"require": {
-		"php": ">=7.2.5"
+		"php": ">=8.0.2"
 	},
 	"require-dev": {
+		"phpspec/prophecy-phpunit": "^2.0",
 		"phpstan/phpstan": "^1.5",
-		"phpunit/phpunit": "^8.5",
-		"psr/container": "^1.0",
-		"symfony/config": "^4.0|^5.1",
-		"symfony/dependency-injection": "^4.0|^5.1",
-		"symfony/yaml": "^4.0|^5.1"
+		"phpunit/phpunit": "^9.5",
+		"psr/container": "^1.0|^2.0",
+		"symfony/config": "^6.0",
+		"symfony/dependency-injection": "^6.0",
+		"symfony/yaml": "^6.0"
 	},
 	"autoload": {
 		"psr-4": {

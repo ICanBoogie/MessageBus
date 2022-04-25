@@ -12,10 +12,13 @@
 namespace ICanBoogie\MessageBus;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class SimpleDispatcherTest extends TestCase
 {
-    public function testDispatch()
+    use ProphecyTrait;
+
+    public function testDispatch(): void
     {
         $expectedMessage = (object) [ uniqid() => uniqid() ];
         $result = uniqid();

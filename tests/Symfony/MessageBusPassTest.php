@@ -29,16 +29,16 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 use function uniqid;
 
-class MessageBusPassTest extends TestCase
+final class MessageBusPassTest extends TestCase
 {
-    public function testFailOnMissingMessage()
+    public function testFailOnMissingMessage(): void
     {
         $this->expectExceptionMessage("The `message` property is required for service `handler.message_a`");
         $this->expectException(InvalidArgumentException::class);
         $this->makeContainer(__DIR__ . '/resources/missing-message.yml');
     }
 
-    public function testFailOnDuplicateMessage()
+    public function testFailOnDuplicateMessage(): void
     {
         $this->expectExceptionMessage(
             "The command `ICanBoogie\MessageBus\MessageA` already has an handler: `handler.message_a`."
@@ -47,7 +47,7 @@ class MessageBusPassTest extends TestCase
         $this->makeContainer(__DIR__ . '/resources/message-duplicate.yml');
     }
 
-    public function testProvider()
+    public function testProvider(): void
     {
         /* @var ContainerHandlerProvider $provider */
         $container = $this->makeContainer(__DIR__ . '/resources/ok.yml', $alias = 'alias_' . uniqid());
@@ -58,7 +58,7 @@ class MessageBusPassTest extends TestCase
         $this->assertInstanceOf(HandlerB::class, $provider->getHandlerForMessage(new MessageB()));
     }
 
-    public function testCQS()
+    public function testCQS(): void
     {
         $container = new SymfonyContainerBuilder();
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__));

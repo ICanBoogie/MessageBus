@@ -17,27 +17,18 @@ namespace ICanBoogie\MessageBus;
 final class SimpleHandlerProvider implements HandlerProvider
 {
     /**
-     * @var array<string, callable>
-     */
-    private $handlers;
-
-    /**
      * @param array<string, callable> $handlers
      */
-    public function __construct(array $handlers)
-    {
-        $this->handlers = $handlers;
+    public function __construct(
+        private array $handlers
+    ) {
     }
 
     public function getHandlerForMessage(object $message): callable
     {
         $class = get_class($message);
-        $handler = $this->handlers[$class] ?? null;
 
-        if (!$handler) {
-            throw new NotFound("No handler for messages of type `$class`.");
-        }
-
-        return $handler;
+        return $this->handlers[$class]
+            ?? throw new NotFound("No handler for messages of type `$class`.");
     }
 }

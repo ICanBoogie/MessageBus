@@ -17,22 +17,18 @@ namespace ICanBoogie\MessageBus;
 class AssertingDispatcher implements Dispatcher
 {
     /**
-     * @var Dispatcher
-     */
-    private $dispatcher;
-
-    /**
      * @var callable
      */
     private $assertion;
 
     /**
-     * @param Dispatcher $dispatcher
-     * @param callable $assertion A callable that should throw an exception if the message shouldn't
-     * be dispatched.
+     * @param callable $assertion
+     *     A callable that should throw an exception if the message shouldn't be dispatched.
      */
-    public function __construct(Dispatcher $dispatcher, callable $assertion)
-    {
+    public function __construct(
+        private Dispatcher $dispatcher,
+        callable $assertion
+    ) {
         $this->dispatcher = $dispatcher;
         $this->assertion = $assertion;
     }
