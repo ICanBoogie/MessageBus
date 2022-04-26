@@ -1,0 +1,12 @@
+services:
+  Acme\MenuService\Presentation\Security\Voters\IsAdmin:
+    tags:
+    - { name: message_bus.voter, permission: is_admin }
+
+  Acme\MenuService\Presentation\Security\Voters\CanWriteMenu:
+    tags:
+    - { name: message_bus.voter, permission: can_write_menu }
+
+  Acme\MenuService\Presentation\Security\Voters\CanManageMenu:
+    tags:
+    - { name: message_bus.voter, permission: can_manage_menu }

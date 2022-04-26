@@ -1,0 +1,18 @@
+services:
+  Acme\MenuService\Application\MessageBus\CreateMenuHandler:
+    tags:
+    - name: message_bus.handler
+      message: Acme\MenuService\Application\MessageBus\CreateMenu
+    - name: message_bus.permission
+      permission: is_admin
+    - name: message_bus.permission
+      permission: can_write_menu
+
+  Acme\MenuService\Application\MessageBus\DeleteMenuHandler:
+    tags:
+    - name: message_bus.handler
+      message: Acme\MenuService\Application\MessageBus\DeleteMenu
+    - name: message_bus.permission
+      permission: is_admin
+    - name: message_bus.permission
+      permission: can_manage_menu

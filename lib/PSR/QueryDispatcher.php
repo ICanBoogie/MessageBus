@@ -13,6 +13,9 @@ namespace ICanBoogie\MessageBus\PSR;
 
 use ICanBoogie\MessageBus\SimpleDispatcher;
 
+/**
+ * @deprecated {@see https://github.com/ICanBoogie/MessageBus/issues/3}
+ */
 class QueryDispatcher extends SimpleDispatcher
 {
     public function __construct(QueryHandlerProvider $handlerProvider)

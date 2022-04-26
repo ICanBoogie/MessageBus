@@ -23,6 +23,8 @@ use ICanBoogie\MessageBus\PSR\QueryHandlerProvider;
  *     - name: query_dispatcher.handler
  *       command: Acme\MenuService\Application\Query\ShowMenu
  * ```
+ *
+ * @deprecated {@see https://github.com/ICanBoogie/MessageBus/issues/3}
  */
 final class QueryHandlerProviderPass extends HandlerProviderPass
 {

@@ -13,6 +13,8 @@ namespace ICanBoogie\MessageBus;
 
 /**
  * A Dispatcher decorator that asserts messages before dispatching them.
+ *
+ * @deprecated {@see https://github.com/ICanBoogie/MessageBus/issues/3}
  */
 class AssertingDispatcher implements Dispatcher
 {

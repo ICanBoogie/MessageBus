@@ -1,6 +1,31 @@
 # Migration
 
-## v1.x to v2.x
+## v2.0 to v2.1
+
+### New features
+
+- Add support for permissions and voters.
+- Add `MessageBusPass` that takes care of handlers, commands, permissions, and voters. This time
+  around the compiler pass generates parameters instead of fulfilled services, offering more
+  flexibility in how they are used. Unlike `HandlerProviderPass`, `MessageBusPass` uses the tag
+  `message_bus.handler` instead of `message_dispatcher.handler`.
+- Add a `services.yaml` sample file, that can be used as is with Symfony's DIC.
+
+### Backward Incompatible Changes
+
+N/A
+
+### Deprecated Features
+
+- Deprecate: `CommandDispatcher`, `CommandHandlerProvider`, `QueryDispatcher`,
+  `QueryHandlerProvider`, `CommandHandlerProviderPass`, `HandlerProviderPass`,
+  `QueryHandlerProviderPass`, `AssertingDispatcher`.
+
+### Other Changes
+
+N/A
+
+## v1.x to v2.0
 
 ### New features
 

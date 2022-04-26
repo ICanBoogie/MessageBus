@@ -16,6 +16,9 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
+/**
+ * @deprecated {@see https://github.com/ICanBoogie/MessageBus/issues/3}
+ */
 final class AssertingDispatcherTest extends TestCase
 {
     use ProphecyTrait;

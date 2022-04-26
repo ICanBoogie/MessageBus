@@ -11,6 +11,9 @@
 
 namespace ICanBoogie\MessageBus\PSR;
 
+/**
+ * @deprecated {@see https://github.com/ICanBoogie/MessageBus/issues/3}
+ */
 class QueryHandlerProvider extends ContainerHandlerProvider
 {
 }

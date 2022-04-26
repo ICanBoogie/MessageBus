@@ -11,82 +11,97 @@
 
 namespace ICanBoogie\MessageBus\Symfony;
 
-use ICanBoogie\MessageBus\HandlerA;
-use ICanBoogie\MessageBus\HandlerB;
-use ICanBoogie\MessageBus\HandlerProvider;
-use ICanBoogie\MessageBus\MessageA;
-use ICanBoogie\MessageBus\MessageB;
-use ICanBoogie\MessageBus\PSR\CommandDispatcher;
+use Exception;
 use ICanBoogie\MessageBus\PSR\ContainerHandlerProvider;
-use ICanBoogie\MessageBus\PSR\QueryDispatcher;
-use InvalidArgumentException;
-use LogicException;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\Alias;
-use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use ICanBoogie\MessageBus\RestrictedDispatcher;
+use ICanBoogie\MessageBus\SimpleDispatcher;
+use ICanBoogie\MessageBus\VoterProvider;
+use ICanBoogie\MessageBus\VoterWithPermissions;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use function uniqid;
-
-final class MessageBusPassTest extends TestCase
+final class MessageBusPassTest extends ContainerTestCase
 {
-    public function testFailOnMissingMessage(): void
-    {
-        $this->expectExceptionMessage("The `message` property is required for service `handler.message_a`");
-        $this->expectException(InvalidArgumentException::class);
-        $this->makeContainer(__DIR__ . '/resources/missing-message.yml');
-    }
+    private ContainerInterface $container;
 
-    public function testFailOnDuplicateMessage(): void
+    protected function setUp(): void
     {
-        $this->expectExceptionMessage(
-            "The command `ICanBoogie\MessageBus\MessageA` already has an handler: `handler.message_a`."
+        parent::setUp();
+
+        $this->container = $this->makeContainer(
+            __DIR__ . '/resources/integration.yml',
+            function (ContainerBuilder $container) {
+                $container->addCompilerPass(new MessageBusPass());
+            }
         );
-        $this->expectException(LogicException::class);
-        $this->makeContainer(__DIR__ . '/resources/message-duplicate.yml');
     }
 
-    public function testProvider(): void
+    /**
+     * @dataProvider provideService
+     *
+     * @param class-string $expected
+     *
+     * @throws Exception
+     */
+    public function testService(string $id, string $expected): void
     {
-        /* @var ContainerHandlerProvider $provider */
-        $container = $this->makeContainer(__DIR__ . '/resources/ok.yml', $alias = 'alias_' . uniqid());
-        $provider = $container->get($alias);
-
-        $this->assertInstanceOf(ContainerHandlerProvider::class, $provider);
-        $this->assertInstanceOf(HandlerA::class, $provider->getHandlerForMessage(new MessageA()));
-        $this->assertInstanceOf(HandlerB::class, $provider->getHandlerForMessage(new MessageB()));
+        $this->assertInstanceOf($expected, $this->container->get($id));
     }
 
-    public function testCQS(): void
+    // @phpstan-ignore-next-line
+    public function provideService(): array
     {
-        $container = new SymfonyContainerBuilder();
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__));
-        $loader->load(__DIR__ . '/resources/cqs.yml');
-        $container
-            ->addCompilerPass(new QueryHandlerProviderPass())
-            ->addCompilerPass(new CommandHandlerProviderPass())
-            ->compile();
+        return [
 
-        $commandDispatcher = $container->get('command_dispatcher');
-        $queryDispatcher = $container->get('query_dispatcher');
-        $this->assertInstanceOf(CommandDispatcher::class, $commandDispatcher);
-        $this->assertInstanceOf(QueryDispatcher::class, $queryDispatcher);
+            [ 'test.voter_provider', VoterProvider::class ],
+            [ 'test.voter_with_permissions', VoterWithPermissions::class ],
+            [ 'test.handler_provider', ContainerHandlerProvider::class ],
+            [ 'test.dispatcher', SimpleDispatcher::class ],
+            [ 'test.restricted_dispatcher', RestrictedDispatcher::class ],
+
+        ];
     }
 
-    private function makeContainer(string $config, string $alias = null): SymfonyContainerBuilder
+    /**
+     * @dataProvider provideParameter
+     */
+    public function testParameter(string $name, mixed $expected): void
     {
-        $container = new SymfonyContainerBuilder();
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__));
-        $loader->load($config);
-        $container->addCompilerPass(new HandlerProviderPass());
+        $this->assertSame($expected, $this->container->getParameter($name));
+    }
 
-        if ($alias) {
-            $container->setAlias($alias, new Alias(HandlerProvider::class, true));
-        }
+    // @phpstan-ignore-next-line
+    public function provideParameter(): array
+    {
+        return [
 
-        $container->compile();
+            [
+                MessageBusPass::DEFAULT_PARAMETER_FOR_MESSAGE_TO_HANDLER,
+                [
+                    'Acme\MenuService\Application\MessageBus\CreateMenu'
+                    => 'Acme\MenuService\Application\MessageBus\CreateMenuHandler',
+                    'Acme\MenuService\Application\MessageBus\DeleteMenu'
+                    => 'Acme\MenuService\Application\MessageBus\DeleteMenuHandler',
+                ]
+            ],
 
-        return $container;
+            [
+                MessageBusPass::DEFAULT_PARAMETER_FOR_PERMISSION_TO_VOTER,
+                [
+                    'Acme\MenuService\Application\MessageBus\CreateMenu' => [ 'is_admin', 'can_write_menu' ],
+                    'Acme\MenuService\Application\MessageBus\DeleteMenu' => [ 'is_admin', 'can_manage_menu' ],
+                ]
+            ],
+
+            [
+                MessageBusPass::DEFAULT_PARAMETER_FOR_VOTERS,
+                [
+                    'is_admin' => 'Acme\MenuService\Presentation\Security\Voters\IsAdmin',
+                    'can_write_menu' => 'Acme\MenuService\Presentation\Security\Voters\CanWriteMenu',
+                    'can_manage_menu' => 'Acme\MenuService\Presentation\Security\Voters\CanManageMenu',
+                ]
+            ],
+
+        ];
     }
 }
