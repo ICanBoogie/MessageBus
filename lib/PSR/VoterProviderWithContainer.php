@@ -23,18 +23,18 @@ use Throwable;
 final class VoterProviderWithContainer implements VoterProvider
 {
     /**
-     * @param array<string, string> $permissionToService
-     *     Where _key_ is a permission and _value_ a service.
+     * @param array<string, string> $permissionToVoter
+     *     Where _key_ is a permission and _value_ a voter service identifier.
      */
     public function __construct(
         private ContainerInterface $container,
-        private array $permissionToService,
+        private array $permissionToVoter,
     ) {
     }
 
     public function getVoterForPermission(string $permission): ?Voter
     {
-        $id = $this->permissionToService[$permission]
+        $id = $this->permissionToVoter[$permission]
             ?? throw new VoterNotFound($permission);
 
         try {

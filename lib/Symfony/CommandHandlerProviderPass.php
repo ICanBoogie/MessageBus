@@ -23,6 +23,8 @@ use ICanBoogie\MessageBus\PSR\CommandHandlerProvider;
  *     - name: command_dispatcher.handler
  *       command: Acme\MenuService\Application\Command\ActivateMenu
  * ```
+ *
+ * @deprecated {@see https://github.com/ICanBoogie/MessageBus/issues/3}
  */
 final class CommandHandlerProviderPass extends HandlerProviderPass
 {

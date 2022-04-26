@@ -1,0 +1,48 @@
+# If you're happy with the defaults, this file can be included as is in your project.
+
+parameters:
+  # These parameters are provided by MessageBusPass
+  message_bus.permission_to_voter: ~
+  message_bus.permissions_by_message: ~
+  message_bus.message_to_handler: ~
+
+services:
+  _defaults:
+    autowire: true
+
+  # interfaces
+
+  ICanBoogie\MessageBus\HandlerProvider:
+    alias: ICanBoogie\MessageBus\PSR\ContainerHandlerProvider
+
+  ICanBoogie\MessageBus\Dispatcher:
+    alias: ICanBoogie\MessageBus\SimpleDispatcher
+
+  ICanBoogie\MessageBus\Voter:
+    alias: ICanBoogie\MessageBus\VoterWithPermissions
+
+  ICanBoogie\MessageBus\VoterProvider:
+    alias: ICanBoogie\MessageBus\PSR\VoterProviderWithContainer
+
+  ICanBoogie\MessageBus\RestrictedDispatcher:
+    alias: ICanBoogie\MessageBus\RestrictedDispatcherWithVoter
+
+  # implementations
+
+  ICanBoogie\MessageBus\PSR\ContainerHandlerProvider:
+    arguments:
+    - !tagged_locator { tag: message_bus.handler }
+    - '%message_bus.message_to_handler%'
+
+  ICanBoogie\MessageBus\SimpleDispatcher: ~
+
+  ICanBoogie\MessageBus\VoterWithPermissions:
+    arguments:
+      $permissionsByMessage: '%message_bus.permissions_by_message%'
+
+  ICanBoogie\MessageBus\PSR\VoterProviderWithContainer:
+    arguments:
+    - !tagged_locator { tag: message_bus.voter, index_by: permission }
+    - '%message_bus.permission_to_voter%'
+
+  ICanBoogie\MessageBus\RestrictedDispatcherWithVoter: ~

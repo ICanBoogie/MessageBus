@@ -24,6 +24,8 @@ use function is_string;
 
 /**
  * Collect message handlers and register their provider.
+ *
+ * @deprecated {@see https://github.com/ICanBoogie/MessageBus/issues/3}
  */
 class HandlerProviderPass implements CompilerPassInterface
 {

@@ -23,6 +23,6 @@ class VoterNotFound extends LogicException implements Exception
         public string $permission,
         ?Throwable $previous = null
     ) {
-        parent::__construct("Voter not found for permission: $permission", 0, $previous);
+        parent::__construct("Voter not found for permission: $permission", previous: $previous);
     }
 }

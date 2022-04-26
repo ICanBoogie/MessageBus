@@ -11,8 +11,6 @@
 
 namespace ICanBoogie\MessageBus;
 
-use LogicException;
-
 /**
  * The context in which a message is dispatched.
  */

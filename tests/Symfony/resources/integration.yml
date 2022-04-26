@@ -1,0 +1,25 @@
+imports:
+- { resource: default_services.yaml }
+- { resource: handlers.yaml }
+- { resource: voters.yaml }
+
+services:
+  test.voter_provider:
+    alias: ICanBoogie\MessageBus\VoterProvider
+    public: true
+
+  test.voter_with_permissions:
+    alias: ICanBoogie\MessageBus\VoterWithPermissions
+    public: true
+
+  test.handler_provider:
+    alias: ICanBoogie\MessageBus\HandlerProvider
+    public: true
+
+  test.dispatcher:
+    alias: ICanBoogie\MessageBus\Dispatcher
+    public: true
+
+  test.restricted_dispatcher:
+    alias: ICanBoogie\MessageBus\RestrictedDispatcher
+    public: true
