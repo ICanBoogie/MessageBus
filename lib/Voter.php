@@ -19,5 +19,5 @@ interface Voter
     /**
      * Returns `true` when permission is granted, ending the voting process positively.
      */
-    public function isGranted(object $subject, Context $context): bool;
+    public function isGranted(object $message, Context $context): bool;
 }
