@@ -14,6 +14,7 @@ None
   flexibility in how they are used. Unlike `HandlerProviderPass`, `MessageBusPass` uses the tag
   `message_bus.handler` instead of `message_dispatcher.handler`.
 - Add a `services.yaml` sample file, that can be used as is with Symfony's DIC.
+- Add `Safe`, a way to identify safe messages.
 - Add `DispatcherWithHandlerProvider`, a replacement for `SimpleDispatcher`.
 - Add `HandlerProviderWithContainer`, a replacement for `ContainerHandlerProvider`.
 - Add `HandlerProviderWithHandlers`, a replacement for `SimpleHandlerProvider`.
