@@ -23,6 +23,10 @@ final class DispatcherWithHandlerProvider implements Dispatcher
 
     public function dispatch(object $message)
     {
-        return $this->handlerProvider->getHandlerForMessage($message)($message);
+        $class = $message::class;
+        $handler = $this->handlerProvider->getHandlerForMessage($message)
+            ?? throw new HandlerNotFound("No handler for messages of type `$class`");
+
+        return $handler($message);
     }
 }

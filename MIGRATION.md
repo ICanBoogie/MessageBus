@@ -12,6 +12,8 @@ None
 
 ### Backward Incompatible Changes
 
+- `HandlerProvider::getHandlerForMessage()` can now return `null`, undefined handlers are handled in
+  one single location now, that is `DispatcherWithHandlerProvider`.
 - Dropped `HandlerProviderPass`, `CommandDispatcher`, `CommandHandlerProvider`,
   `CommandHandlerProviderPass`, `QueryDispatcher`, `QueryHandlerProvider`,
   `QueryHandlerProviderPass` in favor of `MessageBusPass`.

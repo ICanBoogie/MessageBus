@@ -12,7 +12,6 @@
 namespace ICanBoogie\MessageBus\PSR;
 
 use Exception;
-use ICanBoogie\MessageBus\HandlerNotFound;
 use ICanBoogie\MessageBus\HandlerProvider;
 use ICanBoogie\MessageBus\MessageA;
 use ICanBoogie\MessageBus\MessageB;
@@ -46,10 +45,10 @@ final class HandlerProviderWithContainerTest extends TestCase
 
         $provider = $this->makeProvider([]);
 
-        $this->expectException(HandlerNotFound::class);
-
-        $provider->getHandlerForMessage(new class () {
-        });
+        $this->assertNull(
+            $provider->getHandlerForMessage(new class () {
+            })
+        );
     }
 
     public function testFailOnUndefinedService(): void
@@ -57,7 +56,7 @@ final class HandlerProviderWithContainerTest extends TestCase
         $messageA = new MessageA();
         $handlers = [
 
-            get_class($messageA) => $undefinedService = uniqid(),
+            $messageA::class => $undefinedService = uniqid(),
 
         ];
 
@@ -67,7 +66,7 @@ final class HandlerProviderWithContainerTest extends TestCase
 
         $provider = $this->makeProvider($handlers);
 
-        $this->expectException(HandlerNotFound::class);
+        $this->expectException(NotFoundExceptionInterface::class);
 
         $provider->getHandlerForMessage($messageA);
     }
@@ -80,8 +79,8 @@ final class HandlerProviderWithContainerTest extends TestCase
         };
         $handlers = [
 
-            get_class($messageA) => $expectedServiceId = uniqid(),
-            get_class($messageB) => uniqid(),
+            $messageA::class => $expectedServiceId = uniqid(),
+            $messageB::class => uniqid(),
 
         ];
 

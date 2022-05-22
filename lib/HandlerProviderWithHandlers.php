@@ -25,11 +25,8 @@ final class HandlerProviderWithHandlers implements HandlerProvider
     ) {
     }
 
-    public function getHandlerForMessage(object $message): callable
+    public function getHandlerForMessage(object $message): ?callable
     {
-        $class = $message::class;
-
-        return $this->handlers[$class]
-            ?? throw new HandlerNotFound("No handler for messages of type `$class`.");
+        return $this->handlers[$message::class] ?? null;
     }
 }

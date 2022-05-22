@@ -15,50 +15,37 @@ use PHPUnit\Framework\TestCase;
 
 final class HandlerProviderWithHandlersTest extends TestCase
 {
-    public function testFailOnMissingHandler(): void
-    {
-        $messageA = new MessageA();
-        $messageB = new MessageB();
+    private MessageB $message;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->message = new MessageB();
+    }
+
+    public function testNoHandler(): void
+    {
         $handlerProvider = new HandlerProviderWithHandlers([
-            get_class($messageA) => function () {
+            MessageA::class => function () {
                 $this->fail("This is not the handler you are looking for");
             }
         ]);
 
-        $bus = new DispatcherWithHandlerProvider($handlerProvider);
-
-        try {
-            $bus->dispatch($messageB);
-        } catch (HandlerNotFound $e) {
-            $this->assertStringContainsString(get_class($messageB), $e->getMessage());
-            return;
-        }
-
-        $this->fail("Expected NotFound");
+        $this->assertNull($handlerProvider->getHandlerForMessage($this->message));
     }
 
-    public function testDispatch(): void
+    public function testYesHandler(): void
     {
-        $messageA = new MessageA();
-        $messageB = new MessageB();
-
-        $result = uniqid();
-
         $handlerProvider = new HandlerProviderWithHandlers([
-            get_class($messageA) => function () {
+            MessageA::class => function () {
                 $this->fail("This is not the handler you are looking for");
             },
 
-            get_class($messageB) => function ($message) use ($result, $messageB) {
-                $this->assertSame($messageB, $message);
-
-                return $result;
-            },
+            MessageB::class => $handler = function () {
+            }
         ]);
 
-        $bus = new DispatcherWithHandlerProvider($handlerProvider);
-
-        $this->assertSame($result, $bus->dispatch($messageB));
+        $this->assertSame($handler, $handlerProvider->getHandlerForMessage($this->message));
     }
 }

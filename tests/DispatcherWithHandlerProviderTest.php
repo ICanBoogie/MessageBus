@@ -13,21 +13,55 @@ namespace ICanBoogie\MessageBus;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
+
+use function uniqid;
 
 final class DispatcherWithHandlerProviderTest extends TestCase
 {
     use ProphecyTrait;
 
+    private object $message;
+
+    /**
+     * @var ObjectProphecy<HandlerProvider>
+     */
+    private ObjectProphecy $handlerProvider;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->message = (object) [ uniqid() => uniqid() ];
+        $this->handlerProvider = $this->prophesize(HandlerProvider::class);
+    }
+
+    public function testFailOnMissingHandler(): void
+    {
+        $this->handlerProvider->getHandlerForMessage($this->message)
+            ->shouldBeCalled()->willReturn(null);
+
+        $stu = $this->makeSTU();
+
+        $this->expectException(HandlerNotFound::class);
+        $stu->dispatch($this->message);
+    }
+
     public function testDispatch(): void
     {
-        $expectedMessage = (object) [ uniqid() => uniqid() ];
         $result = uniqid();
 
-        $handlerProvider = $this->prophesize(HandlerProvider::class);
-        $handlerProvider->getHandlerForMessage($expectedMessage)
-            ->shouldBeCalled()->willReturn(fn() => $result);
+        $this->handlerProvider->getHandlerForMessage($this->message)
+            ->willReturn(fn() => $result);
 
-        $bus = new DispatcherWithHandlerProvider($handlerProvider->reveal());
-        $this->assertSame($result, $bus->dispatch($expectedMessage));
+        $stu = $this->makeSTU();
+        $this->assertSame($result, $stu->dispatch($this->message));
+    }
+
+    private function makeSTU(): Dispatcher
+    {
+        return new DispatcherWithHandlerProvider(
+            $this->handlerProvider->reveal()
+        );
     }
 }

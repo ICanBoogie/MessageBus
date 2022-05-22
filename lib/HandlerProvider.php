@@ -20,11 +20,8 @@ interface HandlerProvider
      * @param object $message
      *   A message for which to return the relevant handler.
      *
-     * @return callable
+     * @return callable|null
      *   A callable that MUST be type-compatible with $message.
-     *
-     * @throws HandlerNotFound
-     *   The handler for the message cannot the found.
      */
-    public function getHandlerForMessage(object $message): callable;
+    public function getHandlerForMessage(object $message): ?callable;
 }
