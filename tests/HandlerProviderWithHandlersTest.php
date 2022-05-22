@@ -13,17 +13,14 @@ namespace ICanBoogie\MessageBus;
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * @deprecated {@see HandlerProviderWithHandlersTest}
- */
-final class SimpleHandlerProviderTest extends TestCase
+final class HandlerProviderWithHandlersTest extends TestCase
 {
     public function testFailOnMissingHandler(): void
     {
         $messageA = new MessageA();
         $messageB = new MessageB();
 
-        $handlerProvider = new SimpleHandlerProvider([
+        $handlerProvider = new HandlerProviderWithHandlers([
             get_class($messageA) => function () {
                 $this->fail("This is not the handler you are looking for");
             }
@@ -48,7 +45,7 @@ final class SimpleHandlerProviderTest extends TestCase
 
         $result = uniqid();
 
-        $handlerProvider = new SimpleHandlerProvider([
+        $handlerProvider = new HandlerProviderWithHandlers([
             get_class($messageA) => function () {
                 $this->fail("This is not the handler you are looking for");
             },

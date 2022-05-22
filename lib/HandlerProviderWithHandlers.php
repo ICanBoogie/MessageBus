@@ -12,14 +12,13 @@
 namespace ICanBoogie\MessageBus;
 
 /**
- * A simple implementation of {@link HandlerProvider}.
- *
- * @deprecated {@see HandlerProviderWithHandlers}
+ * A handler provider backend with pairs of message class/handlers.
  */
-final class SimpleHandlerProvider implements HandlerProvider
+final class HandlerProviderWithHandlers implements HandlerProvider
 {
     /**
-     * @param array<string, callable> $handlers
+     * @param array<class-string, callable> $handlers
+     *     Where _key_ is a message class and _value_ a handler for that message class.
      */
     public function __construct(
         private array $handlers
@@ -28,7 +27,7 @@ final class SimpleHandlerProvider implements HandlerProvider
 
     public function getHandlerForMessage(object $message): callable
     {
-        $class = get_class($message);
+        $class = $message::class;
 
         return $this->handlers[$class]
             ?? throw new NotFound("No handler for messages of type `$class`.");

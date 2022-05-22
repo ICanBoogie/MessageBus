@@ -16,6 +16,7 @@ None
 - Add a `services.yaml` sample file, that can be used as is with Symfony's DIC.
 - Add `DispatcherWithHandlerProvider`, a replacement for `SimpleDispatcher`.
 - Add `HandlerProviderWithContainer`, a replacement for `ContainerHandlerProvider`.
+- Add `HandlerProviderWithHandlers`, a replacement for `SimpleHandlerProvider`.
 
 ### Backward Incompatible Changes
 
@@ -23,11 +24,12 @@ None
 
 ### Deprecated Features
 
-- Deprecate `CommandDispatcher`, `CommandHandlerProvider`, `QueryDispatcher`,
-  `QueryHandlerProvider`, `CommandHandlerProviderPass`, `HandlerProviderPass`,
+- Deprecate `HandlerProviderPass`, `CommandDispatcher`, `CommandHandlerProvider`,
+  `CommandHandlerProviderPass`, `QueryDispatcher`, `QueryHandlerProvider`,
   `QueryHandlerProviderPass` in favor of `MessageBusPass`.
 - Deprecate `AssertingDispatcher` in favor of `RestrictedDispatcher`.
 - Deprecate `SimpleDispatcher` in favor of `DispatcherWithHandlerProvider`.
+- Deprecate `SimpleHandlerProvider` in favor of `HandlerProviderWithHandlers`.
 - Deprecate `ContainerHandlerProvider` in favor of `HandlerProviderWithContainer`.
 
 ### Other Changes
