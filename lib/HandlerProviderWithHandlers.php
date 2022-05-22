@@ -30,6 +30,6 @@ final class HandlerProviderWithHandlers implements HandlerProvider
         $class = $message::class;
 
         return $this->handlers[$class]
-            ?? throw new NotFound("No handler for messages of type `$class`.");
+            ?? throw new HandlerNotFound("No handler for messages of type `$class`.");
     }
 }

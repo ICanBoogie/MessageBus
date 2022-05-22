@@ -31,6 +31,6 @@ final class SimpleHandlerProvider implements HandlerProvider
         $class = get_class($message);
 
         return $this->handlers[$class]
-            ?? throw new NotFound("No handler for messages of type `$class`.");
+            ?? throw new HandlerNotFound("No handler for messages of type `$class`.");
     }
 }

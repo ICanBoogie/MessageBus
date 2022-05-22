@@ -23,7 +23,7 @@ interface Dispatcher
      * @return mixed
      *   Result type depends on the handler.
      *
-     * @throws NotFound
+     * @throws HandlerNotFound
      *   The handler for the message cannot the found.
      */
     public function dispatch(object $message);

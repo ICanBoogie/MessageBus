@@ -17,6 +17,7 @@ None
 - Add `DispatcherWithHandlerProvider`, a replacement for `SimpleDispatcher`.
 - Add `HandlerProviderWithContainer`, a replacement for `ContainerHandlerProvider`.
 - Add `HandlerProviderWithHandlers`, a replacement for `SimpleHandlerProvider`.
+- Add `HandlerNotFound`, a replacement for `NotFound`.
 
 ### Backward Incompatible Changes
 
@@ -31,6 +32,7 @@ None
 - Deprecate `SimpleDispatcher` in favor of `DispatcherWithHandlerProvider`.
 - Deprecate `SimpleHandlerProvider` in favor of `HandlerProviderWithHandlers`.
 - Deprecate `ContainerHandlerProvider` in favor of `HandlerProviderWithContainer`.
+- Deprecate `NotFound` in favor of `HandlerNotFound`.
 
 ### Other Changes
 

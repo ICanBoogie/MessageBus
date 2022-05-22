@@ -16,8 +16,10 @@ use Throwable;
 
 /**
  * No handler found for message.
+ *
+ * @deprecated {@see HandlerNotFound}
  */
-final class NotFound extends LogicException implements Exception
+class NotFound extends LogicException implements Exception
 {
     public function __construct(string $message, Throwable $previous = null)
     {
