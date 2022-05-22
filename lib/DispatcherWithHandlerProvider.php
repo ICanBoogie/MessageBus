@@ -12,11 +12,9 @@
 namespace ICanBoogie\MessageBus;
 
 /**
- * A simple message dispatcher.
- *
- * @deprecated {@see DispatcherWithHandlerProvider}
+ * A message dispatcher backed with a {@link HandlerProvider}.
  */
-class SimpleDispatcher implements Dispatcher
+final class DispatcherWithHandlerProvider implements Dispatcher
 {
     public function __construct(
         private HandlerProvider $handlerProvider

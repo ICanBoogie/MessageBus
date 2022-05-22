@@ -16,7 +16,7 @@ services:
     alias: ICanBoogie\MessageBus\PSR\ContainerHandlerProvider
 
   ICanBoogie\MessageBus\Dispatcher:
-    alias: ICanBoogie\MessageBus\SimpleDispatcher
+    alias: ICanBoogie\MessageBus\DispatcherWithHandlerProvider
 
   ICanBoogie\MessageBus\Voter:
     alias: ICanBoogie\MessageBus\VoterWithPermissions
@@ -34,7 +34,7 @@ services:
     - !tagged_locator { tag: message_bus.handler }
     - '%message_bus.message_to_handler%'
 
-  ICanBoogie\MessageBus\SimpleDispatcher: ~
+  ICanBoogie\MessageBus\DispatcherWithHandlerProvider: ~
 
   ICanBoogie\MessageBus\VoterWithPermissions:
     arguments:

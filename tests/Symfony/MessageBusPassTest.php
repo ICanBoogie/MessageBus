@@ -12,9 +12,9 @@
 namespace ICanBoogie\MessageBus\Symfony;
 
 use Exception;
+use ICanBoogie\MessageBus\DispatcherWithHandlerProvider;
 use ICanBoogie\MessageBus\PSR\ContainerHandlerProvider;
 use ICanBoogie\MessageBus\RestrictedDispatcher;
-use ICanBoogie\MessageBus\SimpleDispatcher;
 use ICanBoogie\MessageBus\VoterProvider;
 use ICanBoogie\MessageBus\VoterWithPermissions;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -56,7 +56,7 @@ final class MessageBusPassTest extends ContainerTestCase
             [ 'test.voter_provider', VoterProvider::class ],
             [ 'test.voter_with_permissions', VoterWithPermissions::class ],
             [ 'test.handler_provider', ContainerHandlerProvider::class ],
-            [ 'test.dispatcher', SimpleDispatcher::class ],
+            [ 'test.dispatcher', DispatcherWithHandlerProvider::class ],
             [ 'test.restricted_dispatcher', RestrictedDispatcher::class ],
 
         ];

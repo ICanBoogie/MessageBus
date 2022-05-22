@@ -14,6 +14,7 @@ None
   flexibility in how they are used. Unlike `HandlerProviderPass`, `MessageBusPass` uses the tag
   `message_bus.handler` instead of `message_dispatcher.handler`.
 - Add a `services.yaml` sample file, that can be used as is with Symfony's DIC.
+- Add `DispatcherWithHandlerProvider`, a replacement for `SimpleDispatcher`.
 
 ### Backward Incompatible Changes
 
@@ -21,10 +22,11 @@ None
 
 ### Deprecated Features
 
-- Deprecate: `CommandDispatcher`, `CommandHandlerProvider`, `QueryDispatcher`,
+- Deprecate `CommandDispatcher`, `CommandHandlerProvider`, `QueryDispatcher`,
   `QueryHandlerProvider`, `CommandHandlerProviderPass`, `HandlerProviderPass`,
   `QueryHandlerProviderPass` in favor of `MessageBusPass`.
 - Deprecate `AssertingDispatcher` in favor of `RestrictedDispatcher`.
+- Deprecate `SimpleDispatcher` in favor of `DispatcherWithHandlerProvider`.
 
 ### Other Changes
 

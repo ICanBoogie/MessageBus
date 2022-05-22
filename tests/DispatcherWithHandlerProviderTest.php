@@ -14,10 +14,7 @@ namespace ICanBoogie\MessageBus;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-/**
- * @deprecated {@see DispatcherWithHandlerProviderTest}
- */
-class SimpleDispatcherTest extends TestCase
+final class DispatcherWithHandlerProviderTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -30,7 +27,7 @@ class SimpleDispatcherTest extends TestCase
         $handlerProvider->getHandlerForMessage($expectedMessage)
             ->shouldBeCalled()->willReturn(fn() => $result);
 
-        $bus = new SimpleDispatcher($handlerProvider->reveal());
+        $bus = new DispatcherWithHandlerProvider($handlerProvider->reveal());
         $this->assertSame($result, $bus->dispatch($expectedMessage));
     }
 }

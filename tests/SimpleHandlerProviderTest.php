@@ -26,7 +26,7 @@ final class SimpleHandlerProviderTest extends TestCase
             }
         ]);
 
-        $bus = new SimpleDispatcher($handlerProvider);
+        $bus = new DispatcherWithHandlerProvider($handlerProvider);
 
         try {
             $bus->dispatch($messageB);
@@ -57,7 +57,7 @@ final class SimpleHandlerProviderTest extends TestCase
             },
         ]);
 
-        $bus = new SimpleDispatcher($handlerProvider);
+        $bus = new DispatcherWithHandlerProvider($handlerProvider);
 
         $this->assertSame($result, $bus->dispatch($messageB));
     }
