@@ -15,6 +15,7 @@ None
 - Dropped `HandlerProviderPass`, `CommandDispatcher`, `CommandHandlerProvider`,
   `CommandHandlerProviderPass`, `QueryDispatcher`, `QueryHandlerProvider`,
   `QueryHandlerProviderPass` in favor of `MessageBusPass`.
+- Dropped `ContainerHandlerProvider` in favor of `HandlerProviderWithContainer`.
 
 ### Deprecated Features
 
