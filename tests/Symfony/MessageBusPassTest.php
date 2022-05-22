@@ -17,6 +17,7 @@ use ICanBoogie\MessageBus\PSR\HandlerProviderWithContainer;
 use ICanBoogie\MessageBus\RestrictedDispatcher;
 use ICanBoogie\MessageBus\VoterProvider;
 use ICanBoogie\MessageBus\VoterWithPermissions;
+use LogicException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -30,6 +31,32 @@ final class MessageBusPassTest extends ContainerTestCase
 
         $this->container = $this->makeContainer(
             __DIR__ . '/resources/integration.yml',
+            function (ContainerBuilder $container) {
+                $container->addCompilerPass(new MessageBusPass());
+            }
+        );
+    }
+
+    public function testFailOnDuplicate(): void
+    {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessageMatches("/already registered/");
+
+        $container = $this->makeContainer(
+            __DIR__ . '/resources/message-duplicate.yml',
+            function (ContainerBuilder $container) {
+                $container->addCompilerPass(new MessageBusPass());
+            }
+        );
+    }
+
+    public function testFailOnMissingMessage(): void
+    {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage("Missing attribute 'message' for service 'handler.message_a'");
+
+        $container = $this->makeContainer(
+            __DIR__ . '/resources/missing-message.yml',
             function (ContainerBuilder $container) {
                 $container->addCompilerPass(new MessageBusPass());
             }

@@ -1,5 +1,31 @@
 # Migration
 
+## v2.x to v3.x
+
+### New Requirements
+
+None
+
+### New features
+
+None
+
+### Backward Incompatible Changes
+
+- Dropped `HandlerProviderPass`, `CommandDispatcher`, `CommandHandlerProvider`,
+  `CommandHandlerProviderPass`, `QueryDispatcher`, `QueryHandlerProvider`,
+  `QueryHandlerProviderPass` in favor of `MessageBusPass`.
+
+### Deprecated Features
+
+None
+
+### Other Changes
+
+None
+
+
+
 ## v2.0 to v2.1
 
 ### New Requirements
@@ -38,6 +64,8 @@ None
 ### Other Changes
 
 None
+
+
 
 ## v1.x to v2.0
 

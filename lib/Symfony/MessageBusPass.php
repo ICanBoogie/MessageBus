@@ -12,6 +12,7 @@
 namespace ICanBoogie\MessageBus\Symfony;
 
 use InvalidArgumentException;
+use LogicException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -68,8 +69,15 @@ final class MessageBusPass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds($this->tagForHandler) as $id => $hTags) {
             $message = $hTags[0][$this->attributeForMessage]
                 ?? throw new InvalidArgumentException(
-                    "Missing attribute `$this->attributeForMessage` for service `$id`"
+                    "Missing attribute '$this->attributeForMessage' for service '$id'"
                 );
+
+            $duplicate = $messageToHandler[$message] ?? null;
+
+            if ($duplicate) {
+                throw new LogicException("Unable to register handler '$id'"
+                    . ", the handler '$duplicate' is already registered for message class '$message'");
+            }
 
             $messageToHandler[$message] = $id;
 
