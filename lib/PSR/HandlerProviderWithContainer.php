@@ -14,7 +14,7 @@ namespace ICanBoogie\MessageBus\PSR;
 use ICanBoogie\MessageBus\HandlerProvider;
 use Psr\Container\ContainerInterface;
 
-class HandlerProviderWithContainer implements HandlerProvider
+final class HandlerProviderWithContainer implements HandlerProvider
 {
     /**
      * @param array<class-string, string> $messageToHandler
