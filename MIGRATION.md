@@ -15,6 +15,7 @@ None
   `message_bus.handler` instead of `message_dispatcher.handler`.
 - Add a `services.yaml` sample file, that can be used as is with Symfony's DIC.
 - Add `DispatcherWithHandlerProvider`, a replacement for `SimpleDispatcher`.
+- Add `HandlerProviderWithContainer`, a replacement for `ContainerHandlerProvider`.
 
 ### Backward Incompatible Changes
 
@@ -27,6 +28,7 @@ None
   `QueryHandlerProviderPass` in favor of `MessageBusPass`.
 - Deprecate `AssertingDispatcher` in favor of `RestrictedDispatcher`.
 - Deprecate `SimpleDispatcher` in favor of `DispatcherWithHandlerProvider`.
+- Deprecate `ContainerHandlerProvider` in favor of `HandlerProviderWithContainer`.
 
 ### Other Changes
 

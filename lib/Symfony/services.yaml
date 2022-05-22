@@ -13,7 +13,7 @@ services:
   # interfaces
 
   ICanBoogie\MessageBus\HandlerProvider:
-    alias: ICanBoogie\MessageBus\PSR\ContainerHandlerProvider
+    alias: ICanBoogie\MessageBus\PSR\HandlerProviderWithContainer
 
   ICanBoogie\MessageBus\Dispatcher:
     alias: ICanBoogie\MessageBus\DispatcherWithHandlerProvider
@@ -29,7 +29,7 @@ services:
 
   # implementations
 
-  ICanBoogie\MessageBus\PSR\ContainerHandlerProvider:
+  ICanBoogie\MessageBus\PSR\HandlerProviderWithContainer:
     arguments:
     - !tagged_locator { tag: message_bus.handler }
     - '%message_bus.message_to_handler%'

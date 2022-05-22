@@ -99,21 +99,21 @@ $result = $handler($message);
 
 ### Providing handlers with a PSR container
 
-Handlers can be provided by an instance of [PSR\ContainerHandlerProvider][], which is backed by a
+Handlers can be provided by an instance of [PSR\HandlerProviderWithContainer][], which is backed by a
 [PSR container][PSR-11]:
 
 ```php
 <?php
 
-use ICanBoogie\MessageBus\PSR\ContainerHandlerProvider;
+use ICanBoogie\MessageBus\PSR\HandlerProviderWithContainer;
 use Psr\Container\ContainerInterface;
 
 /* @var $container ContainerInterface */
 
-$handlerProvider = new ContainerHandlerProvider($container, [
+$handlerProvider = new HandlerProviderWithContainer($container, [
 
-	Acme\MenuService\Application\MessageBus\CreateMenu::class => Acme\MenuService\Application\MessageBus\CreateMenuHandler,
-	Acme\MenuService\Application\MessageBus\DeleteMenu::class => Acme\MenuService\Application\MessageBus\DeleteMenuHandler,
+	Acme\MenuService\Application\MessageBus\CreateMenu::class => Acme\MenuService\Application\MessageBus\CreateMenuHandler::class,
+	Acme\MenuService\Application\MessageBus\DeleteMenu::class => Acme\MenuService\Application\MessageBus\DeleteMenuHandler::class,
 
 ]);
 ```
@@ -280,7 +280,6 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 
 [ICanBoogie]:                          https://icanboogie.org/
-[available on GitHub]:                 https://github.com/ICanBoogie/MessageBus
 [JWT]:                                 https://jwt.io/
 [symfony/dependency-injection]:        https://symfony.com/doc/current/components/dependency_injection.html
 [hexagonal]:                           https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/
@@ -291,5 +290,5 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 [Dispatcher]:                          lib/Dispatcher.php
 [HandlerProvider]:                     lib/HandlerProvider.php
 [MessageBusPass]:                      lib/Symfony/MessageBusPass.php
-[PSR\ContainerHandlerProvider]:        lib/PSR/ContainerHandlerProvider.php
+[PSR\HandlerProviderWithContainer]:    lib/PSR/HandlerProviderWithContainer.php
 [RestrictedDispatcher]:                lib/RestrictedDispatcher.php

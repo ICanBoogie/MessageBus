@@ -23,11 +23,14 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-final class ContainerHandlerProviderTest extends TestCase
+final class HandlerProviderWithContainerTest extends TestCase
 {
     use ProphecyTrait;
 
-    private ObjectProphecy|ContainerInterface $container;
+    /**
+     * @var ObjectProphecy<ContainerInterface>
+     */
+    private ObjectProphecy $container;
 
     protected function setUp(): void
     {
@@ -90,8 +93,12 @@ final class ContainerHandlerProviderTest extends TestCase
         $this->assertSame($expectedService, $provider->getHandlerForMessage($messageA));
     }
 
-    private function makeProvider(array $handlers): HandlerProvider
+    /**
+     * @param array<class-string, string> $messageToHandler
+     *     Where _key_ is a message class and _value_ the service identifier of its handler.
+     */
+    private function makeProvider(array $messageToHandler): HandlerProvider
     {
-        return new ContainerHandlerProvider($this->container->reveal(), $handlers);
+        return new HandlerProviderWithContainer($this->container->reveal(), $messageToHandler);
     }
 }
