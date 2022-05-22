@@ -18,6 +18,7 @@ None
 - Dropped `ContainerHandlerProvider` in favor of `HandlerProviderWithContainer`.
 - Dropped `AssertingDispatcher` in favor of `RestrictedDispatcher`.
 - Dropped `SimpleHandlerProvider` in favor of `HandlerProviderWithHandlers`.
+- Dropped `SimpleDispatcher` in favor of `DispatcherWithHandlerProvider`.
 
 ### Deprecated Features
 
