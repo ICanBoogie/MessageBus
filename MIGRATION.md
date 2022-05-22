@@ -19,6 +19,7 @@ None
 - Dropped `AssertingDispatcher` in favor of `RestrictedDispatcher`.
 - Dropped `SimpleHandlerProvider` in favor of `HandlerProviderWithHandlers`.
 - Dropped `SimpleDispatcher` in favor of `DispatcherWithHandlerProvider`.
+- Dropped `NotFound` in favor of `HandlerNotFound`.
 
 ### Deprecated Features
 

@@ -30,7 +30,7 @@ final class HandlerProviderWithHandlersTest extends TestCase
 
         try {
             $bus->dispatch($messageB);
-        } catch (NotFound $e) {
+        } catch (HandlerNotFound $e) {
             $this->assertStringContainsString(get_class($messageB), $e->getMessage());
             return;
         }

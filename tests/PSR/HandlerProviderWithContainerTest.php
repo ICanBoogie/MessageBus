@@ -12,10 +12,10 @@
 namespace ICanBoogie\MessageBus\PSR;
 
 use Exception;
+use ICanBoogie\MessageBus\HandlerNotFound;
 use ICanBoogie\MessageBus\HandlerProvider;
 use ICanBoogie\MessageBus\MessageA;
 use ICanBoogie\MessageBus\MessageB;
-use ICanBoogie\MessageBus\NotFound;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -46,7 +46,7 @@ final class HandlerProviderWithContainerTest extends TestCase
 
         $provider = $this->makeProvider([]);
 
-        $this->expectException(NotFound::class);
+        $this->expectException(HandlerNotFound::class);
 
         $provider->getHandlerForMessage(new class () {
         });
@@ -67,7 +67,7 @@ final class HandlerProviderWithContainerTest extends TestCase
 
         $provider = $this->makeProvider($handlers);
 
-        $this->expectException(NotFound::class);
+        $this->expectException(HandlerNotFound::class);
 
         $provider->getHandlerForMessage($messageA);
     }
