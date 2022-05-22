@@ -17,6 +17,7 @@ None
   `QueryHandlerProviderPass` in favor of `MessageBusPass`.
 - Dropped `ContainerHandlerProvider` in favor of `HandlerProviderWithContainer`.
 - Dropped `AssertingDispatcher` in favor of `RestrictedDispatcher`.
+- Dropped `SimpleHandlerProvider` in favor of `HandlerProviderWithHandlers`.
 
 ### Deprecated Features
 
