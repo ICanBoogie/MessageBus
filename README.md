@@ -8,7 +8,7 @@
 A message dispatcher helps to separate presentation concerns from business logic by mapping inputs
 of various sources to simpler application messages. It also helps to decouple the domain from the
 implementation, for an application only has to know about the messages, not how they are handled. A
-design well know in [Hexagonal architectures][hexagonal].
+design well known in [Hexagonal architectures][hexagonal].
 
 **ICanBoogie/MessageBus** provides an implementation of a message dispatcher, with support for
 permissions and voters. There's also a simple implementation of a message handler provider, and one
@@ -37,7 +37,7 @@ $result = $dispatcher->dispatch($message);
 composer require icanboogie/message-bus
 ```
 
-If you're updating, please check the [Migration guide](MIGRATION.md).
+If you're upgrading to a newer version, please check the [Migration guide](MIGRATION.md).
 
 
 
@@ -48,9 +48,9 @@ HTTP details) are removed to keep what's essential for the domain. That is, a co
 create a message to dispatch, but controller concern would stay in the controller, they would not
 leak into the message.
 
-The following example demonstrate how a `DeleteMenu` message could be defined. Note that there isn't
-a notion of input type or authorization. These are presentation concerns, and they should remain
-there.
+The following example demonstrates how a `DeleteMenu` message could be defined. Note that there
+isn't a notion of input type or authorization. These are presentation concerns, and they should
+remain there.
 
 ```php
 <?php
@@ -66,18 +66,52 @@ final class DeleteMenu
 }
 ```
 
+Messages that don't alter the state of an application—in other words, messages that lead to
+read-only operations—can be marked with the `Safe` interface. This is not a requirement, just a
+recommendation to help you identify messages.
+
+```php
+<?php
+
+use ICanBoogie\MessageBus\Safe;
+
+// …
+
+final class ShowMenu implements Safe
+{
+    public function __construct(
+        public /*readonly*/ int $id
+    ) {
+    }
+}
+```
+
 
 
 ## Message handlers
 
-Message handlers handles messages. Usually the relation is 1:1, that is one handler for one message
+Message handlers handle messages. Usually the relation is 1:1, that is one handler for one message
 type. Message handlers are callables, typically a class implementing `__invoke(T $message)`, where
 `T` is a type of message.
 
+The following example demonstrates how a handler can be defined for a `ShowMenu` message:
+
+```php
+<?php
+
+final class ShowMenuHandler
+{
+    public function __invoke(ShowMenu $message): Menu
+    {
+        // …
+    }
+}
+```
 
 
 
-### Providing message handlers
+
+## Providing message handlers
 
 Message handlers are obtained through a provider, usually backed by a service container.
 
@@ -85,6 +119,7 @@ The following example demonstrates how to obtain a message handler for a given m
 invoke that handler to get a result.
 
 ```php
+<?php
 
 /* @var ICanBoogie\MessageBus\HandlerProvider $provider */
 /* @var object $message */
@@ -99,8 +134,9 @@ $result = $handler($message);
 
 ### Providing handlers with a PSR container
 
-Handlers can be provided by an instance of [PSR\HandlerProviderWithContainer][], which is backed by a
-[PSR container][PSR-11]:
+Handlers can be provided by an instance of [PSR\HandlerProviderWithContainer][], which is backed by
+a [PSR container][PSR-11]. You need to provide the mapping from "message class" to "handler service
+identifier".
 
 ```php
 <?php
@@ -179,8 +215,8 @@ $container->compile();
 ## Permissions and voters
 
 You probably want to restrict the dispatch of messages to certain conditions. For example, deleting
-records should only be possible for users having a certain scope in their [JWT][]. You want to make
-sure of a few things:
+records should only be possible for users having a certain scope in their [JWT][]. For this, you
+want to make sure of a few things:
 
 1. Define voters and the permission they vote for.
 
