@@ -11,26 +11,22 @@
 
 namespace ICanBoogie\MessageBus;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 
 use function uniqid;
 
 final class RestrictedDispatcherWithVoterTest extends TestCase
 {
-    use ProphecyTrait;
+    /**
+     * @var MockObject&Dispatcher
+     */
+    private MockObject $innerDispatcher;
 
     /**
-     * @var ObjectProphecy<Dispatcher>
+     * @var MockObject&Voter
      */
-    private ObjectProphecy $innerDispatcher;
-
-    /**
-     * @var ObjectProphecy<Voter>
-     */
-    private ObjectProphecy $voter;
+    private MockObject $voter;
     private Context $context;
     private object $message;
 
@@ -38,8 +34,8 @@ final class RestrictedDispatcherWithVoterTest extends TestCase
     {
         parent::setUp();
 
-        $this->innerDispatcher = $this->prophesize(Dispatcher::class);
-        $this->voter = $this->prophesize(Voter::class);
+        $this->innerDispatcher = $this->createMock(Dispatcher::class);
+        $this->voter = $this->createMock(Voter::class);
         $this->context = new Context();
         $this->message = new class () {
         };
@@ -47,38 +43,44 @@ final class RestrictedDispatcherWithVoterTest extends TestCase
 
     public function testVoterFalse(): void
     {
-        $this->voter->isGranted($this->message, $this->context)
+        $this->voter
+            ->method('isGranted')
+            ->with($this->message, $this->context)
             ->willReturn(false);
-        $this->innerDispatcher->dispatch(Argument::any())
-            ->shouldNotBeCalled();
+        $this->innerDispatcher
+            ->expects($this->never())
+            ->method('dispatch')
+            ->with($this->any());
 
         $this->expectException(PermissionNotGranted::class);
 
-        $this->makeSTU()->dispatch($this->message, $this->context);
+        $this->makeSUT()->dispatch($this->message, $this->context);
     }
 
     public function testVoterTrue(): void
     {
         $result = uniqid();
 
-        $this->voter->isGranted($this->message, $this->context)
-            ->willReturn(false);
-        $this->innerDispatcher->dispatch($this->message)
+        $this->voter
+            ->method('isGranted')
+            ->with($this->message, $this->context)
+            ->willReturn(true);
+        $this->innerDispatcher
+            ->method('dispatch')
+            ->with($this->message)
             ->willReturn($result);
-
-        $this->expectException(PermissionNotGranted::class);
 
         $this->assertSame(
             $result,
-            $this->makeSTU()->dispatch($this->message, $this->context)
+            $this->makeSUT()->dispatch($this->message, $this->context)
         );
     }
 
-    private function makeSTU(): RestrictedDispatcher
+    private function makeSUT(): RestrictedDispatcher
     {
         return new RestrictedDispatcherWithVoter(
-            $this->innerDispatcher->reveal(),
-            $this->voter->reveal(),
+            $this->innerDispatcher,
+            $this->voter,
         );
     }
 }

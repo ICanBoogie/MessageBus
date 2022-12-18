@@ -12,12 +12,9 @@
 namespace ICanBoogie\MessageBus;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 
 final class HandlerProviderWithChainTest extends TestCase
 {
-    use ProphecyTrait;
-
     public function testChain(): void
     {
         $messageA = new MessageA();
@@ -30,21 +27,23 @@ final class HandlerProviderWithChainTest extends TestCase
         $handler2 = function () {
         };
 
-        $provider1 = $this->prophesize(HandlerProvider::class);
-        $provider1->getHandlerForMessage($messageA)
-            ->willReturn($handler1);
-        $provider1->getHandlerForMessage($messageB)
-            ->willReturn(null);
-        $provider1->getHandlerForMessage($messageC)
-            ->willReturn(null);
+        $provider1 = $this->createMock(HandlerProvider::class);
+        $provider1
+            ->method('getHandlerForMessage')
+            ->willReturnCallback(fn(object $message) => match ($message) {
+                $messageA => $handler1,
+                default => null
+            });
 
-        $provider2 = $this->prophesize(HandlerProvider::class);
-        $provider2->getHandlerForMessage($messageB)
-            ->willReturn($handler2);
-        $provider2->getHandlerForMessage($messageC)
-            ->willReturn(null);
+        $provider2 = $this->createMock(HandlerProvider::class);
+        $provider2
+            ->method('getHandlerForMessage')
+            ->willReturnCallback(fn (object $message) => match ($message) {
+                $messageB => $handler2,
+                default => null
+            });
 
-        $provider = new HandlerProviderWithChain([ $provider1->reveal(), $provider2->reveal() ]);
+        $provider = new HandlerProviderWithChain([ $provider1, $provider2 ]);
 
         $this->assertSame($handler1, $provider->getHandlerForMessage($messageA));
         $this->assertSame($handler2, $provider->getHandlerForMessage($messageB));

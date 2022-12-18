@@ -11,18 +11,15 @@
 
 namespace ICanBoogie\MessageBus;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 
 final class VoterWithPermissionsTest extends TestCase
 {
-    use ProphecyTrait;
-
     /**
-     * @var ObjectProphecy<VoterProvider>
+     * @var MockObject&VoterProvider
      */
-    private ObjectProphecy $voters;
+    private MockObject $voters;
     private Context $context;
     private object $message1;
     private object $message2;
@@ -32,7 +29,7 @@ final class VoterWithPermissionsTest extends TestCase
     {
         parent::setUp();
 
-        $this->voters = $this->prophesize(VoterProvider::class);
+        $this->voters = $this->createMock(VoterProvider::class);
         $this->context = new Context();
         $this->message1 = new class () {
         };
@@ -44,49 +41,51 @@ final class VoterWithPermissionsTest extends TestCase
 
     public function testNoPermission(): void
     {
-        $this->assertTrue($this->makeSTU()->isGranted($this->message1, $this->context));
+        $this->assertTrue($this->makeSUT()->isGranted($this->message1, $this->context));
     }
 
     public function testNoVoter(): void
     {
-        $this->assertFalse($this->makeSTU()->isGranted($this->message2, $this->context));
+        $this->assertFalse($this->makeSUT()->isGranted($this->message2, $this->context));
     }
 
     public function testVoterFalse(): void
     {
-        $voter = $this->prophesize(Voter::class);
-        $voter->isGranted($this->message2, $this->context)
-            ->shouldBeCalled()
+        $voter = $this->createMock(Voter::class);
+        $voter
+            ->method('isGranted')
+            ->with($this->message2, $this->context)
             ->willReturn(false);
 
         $this->voters
-            ->getVoterForPermission('perm1')
+            ->method('getVoterForPermission')
+            ->with('perm1')
             ->willReturn($voter);
 
-        $this->assertFalse($this->makeSTU()->isGranted($this->message2, $this->context));
+        $this->assertFalse($this->makeSUT()->isGranted($this->message2, $this->context));
     }
 
     public function testVoterTrue(): void
     {
-        $voter = $this->prophesize(Voter::class);
-        $voter->isGranted($this->message3, $this->context)
-            ->shouldBeCalled()
+        $voter = $this->createMock(Voter::class);
+        $voter
+            ->expects($this->once())
+            ->method('isGranted')
+            ->with($this->message3, $this->context)
             ->willReturn(true);
 
         $this->voters
-            ->getVoterForPermission('perm1')
+            ->expects($this->once())
+            ->method('getVoterForPermission')
+            ->with('perm1')
             ->willReturn($voter);
 
-        $this->voters
-            ->getVoterForPermission('perm2')
-            ->shouldNotBeCalled();
-
-        $this->assertTrue($this->makeSTU()->isGranted($this->message3, $this->context));
+        $this->assertTrue($this->makeSUT()->isGranted($this->message3, $this->context));
     }
 
-    private function makeSTU(): Voter
+    private function makeSUT(): Voter
     {
-        return new VoterWithPermissions($this->voters->reveal(), [
+        return new VoterWithPermissions($this->voters, [
             $this->message2::class => [ 'perm1' ],
             $this->message3::class => [ 'perm1', 'perm2' ],
         ]);

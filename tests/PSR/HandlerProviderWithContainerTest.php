@@ -15,33 +15,30 @@ use Exception;
 use ICanBoogie\MessageBus\HandlerProvider;
 use ICanBoogie\MessageBus\MessageA;
 use ICanBoogie\MessageBus\MessageB;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 final class HandlerProviderWithContainerTest extends TestCase
 {
-    use ProphecyTrait;
-
     /**
-     * @var ObjectProphecy<ContainerInterface>
+     * @var MockObject&ContainerInterface
      */
-    private ObjectProphecy $container;
+    private MockObject $container;
 
     protected function setUp(): void
     {
-        $this->container = $this->prophesize(ContainerInterface::class);
+        $this->container = $this->createMock(ContainerInterface::class);
 
         parent::setUp();
     }
 
     public function testFailOnUndefinedHandler(): void
     {
-        $this->container->get(Argument::any())
-            ->shouldNotBeCalled();
+        $this->container
+            ->expects($this->never())
+            ->method('get');
 
         $provider = $this->makeProvider([]);
 
@@ -60,8 +57,10 @@ final class HandlerProviderWithContainerTest extends TestCase
 
         ];
 
-        $this->container->get($undefinedService)
-            ->willThrow(new class extends Exception implements NotFoundExceptionInterface {
+        $this->container
+            ->method('get')
+            ->with($undefinedService)
+            ->willThrowException(new class extends Exception implements NotFoundExceptionInterface {
             });
 
         $provider = $this->makeProvider($handlers);
@@ -84,7 +83,9 @@ final class HandlerProviderWithContainerTest extends TestCase
 
         ];
 
-        $this->container->get($expectedServiceId)
+        $this->container
+            ->method('get')
+            ->with($expectedServiceId)
             ->willReturn($expectedService);
 
         $provider = $this->makeProvider($handlers);
@@ -98,6 +99,6 @@ final class HandlerProviderWithContainerTest extends TestCase
      */
     private function makeProvider(array $messageToHandler): HandlerProvider
     {
-        return new HandlerProviderWithContainer($this->container->reveal(), $messageToHandler);
+        return new HandlerProviderWithContainer($this->container, $messageToHandler);
     }
 }

@@ -407,6 +407,8 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 
 
+[Composer]:                            https://getcomposer.org/
+[composer-attribute-collector]:        https://github.com/olvlvl/composer-attribute-collector/
 [ICanBoogie]:                          https://icanboogie.org/
 [JWT]:                                 https://jwt.io/
 [symfony/dependency-injection]:        https://symfony.com/doc/current/components/dependency_injection.html

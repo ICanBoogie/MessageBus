@@ -11,37 +11,37 @@
 
 namespace ICanBoogie\MessageBus;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 
 use function uniqid;
 
 final class DispatcherWithHandlerProviderTest extends TestCase
 {
-    use ProphecyTrait;
-
     private object $message;
 
     /**
-     * @var ObjectProphecy<HandlerProvider>
+     * @var MockObject&HandlerProvider
      */
-    private ObjectProphecy $handlerProvider;
+    private MockObject $handlerProvider;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->message = (object) [ uniqid() => uniqid() ];
-        $this->handlerProvider = $this->prophesize(HandlerProvider::class);
+        $this->handlerProvider = $this->createMock(HandlerProvider::class);
     }
 
     public function testFailOnMissingHandler(): void
     {
-        $this->handlerProvider->getHandlerForMessage($this->message)
-            ->shouldBeCalled()->willReturn(null);
+        $this->handlerProvider
+            ->expects($this->once())
+            ->method('getHandlerForMessage')
+            ->with($this->message)
+            ->willReturn(null);
 
-        $stu = $this->makeSTU();
+        $stu = $this->makeSUT();
 
         $this->expectException(HandlerNotFound::class);
         $stu->dispatch($this->message);
@@ -51,17 +51,19 @@ final class DispatcherWithHandlerProviderTest extends TestCase
     {
         $result = uniqid();
 
-        $this->handlerProvider->getHandlerForMessage($this->message)
+        $this->handlerProvider
+            ->method('getHandlerForMessage')
+            ->with($this->message)
             ->willReturn(fn() => $result);
 
-        $stu = $this->makeSTU();
+        $stu = $this->makeSUT();
         $this->assertSame($result, $stu->dispatch($this->message));
     }
 
-    private function makeSTU(): Dispatcher
+    private function makeSUT(): Dispatcher
     {
         return new DispatcherWithHandlerProvider(
-            $this->handlerProvider->reveal()
+            $this->handlerProvider
         );
     }
 }

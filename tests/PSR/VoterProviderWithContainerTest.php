@@ -15,16 +15,13 @@ use ICanBoogie\MessageBus\Voter;
 use ICanBoogie\MessageBus\VoterNotFound;
 use ICanBoogie\MessageBus\VoterProvider;
 use LogicException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use Throwable;
 
 final class VoterProviderWithContainerTest extends TestCase
 {
-    use ProphecyTrait;
-
     private const PERMISSION_IS_ADMIN = 'is_admin';
     private const PERMISSION_CAN_CREATE_MENU = 'can_create_menu';
     private const VOTER_IS_ADMIN_CLASS = 'Acme\\Presentation\\Security\\Voters\\IsAdmin';
@@ -33,23 +30,24 @@ final class VoterProviderWithContainerTest extends TestCase
     private Voter $voterIsAdmin;
 
     /**
-     * @var ObjectProphecy<ContainerInterface>
+     * @var MockObject&ContainerInterface
      */
-    private ObjectProphecy $container;
+    private MockObject $container;
     private Throwable $containerException;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->voterIsAdmin = $this->prophesize(Voter::class)->reveal();
-        $this->container = $this->prophesize(ContainerInterface::class);
+        $this->voterIsAdmin = $this->createMock(Voter::class);
+        $this->container = $this->createMock(ContainerInterface::class);
+        $this->containerException = new LogicException();
         $this->container
-            ->get(self::VOTER_IS_ADMIN_CLASS)
-            ->willReturn($this->voterIsAdmin);
-        $this->container
-            ->get(self::VOTER_CAN_CREATE_MENU_CLASS)
-            ->willThrow($this->containerException = new LogicException());
+            ->method('get')
+            ->willReturnCallback(fn (string $permission) => match ($permission) {
+                self::VOTER_IS_ADMIN_CLASS => $this->voterIsAdmin,
+                default => throw $this->containerException,
+            });
     }
 
     public function testFailureOnMissingServiceId(): void
@@ -57,7 +55,7 @@ final class VoterProviderWithContainerTest extends TestCase
         $this->expectException(VoterNotFound::class);
         $this->expectExceptionMessage("Voter not found for permission: is_madonna");
 
-        $this->makeSTU()->getVoterForPermission('is_madonna');
+        $this->makeSUT()->getVoterForPermission('is_madonna');
     }
 
     /**
@@ -66,7 +64,7 @@ final class VoterProviderWithContainerTest extends TestCase
     public function testFailureOnMissingService(): void
     {
         try {
-            $this->makeSTU()->getVoterForPermission(self::PERMISSION_CAN_CREATE_MENU);
+            $this->makeSUT()->getVoterForPermission(self::PERMISSION_CAN_CREATE_MENU);
             $this->fail("Expected exception");
         } catch (Throwable $e) {
             $this->assertSame($this->containerException, $e->getPrevious());
@@ -82,13 +80,13 @@ final class VoterProviderWithContainerTest extends TestCase
     {
         $this->assertSame(
             $this->voterIsAdmin,
-            $this->makeSTU()->getVoterForPermission(self::PERMISSION_IS_ADMIN)
+            $this->makeSUT()->getVoterForPermission(self::PERMISSION_IS_ADMIN)
         );
     }
 
-    private function makeSTU(): VoterProvider
+    private function makeSUT(): VoterProvider
     {
-        return new VoterProviderWithContainer($this->container->reveal(), [
+        return new VoterProviderWithContainer($this->container, [
             self::PERMISSION_IS_ADMIN => self::VOTER_IS_ADMIN_CLASS,
             self::PERMISSION_CAN_CREATE_MENU => self::VOTER_CAN_CREATE_MENU_CLASS,
         ]);
