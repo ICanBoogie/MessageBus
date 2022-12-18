@@ -18,35 +18,19 @@ use ICanBoogie\MessageBus\RestrictedDispatcher;
 use ICanBoogie\MessageBus\VoterProvider;
 use ICanBoogie\MessageBus\VoterWithPermissions;
 use LogicException;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-final class MessageBusPassTest extends ContainerTestCase
+final class MessageBusPassTest extends TestCase
 {
-    private ContainerInterface $container;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->container = $this->makeContainer(
-            __DIR__ . '/resources/integration.yml',
-            function (ContainerBuilder $container) {
-                $container->addCompilerPass(new MessageBusPass());
-            }
-        );
-    }
-
-    public function testFailOnDuplicate(): void
+    public function testFailOnDuplicateWithoutAttribute(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessageMatches("/already registered/");
-
-        $container = $this->makeContainer(
-            __DIR__ . '/resources/message-duplicate.yml',
-            function (ContainerBuilder $container) {
-                $container->addCompilerPass(new MessageBusPass());
-            }
+        $this->makeContainer(
+            __DIR__ . '/resources/message-duplicate.yml'
         );
     }
 
@@ -54,12 +38,8 @@ final class MessageBusPassTest extends ContainerTestCase
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage("Missing attribute 'message' for service 'handler.message_a'");
-
-        $container = $this->makeContainer(
-            __DIR__ . '/resources/missing-message.yml',
-            function (ContainerBuilder $container) {
-                $container->addCompilerPass(new MessageBusPass());
-            }
+        $this->makeContainer(
+            __DIR__ . '/resources/missing-message.yml'
         );
     }
 
@@ -72,7 +52,27 @@ final class MessageBusPassTest extends ContainerTestCase
      */
     public function testService(string $id, string $expected): void
     {
-        $this->assertInstanceOf($expected, $this->container->get($id));
+        $container = $this->makeContainer(
+            __DIR__ . '/resources/without-attributes/integration.yaml'
+        );
+
+        $this->assertInstanceOf($expected, $container->get($id));
+    }
+
+    /**
+     * @dataProvider provideService
+     *
+     * @param class-string $expected
+     *
+     * @throws Exception
+     */
+    public function testServiceWithAttributes(string $id, string $expected): void
+    {
+        $container = $this->makeContainerWithAttributes(
+            __DIR__ . '/resources/with-attributes/integration.yaml'
+        );
+
+        $this->assertInstanceOf($expected, $container->get($id));
     }
 
     // @phpstan-ignore-next-line
@@ -94,7 +94,23 @@ final class MessageBusPassTest extends ContainerTestCase
      */
     public function testParameter(string $name, mixed $expected): void
     {
-        $this->assertSame($expected, $this->container->getParameter($name));
+        $container = $this->makeContainer(
+            __DIR__ . '/resources/without-attributes/integration.yaml'
+        );
+
+        $this->assertSame($expected, $container->getParameter($name));
+    }
+
+    /**
+     * @dataProvider provideParameter
+     */
+    public function testParameterWithAttributes(string $name, mixed $expected): void
+    {
+        $container = $this->makeContainerWithAttributes(
+            __DIR__ . '/resources/with-attributes/integration.yaml'
+        );
+
+        $this->assertEquals($expected, $container->getParameter($name));
     }
 
     // @phpstan-ignore-next-line
@@ -130,5 +146,26 @@ final class MessageBusPassTest extends ContainerTestCase
             ],
 
         ];
+    }
+
+    private function makeContainer(string $config, bool $withAttributes = false): SymfonyContainerBuilder
+    {
+        $container = new SymfonyContainerBuilder();
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__));
+        $loader->load($config);
+
+        if ($withAttributes) {
+            $container->addCompilerPass(new MessageBusPassWithAttributes());
+        }
+
+        $container->addCompilerPass(new MessageBusPass());
+        $container->compile();
+
+        return $container;
+    }
+
+    private function makeContainerWithAttributes(string $config): SymfonyContainerBuilder
+    {
+        return $this->makeContainer($config, true);
     }
 }

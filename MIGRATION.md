@@ -1,6 +1,6 @@
 # Migration
 
-## v2.x to v3.x
+## v2.x to v3.0
 
 ### New Requirements
 
@@ -10,6 +10,8 @@ None
 
 - Added `HandlerProviderWithChain`, which allows chaining multiple handler providers. They are
   queried in turn until a handler is found.
+- Handlers, Permissions, and Voters can now be defined using PHP 8 attributes instead of YAML. Added
+  `MessageBusPassWithAttributes`, and the attributes `Handler`, `Permission`, and `Vote`.
 
 ### Backward Incompatible Changes
 

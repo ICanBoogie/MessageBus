@@ -1,0 +1,5 @@
+imports:
+- { resource: ../integration.yaml }
+- { resource: ../default_services.yaml }
+- { resource: handlers.yaml }
+- { resource: voters.yaml }

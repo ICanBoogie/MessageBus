@@ -1,0 +1,3 @@
+imports:
+- { resource: ../integration.yaml }
+- { resource: ../default_services.yaml }

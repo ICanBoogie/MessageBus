@@ -11,9 +11,9 @@
 
 namespace ICanBoogie\MessageBus;
 
-class HandlerA
+final class HandlerA
 {
-    public function __invoke()
+    public function __invoke(MessageA $message): void
     {
     }
 }

@@ -212,7 +212,78 @@ $container->compile();
 
 
 
-## Providing handlers using a chain of providers
+
+
+#### Using PHP 8 attributes instead of YAML
+
+With the [composer-attribute-collector][] [Composer][] plugin, PHP 8 attributes can be used instead
+of YAML to define handlers, permissions, and voters.
+
+For handlers and permissions, the [Handler](lib/Attribute/Handler.php) and
+[Permission](lib/Attribute/Permission.php) attributes can be used to replace YAML:
+
+```php
+
+namespace Acme\MenuService\Application\MessageBus;
+
+use ICanBoogie\MessageBus\Attribute\Handler;
+use ICanBoogie\MessageBus\Attribute\Permission;
+
+#[Permission('is_admin')]
+#[Permission('can_write_menu')]
+final class CreateMenu
+{
+    // ...
+}
+
+#[Handler]
+final class CreateMenuHandler
+{
+    // ...
+}
+```
+
+For voters, the [Vote](lib/Attribute/Vote.php) attribute can be used to replace YAML:
+
+```php
+<?php
+
+namespace Acme\MenuService\Presentation\Security\Voters;
+
+use ICanBoogie\MessageBus\Attribute\Vote;
+
+#[Vote('can_write_menu')]
+final class CanWriteMenu
+{
+    // ...
+}
+```
+
+```yaml
+  Acme\MenuService\Application\MessageBus\CreateMenuHandler:
+    tags:
+    - { name: message_bus.handler, message: Acme\MenuService\Application\MessageBus\CreateMenu }
+    - { name: message_bus.permission, permission: is_admin }
+    - { name: message_bus.permission, permission: can_write_menu }
+```
+
+You just need to add the compiler pass [MessagePubPassWithAttributes](lib/Symfony/MessageBusPassWithAttributes.php)
+before [MessageBusPass](lib/Symfony/MessageBusPass.php):
+
+```php
+<?php
+
+// ...
+$container->addCompilerPass(new MessageBusPassWithAttributes());
+$container->addCompilerPass(new MessageBusPass());
+// ...
+```
+
+
+
+
+
+### Providing handlers using a chain of providers
 
 With `HandlerProviderWithChain` you can chain multiple handler providers together. They will be used
 in sequence until a handler is found.
