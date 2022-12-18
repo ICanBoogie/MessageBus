@@ -12,21 +12,28 @@
 namespace ICanBoogie\MessageBus;
 
 /**
- * A handler provider backed with pairs of message class/handlers.
+ * A handler provider backed with a chain of providers.
  */
-final class HandlerProviderWithHandlers implements HandlerProvider
+final class HandlerProviderWithChain implements HandlerProvider
 {
     /**
-     * @param array<class-string, callable> $handlers
-     *     Where _key_ is a message class and _value_ a handler for that message class.
+     * @param iterable<HandlerProvider> $providers
      */
     public function __construct(
-        private array $handlers
+        private iterable $providers
     ) {
     }
 
     public function getHandlerForMessage(object $message): ?callable
     {
-        return $this->handlers[$message::class] ?? null;
+        foreach ($this->providers as $provider) {
+            $handler = $provider->getHandlerForMessage($message);
+
+            if ($handler) {
+                return $handler;
+            }
+        }
+
+        return null;
     }
 }

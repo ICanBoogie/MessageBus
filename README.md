@@ -154,7 +154,7 @@ $handlerProvider = new HandlerProviderWithContainer($container, [
 ]);
 ```
 
-### Using Symfony's Dependency Injection component
+### Providing handlers with Symfony's Dependency Injection component
 
 The easiest way to define messages, handlers, permissions, and voters, is with [Symfony's Dependency
 Injection][symfony/di] component. The handlers are defined as services, tags are used to identify
@@ -210,6 +210,27 @@ $container->addCompilerPass(new MessageBusPass());
 $container->compile();
 ```
 
+
+
+## Providing handlers using a chain of providers
+
+With `HandlerProviderWithChain` you can chain multiple handler providers together. They will be used
+in sequence until a handler is found.
+
+```php
+<?php
+
+namespace ICanBoogie\MessageBus;
+
+/* @var HandlerProviderWithHandlers $providerWithHandlers */
+/* @var PSR\HandlerProviderWithContainer $providerWithContainer */
+
+$provider = new HandlerProviderWithChain([ $providerWithHandlers, $providerWithContainer ]);
+
+/* @var object $message */
+
+$handler = $provider->getHandlerForMessage($message);
+```
 
 
 ## Permissions and voters

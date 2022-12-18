@@ -8,7 +8,8 @@ None
 
 ### New features
 
-None
+- Added `HandlerProviderWithChain`, which allows chaining multiple handler providers. They are
+  queried in turn until a handler is found.
 
 ### Backward Incompatible Changes
 
