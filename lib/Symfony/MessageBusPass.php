@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the ICanBoogie package.
- *
- * (c) Olivier Laviale <olivier.laviale@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ICanBoogie\MessageBus\Symfony;
 
 use InvalidArgumentException;
@@ -67,7 +58,8 @@ final class MessageBusPass implements CompilerPassInterface
         $permissionsByMessage = [];
 
         foreach ($container->findTaggedServiceIds($this->tagForHandler) as $id => $hTags) {
-            $message = $hTags[0][$this->attributeForMessage]
+            /** @var string $message */
+            $message = $hTags[0][$this->attributeForMessage] // @phpstan-ignore-line
                 ?? throw new InvalidArgumentException(
                     "Missing attribute '$this->attributeForMessage' for service '$id'"
                 );
@@ -82,6 +74,7 @@ final class MessageBusPass implements CompilerPassInterface
             $messageToHandler[$message] = $id;
 
             foreach ($container->findDefinition($id)->getTag($this->tagForPermission) as $pTags) {
+                // @phpstan-ignore-next-line
                 $permissionsByMessage[$message][] = $pTags[$this->attributeForPermission];
             }
         }
@@ -98,6 +91,7 @@ final class MessageBusPass implements CompilerPassInterface
         $permissionToVoter = [];
 
         foreach ($container->findTaggedServiceIds($this->tagForVoter) as $id => $tags) {
+            // @phpstan-ignore-next-line
             $permissionToVoter[$tags[0][$this->attributeForPermission]] = $id;
         }
 

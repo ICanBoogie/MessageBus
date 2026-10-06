@@ -1,29 +1,34 @@
-FROM php:8.0-cli-buster
+ARG PHP_VERSION=8.4
+FROM php:${PHP_VERSION}-cli-trixie
 
-RUN apt-get update && \
-	apt-get install -y autoconf pkg-config && \
-	pecl channel-update pecl.php.net && \
-	pecl install xdebug && \
-	docker-php-ext-enable opcache xdebug
+RUN <<-EOF
+	apt-get update
+	apt-get install -y autoconf pkg-config unzip
+	pecl channel-update pecl.php.net
+	pecl install xdebug
+	docker-php-ext-enable xdebug
+EOF
 
-RUN echo '\
-xdebug.client_host=host.docker.internal\n\
-xdebug.mode=develop\n\
-xdebug.start_with_request=yes\n\
-' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN <<-EOF
+	cat <<-SHELL >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+	xdebug.client_host=host.docker.internal
+	xdebug.mode=develop
+	xdebug.start_with_request=yes
+	SHELL
 
-RUN echo '\
-display_errors=On\n\
-error_reporting=E_ALL\n\
-date.timezone=UTC\n\
-' >> /usr/local/etc/php/conf.d/php.ini
+	cat <<-SHELL >> /usr/local/etc/php/conf.d/php.ini
+	display_errors=On
+	error_reporting=E_ALL
+	date.timezone=UTC
+	SHELL
+EOF
 
+# composer
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV PATH="/root/.composer/vendor/bin:${PATH}"
 
-RUN apt-get update && \
-	apt-get install unzip && \
-	curl -s https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer | php -- --quiet && \
-	mv composer.phar /usr/local/bin/composer && \
-	echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"\n' >> /root/.bashrc
+# lint
 
 RUN composer global require squizlabs/php_codesniffer

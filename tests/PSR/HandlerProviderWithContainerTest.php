@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the ICanBoogie package.
- *
- * (c) Olivier Laviale <olivier.laviale@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ICanBoogie\MessageBus\PSR;
 
 use Exception;
@@ -58,6 +49,7 @@ final class HandlerProviderWithContainerTest extends TestCase
         ];
 
         $this->container
+            ->expects($this->once())
             ->method('get')
             ->with($undefinedService)
             ->willThrowException(new class extends Exception implements NotFoundExceptionInterface {
@@ -84,6 +76,7 @@ final class HandlerProviderWithContainerTest extends TestCase
         ];
 
         $this->container
+            ->expects($this->once())
             ->method('get')
             ->with($expectedServiceId)
             ->willReturn($expectedService);

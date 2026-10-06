@@ -1,13 +1,8 @@
 # customization
 
-PACKAGE_NAME = icanboogie/message-bus
 PHPUNIT = vendor/bin/phpunit
 
 # do not edit the following lines
-
-.PHONY: usage
-usage:
-	@echo "test:  Runs the test suite.\ndoc:   Creates the documentation.\nclean: Removes the documentation, the dependencies and the Composer files."
 
 vendor:
 	@composer install
@@ -32,8 +27,11 @@ test-coveralls: test-dependencies
 	@XDEBUG_MODE=coverage $(PHPUNIT) --coverage-clover build/logs/clover.xml
 
 .PHONY: test-container
-test-container:
-	@-docker-compose run --rm app bash
+test-container: test-container-84
+
+.PHONY: test-container-84
+test-container-84:
+	@-docker-compose run --rm app84 bash
 	@docker-compose down -v
 
 .PHONY: lint

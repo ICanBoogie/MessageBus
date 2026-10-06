@@ -1,18 +1,11 @@
 <?php
 
-/*
- * This file is part of the ICanBoogie package.
- *
- * (c) Olivier Laviale <olivier.laviale@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ICanBoogie\MessageBus\PSR;
 
 use ICanBoogie\MessageBus\HandlerProvider;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 final class HandlerProviderWithContainer implements HandlerProvider
 {
@@ -28,6 +21,10 @@ final class HandlerProviderWithContainer implements HandlerProvider
         $this->messageToHandler = $messageToHandler;
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function getHandlerForMessage(object $message): ?callable
     {
         $id = $this->messageToHandler[$message::class] ?? null;

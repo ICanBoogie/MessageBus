@@ -1,19 +1,12 @@
 <?php
 
-/*
- * This file is part of the ICanBoogie package.
- *
- * (c) Olivier Laviale <olivier.laviale@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ICanBoogie\MessageBus;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class VoterWithPermissionsTest extends TestCase
 {
     /**
@@ -41,23 +34,29 @@ final class VoterWithPermissionsTest extends TestCase
 
     public function testNoPermission(): void
     {
-        $this->assertTrue($this->makeSUT()->isGranted($this->message1, $this->context));
+        $actual = $this->makeSUT()->isGranted($this->message1, $this->context);
+
+        $this->assertTrue($actual);
     }
 
     public function testNoVoter(): void
     {
-        $this->assertFalse($this->makeSUT()->isGranted($this->message2, $this->context));
+        $actual = $this->makeSUT()->isGranted($this->message2, $this->context);
+
+        $this->assertFalse($actual);
     }
 
     public function testVoterFalse(): void
     {
         $voter = $this->createMock(Voter::class);
         $voter
+            ->expects($this->once())
             ->method('isGranted')
             ->with($this->message2, $this->context)
             ->willReturn(false);
 
         $this->voters
+            ->expects($this->once())
             ->method('getVoterForPermission')
             ->with('perm1')
             ->willReturn($voter);

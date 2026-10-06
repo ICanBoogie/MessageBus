@@ -1,18 +1,9 @@
 <?php
 
-/*
- * This file is part of the ICanBoogie package.
- *
- * (c) Olivier Laviale <olivier.laviale@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ICanBoogie\MessageBus;
 
 /**
- * A dispatcher with a voter, preferably one such as {@link VoterWithPermissions}.
+ * A dispatcher with a voter, preferably one such as {@see VoterWithPermissions}.
  */
 final class RestrictedDispatcherWithVoter implements RestrictedDispatcher
 {

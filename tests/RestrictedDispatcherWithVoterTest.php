@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the ICanBoogie package.
- *
- * (c) Olivier Laviale <olivier.laviale@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ICanBoogie\MessageBus;
 
 use PHPUnit\Framework\MockObject\MockObject;
@@ -44,13 +35,13 @@ final class RestrictedDispatcherWithVoterTest extends TestCase
     public function testVoterFalse(): void
     {
         $this->voter
+            ->expects($this->once())
             ->method('isGranted')
             ->with($this->message, $this->context)
             ->willReturn(false);
         $this->innerDispatcher
             ->expects($this->never())
-            ->method('dispatch')
-            ->with($this->any());
+            ->method('dispatch');
 
         $this->expectException(PermissionNotGranted::class);
 
@@ -62,10 +53,12 @@ final class RestrictedDispatcherWithVoterTest extends TestCase
         $result = uniqid();
 
         $this->voter
+            ->expects($this->once())
             ->method('isGranted')
             ->with($this->message, $this->context)
             ->willReturn(true);
         $this->innerDispatcher
+            ->expects($this->once())
             ->method('dispatch')
             ->with($this->message)
             ->willReturn($result);

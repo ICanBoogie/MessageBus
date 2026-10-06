@@ -9,7 +9,7 @@ use ICanBoogie\MessageBus\Attribute\Permission;
 final class CreateMenu
 {
     public function __construct(
-        public /*readonly*/ int $id
+        public readonly int $id
     ) {
     }
 }

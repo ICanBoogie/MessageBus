@@ -1,25 +1,18 @@
 <?php
 
-/*
- * This file is part of the ICanBoogie package.
- *
- * (c) Olivier Laviale <olivier.laviale@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ICanBoogie\MessageBus\PSR;
 
 use ICanBoogie\MessageBus\Voter;
 use ICanBoogie\MessageBus\VoterNotFound;
 use ICanBoogie\MessageBus\VoterProvider;
 use LogicException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Throwable;
 
+#[AllowMockObjectsWithoutExpectations]
 final class VoterProviderWithContainerTest extends TestCase
 {
     private const PERMISSION_IS_ADMIN = 'is_admin';
@@ -53,7 +46,7 @@ final class VoterProviderWithContainerTest extends TestCase
     public function testFailureOnMissingServiceId(): void
     {
         $this->expectException(VoterNotFound::class);
-        $this->expectExceptionMessage("Voter not found for permission: is_madonna");
+        $this->expectExceptionMessageIs("Voter not found for permission: is_madonna");
 
         $this->makeSUT()->getVoterForPermission('is_madonna');
     }
@@ -70,7 +63,7 @@ final class VoterProviderWithContainerTest extends TestCase
             $this->assertSame($this->containerException, $e->getPrevious());
 
             $this->expectException(VoterNotFound::class);
-            $this->expectExceptionMessage("Voter not found for permission: can_create_menu");
+            $this->expectExceptionMessageIs("Voter not found for permission: can_create_menu");
 
             throw $e;
         }

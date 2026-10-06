@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the ICanBoogie package.
- *
- * (c) Olivier Laviale <olivier.laviale@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ICanBoogie\MessageBus\Symfony;
 
 use Exception;
@@ -18,6 +9,7 @@ use ICanBoogie\MessageBus\RestrictedDispatcher;
 use ICanBoogie\MessageBus\VoterProvider;
 use ICanBoogie\MessageBus\VoterWithPermissions;
 use LogicException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
@@ -37,19 +29,18 @@ final class MessageBusPassTest extends TestCase
     public function testFailOnMissingMessage(): void
     {
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage("Missing attribute 'message' for service 'handler.message_a'");
+        $this->expectExceptionMessageIs("Missing attribute 'message' for service 'handler.message_a'");
         $this->makeContainer(
             __DIR__ . '/resources/missing-message.yml'
         );
     }
 
     /**
-     * @dataProvider provideService
-     *
      * @param class-string $expected
      *
      * @throws Exception
      */
+    #[DataProvider("provideService")]
     public function testService(string $id, string $expected): void
     {
         $container = $this->makeContainer(
@@ -60,12 +51,11 @@ final class MessageBusPassTest extends TestCase
     }
 
     /**
-     * @dataProvider provideService
-     *
      * @param class-string $expected
      *
      * @throws Exception
      */
+    #[DataProvider("provideService")]
     public function testServiceWithAttributes(string $id, string $expected): void
     {
         $container = $this->makeContainerWithAttributes(
@@ -76,7 +66,7 @@ final class MessageBusPassTest extends TestCase
     }
 
     // @phpstan-ignore-next-line
-    public function provideService(): array
+    public static function provideService(): array
     {
         return [
 
@@ -89,9 +79,7 @@ final class MessageBusPassTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provideParameter
-     */
+    #[DataProvider("provideParameter")]
     public function testParameter(string $name, mixed $expected): void
     {
         $container = $this->makeContainer(
@@ -101,20 +89,19 @@ final class MessageBusPassTest extends TestCase
         $this->assertSame($expected, $container->getParameter($name));
     }
 
-    /**
-     * @dataProvider provideParameter
-     */
+    #[DataProvider("provideParameter")]
     public function testParameterWithAttributes(string $name, mixed $expected): void
     {
         $container = $this->makeContainerWithAttributes(
             __DIR__ . '/resources/with-attributes/integration.yaml'
         );
+        $actual = $container->getParameter($name);
 
-        $this->assertEquals($expected, $container->getParameter($name));
+        $this->assertEquals($expected, $actual);
     }
 
     // @phpstan-ignore-next-line
-    public function provideParameter(): array
+    public static function provideParameter(): array
     {
         return [
 

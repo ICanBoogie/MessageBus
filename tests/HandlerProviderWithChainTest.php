@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the ICanBoogie package.
- *
- * (c) Olivier Laviale <olivier.laviale@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ICanBoogie\MessageBus;
 
 use PHPUnit\Framework\TestCase;
@@ -29,6 +20,7 @@ final class HandlerProviderWithChainTest extends TestCase
 
         $provider1 = $this->createMock(HandlerProvider::class);
         $provider1
+            ->expects($this->exactly(3))
             ->method('getHandlerForMessage')
             ->willReturnCallback(fn(object $message) => match ($message) {
                 $messageA => $handler1,
@@ -37,6 +29,7 @@ final class HandlerProviderWithChainTest extends TestCase
 
         $provider2 = $this->createMock(HandlerProvider::class);
         $provider2
+            ->expects($this->exactly(2))
             ->method('getHandlerForMessage')
             ->willReturnCallback(fn (object $message) => match ($message) {
                 $messageB => $handler2,
