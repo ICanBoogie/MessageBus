@@ -53,6 +53,7 @@ final class MessageBusPassWithAttributes implements CompilerPassInterface
             $message = self::resolveMessage($handler);
 
             $definition = new Definition($handler);
+            $definition->setAutowired(true);
             $definition->addTag($this->tagForHandler, [ $this->attributeForMessage => $message ]);
 
             foreach ($permissions[$message] ?? [] as $permission) {
