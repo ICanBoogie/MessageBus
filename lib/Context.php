@@ -33,6 +33,24 @@ final class Context
     }
 
     /**
+     * Whether an object matching the specified class exists in the context.
+     *
+     * @template T of object
+     *
+     * @param class-string<T> $class
+     */
+    public function has(string $class): bool
+    {
+        foreach ($this->objects as $object) {
+            if ($object instanceof $class) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Returns the object matching the specified class.
      *
      * @template T of object

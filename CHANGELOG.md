@@ -8,7 +8,7 @@
 
 ### New features
 
-None
+- Added `Context::has()`, to check the availability of an object type.
 
 ### Backward Incompatible Changes
 

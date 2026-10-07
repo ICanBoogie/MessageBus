@@ -12,19 +12,26 @@ final class ContextTest extends TestCase
 {
     public function testGetUndefined(): void
     {
+        $sut = new Context();
+        $this->assertFalse($sut->has(Throwable::class));
+
         $this->expectException(LogicException::class);
         $this->expectExceptionMessageIs("Unable to find object matching: Throwable");
 
-        (new Context())->get(Throwable::class);
+        $sut->get(Throwable::class);
     }
 
     public function testAddAndGet(): void
     {
-        $context = new Context([ $e2 = new BadMethodCallException() ]);
-        $context->add($e1 = new BadFunctionCallException());
+        $sut = new Context([ $e2 = new BadMethodCallException() ]);
+        $sut->add($e1 = new BadFunctionCallException());
 
-        $this->assertSame($e1, $context->get(Throwable::class));
-        $this->assertSame($e1, $context->get(BadFunctionCallException::class));
-        $this->assertSame($e2, $context->get(BadMethodCallException::class));
+        $this->assertTrue($sut->has(Throwable::class));
+        $this->assertTrue($sut->has(BadFunctionCallException::class));
+        $this->assertTrue($sut->has(BadMethodCallException::class));
+
+        $this->assertSame($e1, $sut->get(Throwable::class));
+        $this->assertSame($e1, $sut->get(BadFunctionCallException::class));
+        $this->assertSame($e2, $sut->get(BadMethodCallException::class));
     }
 }
