@@ -37,7 +37,7 @@ final class VoterProviderWithContainerTest extends TestCase
         $this->containerException = new LogicException();
         $this->container
             ->method('get')
-            ->willReturnCallback(fn (string $permission) => match ($permission) {
+            ->willReturnCallback(fn(string $permission) => match ($permission) {
                 self::VOTER_IS_ADMIN_CLASS => $this->voterIsAdmin,
                 default => throw $this->containerException,
             });

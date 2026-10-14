@@ -4,7 +4,7 @@ namespace ICanBoogie\MessageBus;
 
 class HandlerB
 {
-    public function __invoke()
+    public function __invoke(): void
     {
     }
 }

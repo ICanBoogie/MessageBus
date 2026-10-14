@@ -1,8 +1,7 @@
 # MessageBus
 
 [![Packagist](https://img.shields.io/packagist/v/icanboogie/message-bus.svg)](https://packagist.org/packages/icanboogie/message-bus)
-[![Code Quality](https://img.shields.io/scrutinizer/g/ICanBoogie/MessageBus.svg)](https://scrutinizer-ci.com/g/ICanBoogie/MessageBus)
-[![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/MessageBus.svg)](https://coveralls.io/r/ICanBoogie/MessageBus)
+[![Code Coverage](https://coveralls.io/repos/github/ICanBoogie/MessageBus/badge.svg?branch=7.0)](https://coveralls.io/r/ICanBoogie/MessageBus?branch=7.0)
 [![Downloads](https://img.shields.io/packagist/dt/icanboogie/message-bus.svg)](https://packagist.org/packages/icanboogie/message-bus)
 
 A message dispatcher helps to separate presentation concerns from business logic by mapping inputs
@@ -37,7 +36,7 @@ $result = $dispatcher->dispatch($message);
 composer require icanboogie/message-bus
 ```
 
-If you're upgrading to a newer version, please check the [Migration guide](MIGRATION.md).
+If you're upgrading to a newer version, please check the [CHANGELOG](CHANGELOG.md).
 
 
 
@@ -380,11 +379,11 @@ example, that would be a token, for the voter to check for scopes.
 
 ## Continuous Integration
 
-The project is continuously tested by [GitHub actions](https://github.com/ICanBoogie/MessageBus/actions).
+The project is continuously tested by [GitHub Actions](https://github.com/ICanBoogie/MessageBus/actions).
 
-[![Tests](https://github.com/ICanBoogie/MessageBus/workflows/test/badge.svg?branch=master)](https://github.com/ICanBoogie/MessageBus/actions?query=workflow%3Atest)
-[![Static Analysis](https://github.com/ICanBoogie/MessageBus/workflows/static-analysis/badge.svg?branch=master)](https://github.com/ICanBoogie/MessageBus/actions?query=workflow%3Astatic-analysis)
-[![Code Style](https://github.com/ICanBoogie/MessageBus/workflows/code-style/badge.svg?branch=master)](https://github.com/ICanBoogie/MessageBus/actions?query=workflow%3Acode-style)
+[![Tests](https://github.com/ICanBoogie/MessageBus/actions/workflows/test.yml/badge.svg?branch=7.0)](https://github.com/ICanBoogie/MessageBus/actions/workflows/test.yml)
+[![Static Analysis](https://github.com/ICanBoogie/MessageBus/actions/workflows/static-analysis.yml/badge.svg?branch=7.0)](https://github.com/ICanBoogie/MessageBus/actions/workflows/static-analysis.yml)
+[![Code Style](https://github.com/ICanBoogie/MessageBus/actions/workflows/code-style.yml/badge.svg?branch=7.0)](https://github.com/ICanBoogie/MessageBus/actions/workflows/code-style.yml)
 
 
 

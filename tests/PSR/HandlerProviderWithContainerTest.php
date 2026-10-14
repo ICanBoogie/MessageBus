@@ -52,7 +52,7 @@ final class HandlerProviderWithContainerTest extends TestCase
             ->expects($this->once())
             ->method('get')
             ->with($undefinedService)
-            ->willThrowException(new class extends Exception implements NotFoundExceptionInterface {
+            ->willThrowException(new class () extends Exception implements NotFoundExceptionInterface {
             });
 
         $provider = $this->makeProvider($handlers);

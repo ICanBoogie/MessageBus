@@ -31,7 +31,7 @@ final class HandlerProviderWithChainTest extends TestCase
         $provider2
             ->expects($this->exactly(2))
             ->method('getHandlerForMessage')
-            ->willReturnCallback(fn (object $message) => match ($message) {
+            ->willReturnCallback(fn(object $message) => match ($message) {
                 $messageB => $handler2,
                 default => null
             });
